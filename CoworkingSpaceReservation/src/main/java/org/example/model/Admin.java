@@ -1,4 +1,10 @@
 package org.example.model;
 
-public class Admin {
+import lombok.Getter;
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
+@Getter
+public class Admin extends User {
+
 }
