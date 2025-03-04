@@ -181,7 +181,6 @@ public class Main {
                     generalController.addWorkspace(type, price);
                     generalController.showSuccessMessage();
                 } catch (PlaceAlreadyExistException e) {
-
                     generalController.showErrorAddMessage(e.getPrice(), e.getType());
                 }
             }
@@ -358,6 +357,7 @@ public class Main {
 
     private void exitProgram() {
         generalController.showExitMessage();
+        generalController.saveChanges();
         System.exit(0);
     }
 }

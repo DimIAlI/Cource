@@ -2,10 +2,10 @@ package org.example.model;
 
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
+import org.example.model.storage.ApplicationStateManager;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ public class WorkspaceManager {
     private long id;
 
     private WorkspaceManager() {
-        WORKSPACES = new HashMap<>();
+        WORKSPACES = ApplicationStateManager.getInstance().getState().getWorkspaces();
     }
 
     public static WorkspaceManager getInstance() {

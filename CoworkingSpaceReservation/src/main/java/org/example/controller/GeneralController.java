@@ -18,13 +18,16 @@ public class GeneralController {
     private final WorkspaceController workspaceController;
     private final ReservationController reservationController;
 
-    public GeneralController(Scanner scanner, AdminController adminController, CustomerController customerController, WorkspaceController workspaceController, ReservationController reservationController, GeneralView generalView) {
+    private final ApplicationStateController applicationStateController;
+
+    public GeneralController(Scanner scanner, AdminController adminController, CustomerController customerController, WorkspaceController workspaceController, ReservationController reservationController, GeneralView generalView, ApplicationStateController applicationStateController) {
         this.scanner = scanner;
         this.adminController = adminController;
         this.customerController = customerController;
         this.workspaceController = workspaceController;
         this.reservationController = reservationController;
         this.generalView = generalView;
+        this.applicationStateController = applicationStateController;
     }
 
     public static GeneralController createGeneralController() {
@@ -34,8 +37,8 @@ public class GeneralController {
         CustomerController customerController = CustomerController.createCustomerController();
         WorkspaceController workspaceController = WorkspaceController.createWorkspaceController();
         ReservationController reservationController = ReservationController.createReservationController();
-
-        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView);
+        ApplicationStateController applicationStateController = new ApplicationStateController();
+        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView, applicationStateController);
     }
 
     public void showWelcomeMessage() {
@@ -67,7 +70,7 @@ public class GeneralController {
     }
 
     public void showAllReservations() {
-       Optional< Map<Long, Reservation>> allReservations =Optional.ofNullable(reservationController.getAllReservations());
+        Optional<Map<Long, Reservation>> allReservations = Optional.ofNullable(reservationController.getAllReservations());
         adminController.showAllReservations(allReservations);
     }
 
@@ -83,7 +86,7 @@ public class GeneralController {
     }
 
     public void showViewCustomerReservations(User currentUser) {
-       Optional <List<Reservation>> userReservations = reservationController.getUserReservations(currentUser);
+        Optional<List<Reservation>> userReservations = reservationController.getUserReservations(currentUser);
         customerController.showUserReservations(userReservations);
     }
 
@@ -183,5 +186,9 @@ public class GeneralController {
 
     public void showErrorReservationExistMessage() {
         customerController.showErrorReservationExistMessage();
+    }
+
+    public void saveChanges() {
+        applicationStateController.saveChanges();
     }
 }

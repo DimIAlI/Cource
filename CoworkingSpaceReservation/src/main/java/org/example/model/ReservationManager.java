@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.exceptions.ReservationAlreadyExistException;
 import org.example.exceptions.ReservationDoesNotExistException;
 import org.example.exceptions.UnauthorizedReservationAccessException;
+import org.example.model.storage.ApplicationStateManager;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -15,15 +16,15 @@ public class ReservationManager {
     private long id;
 
     private ReservationManager() {
-        RESERVATIONS_ID = new HashMap<>();
-        RESERVATIONS_CUSTOMER = new HashMap<>();
+        RESERVATIONS_ID = ApplicationStateManager.getInstance().getState().getReservationsById();
+        RESERVATIONS_CUSTOMER = ApplicationStateManager.getInstance().getState().getReservationsByCustomer();
     }
 
     public static ReservationManager getInstance() {
         return INSTANCE;
     }
 
-
+//todo remove getReservation functionality
     public void add(Customer customer, Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
 
         if (isWorkSpaceAvailable(space, startTime, endTime)) {
@@ -40,7 +41,7 @@ public class ReservationManager {
             RESERVATIONS_CUSTOMER.get(customer).add(reservation);
         } else throw new ReservationAlreadyExistException();
     }
-
+    //todo remove getReservation functionality
     private boolean isWorkSpaceAvailable(Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
         List<Reservation> reservations = space.getReservations();
 
@@ -54,7 +55,7 @@ public class ReservationManager {
         }
         return true;
     }
-
+    //todo remove getReservation functionality
     public void remove(long id, Customer currentUser) {
         Reservation reservation = RESERVATIONS_ID.get(id);
 
@@ -89,7 +90,6 @@ public class ReservationManager {
         if (!hasOtherReservations) {
             workspace.setAvailable(true);
         }
-
     }
 
     public Optional<List<Reservation>> getCustomerReservations(Customer customer) {

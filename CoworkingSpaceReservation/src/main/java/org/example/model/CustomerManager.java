@@ -20,7 +20,11 @@ public class CustomerManager {
         return user;
     }
 
-   public Customer buildCustomer() {
+    public Customer buildCustomer() {
         return Customer.builder().build();
+    }
+
+    public Customer buildCustomer(String login) {
+        return Customer.builder().login(login).build();
     }
 }

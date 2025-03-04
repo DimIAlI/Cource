@@ -1,7 +1,8 @@
 package org.example.model;
 
 
-import java.util.HashMap;
+import org.example.model.storage.ApplicationStateManager;
+
 import java.util.Map;
 
 public class LoginManager {
@@ -15,12 +16,12 @@ public class LoginManager {
     private final Map<String, Admin> registeredAdmins;
 
     private LoginManager() {
-        registeredCustomers = new HashMap<>();
-        registeredAdmins = new HashMap<>();
+        registeredCustomers = ApplicationStateManager.getInstance().getState().getRegisteredCustomers();
+        registeredAdmins = ApplicationStateManager.getInstance().getState().getRegisteredAdmins();
     }
 
     public User authenticateOrRegister(User user, String login) {
-      //todo Tested and replaced with equivalent code.
+        //todo Tested and replaced with equivalent code.
 
 //            if (user instanceof Admin) {
 //                return registeredAdmins.computeIfAbsent(login, k -> {
