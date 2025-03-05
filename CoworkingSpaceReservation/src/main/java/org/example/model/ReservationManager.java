@@ -12,7 +12,7 @@ public class ReservationManager {
 
     private static final ReservationManager INSTANCE = new ReservationManager();
     private final Map<Long, Reservation> RESERVATIONS_ID;
-    private final Map<Customer, List<Reservation>> RESERVATIONS_CUSTOMER;
+    private final Map<String, List<Reservation>> RESERVATIONS_CUSTOMER;
     private long id;
 
     private ReservationManager() {
@@ -34,8 +34,10 @@ public class ReservationManager {
 
             RESERVATIONS_ID.put(reservation.getId(), reservation);
 
-            RESERVATIONS_CUSTOMER.putIfAbsent(customer, new ArrayList<>());
-            RESERVATIONS_CUSTOMER.get(customer).add(reservation);
+            String login = customer.getLogin();
+
+            RESERVATIONS_CUSTOMER.putIfAbsent(login, new ArrayList<>());
+            RESERVATIONS_CUSTOMER.get(login).add(reservation);
         } else throw new ReservationAlreadyExistException();
     }
 
@@ -64,14 +66,14 @@ public class ReservationManager {
         }
         RESERVATIONS_ID.remove(id);
 
-        Customer customer = reservation.getCustomer();
-        List<Reservation> reservations = RESERVATIONS_CUSTOMER.get(customer);
+        String login = reservation.getCustomer().getLogin();
+        List<Reservation> reservations = RESERVATIONS_CUSTOMER.get(login);
 
         if (reservations != null) {
             reservations.remove(reservation);
 
             if (reservations.isEmpty()) {
-                RESERVATIONS_CUSTOMER.remove(customer);
+                RESERVATIONS_CUSTOMER.remove(login);
             }
         }
 
@@ -86,7 +88,7 @@ public class ReservationManager {
     }
 
     public Optional<List<Reservation>> getCustomerReservations(Customer customer) {
-        return Optional.ofNullable(RESERVATIONS_CUSTOMER.get(customer));
+        return Optional.ofNullable(RESERVATIONS_CUSTOMER.get(customer.getLogin()));
     }
 
     public Map<Long, Reservation> getAll() {
