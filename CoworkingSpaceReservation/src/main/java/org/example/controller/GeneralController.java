@@ -17,7 +17,6 @@ public class GeneralController {
     private final CustomerController customerController;
     private final WorkspaceController workspaceController;
     private final ReservationController reservationController;
-
     private final ApplicationStateController applicationStateController;
 
     public GeneralController(Scanner scanner, AdminController adminController, CustomerController customerController, WorkspaceController workspaceController, ReservationController reservationController, GeneralView generalView, ApplicationStateController applicationStateController) {
@@ -56,6 +55,10 @@ public class GeneralController {
     public void showWelcomeMessage(User currentUser) {
         if (currentUser instanceof Admin) adminController.showWelcomeMessage();
         else customerController.showWelcomeMessage();
+    }
+
+    public void showMenu() {
+        generalView.printMenu();
     }
 
     public void showMenu(User currentUser) {

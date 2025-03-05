@@ -2,12 +2,11 @@ package org.example.view;
 
 public class GeneralView {
     public void printWelcomeMessage() {
-        System.out.println("Welcome to the Coworking Space Reservation System!\n");
-        printMenu();
+        System.out.println("Welcome to the Coworking Space Reservation System!");
     }
 
     public void printMenu() {
-        System.out.println("Please select an option:");
+        System.out.println("\nPlease select an option:");
         System.out.println("1. Admin Login");
         System.out.println("2. User Login");
         System.out.println("3. Exit");
