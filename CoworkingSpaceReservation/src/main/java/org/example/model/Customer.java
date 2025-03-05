@@ -1,4 +1,8 @@
 package org.example.model;
 
-public class Customer {
+import lombok.experimental.SuperBuilder;
+
+@SuperBuilder
+public class Customer extends User {
+
 }
