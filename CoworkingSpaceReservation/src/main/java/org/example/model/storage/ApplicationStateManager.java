@@ -1,6 +1,8 @@
 package org.example.model.storage;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -13,15 +15,22 @@ import java.nio.file.StandardOpenOption;
 public class ApplicationStateManager {
     private static final String FILE_PATH = "lib/app_state.json";
     //must be initialized before INSTANCE
+    private static final ObjectMapper objectMapper;
+
+    static {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+    }
+
     private static final ApplicationStateManager INSTANCE = new ApplicationStateManager();
+    private final ApplicationState state;
+
     public static ApplicationStateManager getInstance() {
         return INSTANCE;
     }
 
-    private final ObjectMapper objectMapper;
-    private final ApplicationState state;
     private ApplicationStateManager() {
-        objectMapper = new ObjectMapper();
         state = loadState();
     }
 
