@@ -71,7 +71,6 @@ public class WorkspaceManager {
                 .type(type)
                 .price(price)
                 .available(true)
-                .reservations(new ArrayList<>())
                 .build();
     }
 

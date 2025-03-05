@@ -2,7 +2,6 @@ package org.example.model;
 
 import lombok.*;
 
-import java.util.List;
 
 @Builder
 @Data
@@ -16,7 +15,4 @@ public class Workspace {
     @EqualsAndHashCode.Include
     private double price;
     private boolean available;
-    //todo to remove - leads to a cyclic dependency
-    @ToString.Exclude
-    private List<Reservation> reservations;
 }

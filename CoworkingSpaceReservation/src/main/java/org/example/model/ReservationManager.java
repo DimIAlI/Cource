@@ -24,14 +24,11 @@ public class ReservationManager {
         return INSTANCE;
     }
 
-//todo remove getReservation functionality
     public void add(Customer customer, Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
 
         if (isWorkSpaceAvailable(space, startTime, endTime)) {
 
             Reservation reservation = buildReservation(customer, space, startTime, endTime);
-            List<Reservation> reservations = space.getReservations();
-            reservations.add(reservation);
 
             space.setAvailable(false);
 
@@ -41,21 +38,20 @@ public class ReservationManager {
             RESERVATIONS_CUSTOMER.get(customer).add(reservation);
         } else throw new ReservationAlreadyExistException();
     }
-    //todo remove getReservation functionality
-    private boolean isWorkSpaceAvailable(Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
-        List<Reservation> reservations = space.getReservations();
 
-        if (reservations == null || reservations.isEmpty()) {
-            return true;
-        }
-        for (Reservation reservation : reservations) {
-            if (startTime.isBefore(reservation.getEndTime()) && endTime.isAfter(reservation.getStartTime())) {
-                return false;
+    private boolean isWorkSpaceAvailable(Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
+
+        for (Reservation reservation : RESERVATIONS_ID.values()) {
+
+            if (reservation.getSpace().equals(space)) {
+                if (startTime.isBefore(reservation.getEndTime()) && endTime.isAfter(reservation.getStartTime())) {
+                    return false;
+                }
             }
         }
         return true;
     }
-    //todo remove getReservation functionality
+
     public void remove(long id, Customer currentUser) {
         Reservation reservation = RESERVATIONS_ID.get(id);
 
@@ -67,9 +63,6 @@ public class ReservationManager {
             throw new UnauthorizedReservationAccessException(id);
         }
         RESERVATIONS_ID.remove(id);
-
-        Workspace space = reservation.getSpace();
-        space.getReservations().remove(reservation);
 
         Customer customer = reservation.getCustomer();
         List<Reservation> reservations = RESERVATIONS_CUSTOMER.get(customer);
