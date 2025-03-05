@@ -37,12 +37,12 @@ public class ApplicationStateManager {
     private ApplicationState loadState() {
         Path path = Paths.get(FILE_PATH);
         if (!Files.exists(path)) {
-            throw new IllegalStateException("Файл состояния не найден: " + FILE_PATH);
+            throw new IllegalStateException("State file %s not found".formatted(FILE_PATH));
         }
         try {
             return objectMapper.readValue(path.toFile(), ApplicationState.class);
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при загрузке данных из файла состояния", e);
+            throw new RuntimeException("Error loading data from the state file", e);
         }
     }
 
@@ -51,7 +51,7 @@ public class ApplicationStateManager {
             Path path = Paths.get(FILE_PATH);
             objectMapper.writeValue(Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING), state);
         } catch (IOException e) {
-            throw new RuntimeException("Ошибка при сохранении данных в файл состояния", e);
+            throw new RuntimeException("Error saving data to the state file", e);
         }
     }
 }
