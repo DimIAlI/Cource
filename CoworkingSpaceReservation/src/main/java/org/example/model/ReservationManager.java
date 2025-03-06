@@ -41,19 +41,6 @@ public class ReservationManager {
         } else throw new ReservationAlreadyExistException();
     }
 
-    private boolean isWorkSpaceAvailable(Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
-
-        for (Reservation reservation : RESERVATIONS_ID.values()) {
-
-            if (reservation.getSpace().equals(space)) {
-                if (startTime.isBefore(reservation.getEndTime()) && endTime.isAfter(reservation.getStartTime())) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
     public void remove(long id, Customer currentUser) {
         Reservation reservation = RESERVATIONS_ID.get(id);
 
@@ -93,6 +80,19 @@ public class ReservationManager {
 
     public Map<Long, Reservation> getAll() {
         return RESERVATIONS_ID;
+    }
+
+    private boolean isWorkSpaceAvailable(Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
+
+        for (Reservation reservation : RESERVATIONS_ID.values()) {
+
+            if (reservation.getSpace().equals(space)) {
+                if (startTime.isBefore(reservation.getEndTime()) && endTime.isAfter(reservation.getStartTime())) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     private Reservation buildReservation(Customer customer, Workspace space, LocalDateTime startTime, LocalDateTime endTime) {

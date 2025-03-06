@@ -12,7 +12,7 @@ public abstract class User {
     @JsonProperty("login")
     private String login;
     @JsonCreator
-    public User(String login) {
+    User(String login) {
         this.login = login;
     }
 }

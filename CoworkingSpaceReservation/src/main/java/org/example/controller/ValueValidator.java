@@ -17,7 +17,7 @@ public class ValueValidator {
     private static final int MAX_ALLOWED_FOR_CUSTOMER = 5;
     private static final int MAX_ALLOWED_FOR_ADMIN = 4;
 
-    public static boolean checkValue(String message) {
+    static boolean checkValue(String message) {
 
         if (message == null || message.length() != 1) return false;
 
@@ -29,7 +29,7 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkValue(User currentUser, String message) {
+    static boolean checkValue(User currentUser, String message) {
         if (message == null || message.length() != 1) return false;
 
         try {
@@ -42,7 +42,7 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkPrice(String message) {
+    static boolean checkPrice(String message) {
         try {
             return Double.parseDouble(message) > 0;
         } catch (NumberFormatException e) {
@@ -50,7 +50,7 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkType(String message) {
+    static boolean checkType(String message) {
         if (message == null || message.isEmpty()) {
             return false;
         }
@@ -58,7 +58,7 @@ public class ValueValidator {
                 .anyMatch(type -> type.getDisplayName().equalsIgnoreCase(message));
     }
 
-    public static boolean checkIdValue(String message) {
+    static boolean checkIdValue(String message) {
         if (message == null || message.isEmpty()) return false;
         try {
             Long.parseLong(message);
@@ -68,7 +68,7 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkDataType(String message, DateTimeFormatter formatter) {
+    static boolean checkDataType(String message, DateTimeFormatter formatter) {
 
         try {
             LocalDateTime inputDateTime = LocalDateTime.parse(message, formatter);
@@ -88,7 +88,7 @@ public class ValueValidator {
         return inputDateTime.isBefore(currentDateTime);
     }
 
-    public static boolean checkDataTypeAndRange(LocalDateTime startTime, String message, DateTimeFormatter formatter) {
+    static boolean checkDataTypeAndRange(LocalDateTime startTime, String message, DateTimeFormatter formatter) {
         try {
             LocalDateTime parsedDate = LocalDateTime.parse(message, formatter);
             return parsedDate.isAfter(startTime);
@@ -97,7 +97,7 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkLogin(String login) {
+    static boolean checkLogin(String login) {
         if (login == null || login.length() < 5) {
             return false;
         }

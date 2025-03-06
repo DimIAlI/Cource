@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class Admin extends User {
     @JsonCreator
-    public Admin(@JsonProperty("login") String login) {
+    Admin(@JsonProperty("login") String login) {
         super(login);
     }
 }

@@ -5,10 +5,10 @@ import org.example.model.storage.ApplicationStateManager;
 
 import java.util.Map;
 
-public class LoginManager {
+class LoginManager {
     private static final LoginManager INSTANCE = new LoginManager();
 
-    public static LoginManager getInstance() {
+    static LoginManager getInstance() {
         return INSTANCE;
     }
 
@@ -20,7 +20,7 @@ public class LoginManager {
         registeredAdmins = ApplicationStateManager.getInstance().getState().getRegisteredAdmins();
     }
 
-    public User authenticateOrRegister(User user, String login) {
+    User authenticateOrRegister(User user, String login) {
         //todo Tested and replaced with equivalent code.
 
 //            if (user instanceof Admin) {

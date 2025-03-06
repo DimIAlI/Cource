@@ -18,7 +18,7 @@ public class Main {
 
         //realization without using CustomClassLoader
 
-        //ProgramRunner runner = ProgramRunner.createRunner();
-        //runner.run();
+//        ProgramRunner runner = ProgramRunner.createRunner();
+//        runner.run();
     }
 }

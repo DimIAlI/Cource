@@ -83,19 +83,9 @@ public class GeneralController {
 
     }
 
-    public void addReservation(User currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
-        Workspace workspace = workspaceController.getWorkspace(id);
-        reservationController.addReservation(currentUser, workspace, startTime, endTime);
-    }
-
     public void showViewCustomerReservations(User currentUser) {
         Optional<List<Reservation>> userReservations = reservationController.getUserReservations(currentUser);
         customerController.showUserReservations(userReservations);
-    }
-
-    public void cancelReservation(long id, User currentUser) {
-        reservationController.cancelReservation(id, currentUser);
-
     }
 
     public void showSuccessMessage() {
@@ -114,46 +104,17 @@ public class GeneralController {
         customerController.showReservationEndDateMessage();
     }
 
-    public void showGetIdMessage() {
-        customerController.showGetIdMessage();
-    }
-
     public void showEnterChoiceMessage() {
         generalView.printEnterChoiceMessage();
     }
 
-    public void addWorkspace(SpaceType type, double price) {
-        workspaceController.addWorkspace(type, price);
-    }
-
-    public void removeWorkspace(long id) {
-        workspaceController.removeWorkspace(id);
-    }
-
-    public String getUserMessage() {
-        return scanner.nextLine().trim();
-    }
-
-    public User getAdmin(User user, String choice) {
-        return adminController.getAdmin(user, choice);
-    }
-
-    public User getCustomer(User user, String choice) {
-        return customerController.getCustomer(user, choice);
-    }
-
-    public User getEmptyAdmin() {
-        return adminController.getEmptyAdmin();
-    }
-
-    public User getEmptyCustomer() {
-        return customerController.getEmptyCustomer();
+    public void showGetIdMessage() {
+        customerController.showGetIdMessage();
     }
 
     public void showErrorLoginMessage() {
         generalView.printErrorLoginMessage();
     }
-
     public boolean showAllSpacesMessage() {
         adminController.showAllSpacesMessage();
         List<Workspace> allSpaces = workspaceController.getAllSpaces();
@@ -189,6 +150,44 @@ public class GeneralController {
 
     public void showErrorReservationExistMessage() {
         customerController.showErrorReservationExistMessage();
+    }
+
+    public void cancelReservation(long id, User currentUser) {
+        reservationController.cancelReservation(id, currentUser);
+
+    }
+
+    public void addReservation(User currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
+        Workspace workspace = workspaceController.getWorkspace(id);
+        reservationController.addReservation(currentUser, workspace, startTime, endTime);
+    }
+
+    public void addWorkspace(SpaceType type, double price) {
+        workspaceController.addWorkspace(type, price);
+    }
+
+    public void removeWorkspace(long id) {
+        workspaceController.removeWorkspace(id);
+    }
+
+    public String getUserMessage() {
+        return scanner.nextLine().trim();
+    }
+
+    public User getAdmin(User user, String choice) {
+        return adminController.getAdmin(user, choice);
+    }
+
+    public User getCustomer(User user, String choice) {
+        return customerController.getCustomer(user, choice);
+    }
+
+    public User getEmptyAdmin() {
+        return adminController.getEmptyAdmin();
+    }
+
+    public User getEmptyCustomer() {
+        return customerController.getEmptyCustomer();
     }
 
     public void saveChanges() {

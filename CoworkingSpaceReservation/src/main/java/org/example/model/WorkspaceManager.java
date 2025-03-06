@@ -65,6 +65,12 @@ public class WorkspaceManager {
         return new ArrayList<>(WORKSPACES.values());
     }
 
+    public Workspace getWorkspace(long id) {
+        if (WORKSPACES.containsKey(id)) {
+            return WORKSPACES.get(id);
+        } else throw new IdNotFoundException(id);
+    }
+
     private Workspace buildWorkspace(SpaceType type, double price) {
         return Workspace.builder()
                 .id(generateId())
@@ -86,11 +92,5 @@ public class WorkspaceManager {
 
     private boolean isAvailableAtTimeRange(Reservation reservation, LocalDateTime startTime, LocalDateTime endTime) {
         return reservation.getStartTime().isBefore(endTime) && reservation.getEndTime().isAfter(startTime);
-    }
-
-    public Workspace getWorkspace(long id) {
-        if (WORKSPACES.containsKey(id)) {
-            return WORKSPACES.get(id);
-        } else throw new IdNotFoundException(id);
     }
 }

@@ -2,8 +2,8 @@ package org.example.controller;
 
 import org.example.model.storage.ApplicationStateManager;
 
-public class ApplicationStateController {
-    public void saveChanges() {
+class ApplicationStateController {
+    void saveChanges() {
         ApplicationStateManager.getInstance().saveState();
     }
 }

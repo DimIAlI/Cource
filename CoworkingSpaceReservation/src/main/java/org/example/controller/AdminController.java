@@ -2,15 +2,16 @@ package org.example.controller;
 
 import org.example.model.*;
 import org.example.view.AdminView;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class AdminController {
+class AdminController {
 
     private final AdminView adminView;
 
-    public AdminController(AdminView adminView) {
+    AdminController(AdminView adminView) {
         this.adminView = adminView;
     }
 
@@ -19,60 +20,60 @@ public class AdminController {
         return new AdminController(adminView);
     }
 
-    public void showWelcomeMessage() {
+    void showWelcomeMessage() {
         adminView.printWelcomeMessage();
     }
 
-    public void showMenu() {
+    void showMenu() {
         adminView.printMenu();
     }
 
 
-    public void showAllSpaces(List<Workspace> allSpaces) {
+    void showAllSpaces(List<Workspace> allSpaces) {
 
         adminView.printAllSpaces(allSpaces);
     }
 
-    public void showAddType() {
+    void showAddType() {
         adminView.printAddType();
     }
 
-    public void showSuccessMessage() {
+    void showSuccessMessage() {
         adminView.printSuccessMessage();
     }
 
-    public void showIdMessage() {
+    void showIdMessage() {
         adminView.printIdMessage();
     }
 
-    public void showAllReservations(Optional<Map<Long, Reservation>> allReservations) {
+    void showAllReservations(Optional<Map<Long, Reservation>> allReservations) {
 
         allReservations.ifPresentOrElse(adminView::printAllReservations,
                 adminView::printEmptyReservationMessage
         );
     }
 
-    public User getAdmin(User user, String choice) {
-        return AdminManager.getInstance().getAdmin(user, choice);
-    }
-
-    public User getEmptyAdmin() {
-        return AdminManager.getInstance().buildAdmin();
-    }
-
-    public void showEmptySpaceMessage() {
+    void showEmptySpaceMessage() {
         adminView.printEmptySpaceMessage();
     }
 
-    public void showAllSpacesMessage() {
+    void showAllSpacesMessage() {
         adminView.printAllSpacesMessage();
     }
 
-    public void showAddPrice() {
+    void showAddPrice() {
         adminView.printAddPrice();
     }
 
-    public void showErrorAddMessage(String price, String type) {
+    void showErrorAddMessage(String price, String type) {
         adminView.printErrorAddMessage(price, type);
+    }
+
+    User getAdmin(User user, String choice) {
+        return AdminManager.getInstance().getAdmin(user, choice);
+    }
+
+    User getEmptyAdmin() {
+        return AdminManager.getInstance().buildAdmin();
     }
 }
