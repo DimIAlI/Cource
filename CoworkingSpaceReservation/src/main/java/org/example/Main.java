@@ -1,14 +1,24 @@
 package org.example;
 
+import lombok.SneakyThrows;
+import org.example.util.ProgramRunnerInvoker;
+
 public class Main {
 
     public static void main(String[] args) {
         Main main = new Main();
-            main.start();
+        main.start();
     }
 
+    @SneakyThrows
     private void start() {
-        ProgramRunner runner = ProgramRunner.createRunner();
-        runner.run();
+
+        ProgramRunnerInvoker programRunnerInvoker = new ProgramRunnerInvoker("lib");
+        programRunnerInvoker.run();
+
+        //realization without using CustomClassLoader
+
+        //ProgramRunner runner = ProgramRunner.createRunner();
+        //runner.run();
     }
 }
