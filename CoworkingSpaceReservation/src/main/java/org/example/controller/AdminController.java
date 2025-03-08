@@ -28,9 +28,7 @@ class AdminController {
         adminView.printMenu();
     }
 
-
     void showAllSpaces(List<Workspace> allSpaces) {
-
         adminView.printAllSpaces(allSpaces);
     }
 
@@ -47,10 +45,8 @@ class AdminController {
     }
 
     void showAllReservations(Optional<Map<Long, Reservation>> allReservations) {
-
         allReservations.ifPresentOrElse(adminView::printAllReservations,
-                adminView::printEmptyReservationMessage
-        );
+                adminView::printEmptyReservationMessage);
     }
 
     void showEmptySpaceMessage() {
@@ -69,11 +65,7 @@ class AdminController {
         adminView.printErrorAddMessage(price, type);
     }
 
-    User getAdmin(User user, String choice) {
-        return AdminManager.getInstance().getAdmin(user, choice);
-    }
-
-    User getEmptyAdmin() {
-        return AdminManager.getInstance().buildAdmin();
+    User getAdmin(User user, String login) {
+        return AdminManager.getInstance().getAdmin(user, login);
     }
 }

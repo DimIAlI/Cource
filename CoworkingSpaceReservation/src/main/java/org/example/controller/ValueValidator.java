@@ -29,7 +29,7 @@ public class ValueValidator {
         }
     }
 
-    static boolean checkValue(User currentUser, String message) {
+    public static boolean checkValue(User currentUser, String message) {
         if (message == null || message.length() != 1) return false;
 
         try {
@@ -42,7 +42,7 @@ public class ValueValidator {
         }
     }
 
-    static boolean checkPrice(String message) {
+    public static boolean checkPrice(String message) {
         try {
             return Double.parseDouble(message) > 0;
         } catch (NumberFormatException e) {
@@ -50,7 +50,7 @@ public class ValueValidator {
         }
     }
 
-    static boolean checkType(String message) {
+    public static boolean checkType(String message) {
         if (message == null || message.isEmpty()) {
             return false;
         }
@@ -58,7 +58,7 @@ public class ValueValidator {
                 .anyMatch(type -> type.getDisplayName().equalsIgnoreCase(message));
     }
 
-    static boolean checkIdValue(String message) {
+    public static boolean checkIdValue(String message) {
         if (message == null || message.isEmpty()) return false;
         try {
             Long.parseLong(message);
@@ -68,7 +68,7 @@ public class ValueValidator {
         }
     }
 
-    static boolean checkDataType(String message, DateTimeFormatter formatter) {
+    public static boolean checkDataType(String message, DateTimeFormatter formatter) {
 
         try {
             LocalDateTime inputDateTime = LocalDateTime.parse(message, formatter);
@@ -88,7 +88,7 @@ public class ValueValidator {
         return inputDateTime.isBefore(currentDateTime);
     }
 
-    static boolean checkDataTypeAndRange(LocalDateTime startTime, String message, DateTimeFormatter formatter) {
+    public static boolean checkDataTypeAndRange(LocalDateTime startTime, String message, DateTimeFormatter formatter) {
         try {
             LocalDateTime parsedDate = LocalDateTime.parse(message, formatter);
             return parsedDate.isAfter(startTime);
@@ -97,7 +97,7 @@ public class ValueValidator {
         }
     }
 
-    static boolean checkLogin(String login) {
+    public static boolean checkLogin(String login) {
         if (login == null || login.length() < 5) {
             return false;
         }

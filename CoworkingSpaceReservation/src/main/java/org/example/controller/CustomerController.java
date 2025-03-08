@@ -24,11 +24,14 @@ class CustomerController {
 
     void showWelcomeMessage() {
         customerView.printWelcomeMessage();
-
     }
 
     void showMenu() {
         customerView.printMenu();
+    }
+
+    void showAvailableSpaces(List<Workspace> availableSpaces) {
+        customerView.printAvailableSpaces(availableSpaces);
     }
 
     void showReservationStartDateMessage() {
@@ -37,10 +40,6 @@ class CustomerController {
 
     void showReservationEndDateMessage() {
         customerView.printReservationEndDateMessage();
-    }
-
-    void showAvailableSpaces(List<Workspace> availableSpaces) {
-        customerView.printAvailableSpaces(availableSpaces);
     }
 
     void showGetIdMessage() {
@@ -65,7 +64,4 @@ class CustomerController {
         return CustomerManager.getInstance().getCustomer(user, choice);
     }
 
-    User getEmptyCustomer() {
-        return CustomerManager.getInstance().buildCustomer();
-    }
 }

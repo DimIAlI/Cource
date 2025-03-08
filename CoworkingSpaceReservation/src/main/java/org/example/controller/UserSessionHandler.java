@@ -1,18 +1,24 @@
 package org.example.controller;
 
+import org.example.model.factory.UserFactorySelector;
 import org.example.model.Admin;
 import org.example.model.User;
+
+import java.util.Optional;
 
 public class UserSessionHandler {
 
     private final GeneralController generalController;
+    private final UserFactorySelector userFactorySelector;
 
-    private UserSessionHandler(GeneralController generalController) {
+    private UserSessionHandler(GeneralController generalController, UserFactorySelector userFactorySelector) {
         this.generalController = generalController;
+        this.userFactorySelector = userFactorySelector;
     }
 
     public static UserSessionHandler userSessionHandler(GeneralController generalController) {
-        return new UserSessionHandler(generalController);
+        UserFactorySelector userFactorySelector = new UserFactorySelector();
+        return new UserSessionHandler(generalController, userFactorySelector);
     }
 
     public String getUserChoice() {
@@ -31,17 +37,8 @@ public class UserSessionHandler {
         return message;
     }
 
-    public User getEmptyUser(String choice) {
-
-        switch (choice) {
-            case "1" -> {
-                return generalController.getEmptyAdmin();
-            }
-            case "2" -> {
-                return generalController.getEmptyCustomer();
-            }
-            default -> throw new IllegalArgumentException("Invalid choice: " + choice);
-        }
+    public Optional<User> getEmptyUser(String choice) {
+        return userFactorySelector.getEmptyUser(choice);
     }
 
     public String getUserLogin(User emptyUser) {
@@ -57,13 +54,5 @@ public class UserSessionHandler {
             }
         } while (!isValid);
         return login;
-    }
-
-    public User findOrCreateUser(User user, String choice) {
-
-        if (user instanceof Admin) {
-            return generalController.getAdmin(user, choice);
-        }
-        return generalController.getCustomer(user, choice);
     }
 }

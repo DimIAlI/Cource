@@ -53,6 +53,7 @@ public class GeneralController {
     }
 
     public void showWelcomeMessage(User currentUser) {
+        //тут пригодится абстракция над контроллером
         if (currentUser instanceof Admin) adminController.showWelcomeMessage();
         else customerController.showWelcomeMessage();
     }
@@ -67,9 +68,7 @@ public class GeneralController {
     }
 
     public void showAddType() {
-
         adminController.showAddType();
-
     }
 
     public void showAllReservations() {
@@ -80,7 +79,6 @@ public class GeneralController {
     public void showAvailableSpaces(LocalDateTime startTime, LocalDateTime endTime) {
         List<Workspace> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
         customerController.showAvailableSpaces(availableSpaces);
-
     }
 
     public void showViewCustomerReservations(User currentUser) {
@@ -154,7 +152,6 @@ public class GeneralController {
 
     public void cancelReservation(long id, User currentUser) {
         reservationController.cancelReservation(id, currentUser);
-
     }
 
     public void addReservation(User currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
@@ -174,23 +171,21 @@ public class GeneralController {
         return scanner.nextLine().trim();
     }
 
-    public User getAdmin(User user, String choice) {
-        return adminController.getAdmin(user, choice);
+    public User getUser (User user, String login){
+        if (user instanceof Admin) {
+            return getAdmin(user, login);
+        }
+        return getCustomer(user, login);
     }
-
-    public User getCustomer(User user, String choice) {
-        return customerController.getCustomer(user, choice);
-    }
-
-    public User getEmptyAdmin() {
-        return adminController.getEmptyAdmin();
-    }
-
-    public User getEmptyCustomer() {
-        return customerController.getEmptyCustomer();
-    }
-
     public void saveChanges() {
         applicationStateController.saveChanges();
+    }
+
+    private User getAdmin(User user, String login) {
+        return adminController.getAdmin(user, login);
+    }
+
+    private User getCustomer(User user, String choice) {
+        return customerController.getCustomer(user, choice);
     }
 }
