@@ -15,10 +15,5 @@ public class Main {
 
         ProgramRunnerInvoker programRunnerInvoker = new ProgramRunnerInvoker("lib");
         programRunnerInvoker.run();
-
-        //realization without using CustomClassLoader
-
-//        ProgramRunner runner = ProgramRunner.createRunner();
-//        runner.run();
     }
 }

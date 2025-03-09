@@ -21,37 +21,17 @@ class LoginManager {
     }
 
     User authenticateOrRegister(User user, String login) {
-        //todo Tested and replaced with equivalent code.
 
-//            if (user instanceof Admin) {
-//                return registeredAdmins.computeIfAbsent(login, k -> {
-//                    User editedUser = AdminManager.getInstance().setAdminLogin(user, login);
-//                    return (Admin) editedUser;
-//                });
-//            } else {
-//                return registeredCustomers.computeIfAbsent(login, k -> {
-//                    User editedUser = CustomerManager.getInstance().setCustomerLogin(user, login);
-//                    return (Customer) editedUser;
-//                });
-//            }
-
-        User editedUser;
-        if (user instanceof Admin) {
-            if (registeredAdmins.containsKey(login)) {
-                return registeredAdmins.get(login);
+            if (user instanceof Admin) {
+                return registeredAdmins.computeIfAbsent(login, k -> {
+                    User editedUser = AdminManager.getInstance().setAdminLogin(user, login);
+                    return (Admin) editedUser;
+                });
             } else {
-                editedUser = AdminManager.getInstance().setAdminLogin(user, login);
-                registeredAdmins.put(login, (Admin) editedUser);
-                return editedUser;
+                return registeredCustomers.computeIfAbsent(login, k -> {
+                    User editedUser = CustomerManager.getInstance().setCustomerLogin(user, login);
+                    return (Customer) editedUser;
+                });
             }
-        } else {
-            if (registeredCustomers.containsKey(login)) {
-                return registeredCustomers.get(login);
-            } else {
-                editedUser = CustomerManager.getInstance().setCustomerLogin(user, login);
-                registeredCustomers.put(login, (Customer) editedUser);
-                return editedUser;
-            }
-        }
     }
 }

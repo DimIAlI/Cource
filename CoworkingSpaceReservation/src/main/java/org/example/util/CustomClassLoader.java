@@ -14,6 +14,21 @@ public class CustomClassLoader extends ClassLoader {
     }
 
     @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        Class<?> loadedClass = findLoadedClass(name);
+
+        if (loadedClass != null) {
+            return loadedClass;
+        }
+
+        try {
+            return findClass(name);
+        } catch (ClassNotFoundException e) {
+            return super.loadClass(name, resolve);
+        }
+    }
+
+    @Override
     protected Class<?> findClass(String name) throws ClassNotFoundException {
 
         byte[] classData = loadClassData(name);
