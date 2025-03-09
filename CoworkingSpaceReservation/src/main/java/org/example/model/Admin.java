@@ -1,10 +1,13 @@
 package org.example.model;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@Getter
 public class Admin extends User {
-
+    @JsonCreator
+    Admin(@JsonProperty("login") String login) {
+        super(login);
+    }
 }

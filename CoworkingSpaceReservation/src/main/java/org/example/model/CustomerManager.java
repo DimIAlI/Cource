@@ -15,12 +15,12 @@ public class CustomerManager {
         return LoginManager.getInstance().authenticateOrRegister(user, login);
     }
 
-    public User setCustomerLogin(User user, String choice) {
-        user.setLogin(choice);
-        return user;
+    public Customer buildCustomer() {
+        return Customer.builder().build();
     }
 
-   public Customer buildCustomer() {
-        return Customer.builder().build();
+    User setCustomerLogin(User user, String choice) {
+        user.setLogin(choice);
+        return user;
     }
 }
