@@ -12,16 +12,9 @@ import org.example.model.Customer;
 import java.util.Map;
 
 public class CustomerMenuStrategy implements MenuStrategy {
-
-    private Customer currentCustomer;
-
-    public CustomerMenuStrategy(Customer currentCustomer) {
-        this.currentCustomer = currentCustomer;
-    }
-
     private final Map<String, MenuCommand> commands;
 
-    {
+    public CustomerMenuStrategy(Customer currentCustomer) {
         commands = Map.of("1", new ShowAvailableSpacesCommand(currentCustomer),
                 "2", new MakeReservationCommand(currentCustomer),
                 "3", new ViewReservationsCommand(currentCustomer),

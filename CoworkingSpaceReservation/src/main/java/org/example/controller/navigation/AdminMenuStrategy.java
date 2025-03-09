@@ -12,7 +12,7 @@ import java.util.Map;
 public class AdminMenuStrategy implements MenuStrategy {
     private final Map<String, MenuCommand> commands;
 
-    {
+    public AdminMenuStrategy() {
         commands = Map.of("1", new AddWorkspaceCommand(),
                 "2", new RemoveWorkspaceCommand(),
                 "3", new ShowAllReservationCommand(),

@@ -10,5 +10,4 @@ public abstract class CustomerCommand implements MenuCommand {
     public CustomerCommand(Customer customer) {
         this.customer = customer;
     }
-
 }
