@@ -6,7 +6,8 @@ import org.example.model.Customer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-public class ShowAvailableSpacesCommand extends CustomerCommand{
+
+public class ShowAvailableSpacesCommand extends CustomerCommand {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     public ShowAvailableSpacesCommand(Customer customer) {
@@ -18,7 +19,7 @@ public class ShowAvailableSpacesCommand extends CustomerCommand{
         String message;
         boolean isValid;
 
-
+        generalController.showBrowseSpacesItem();
         generalController.showReservationStartDateMessage();
         generalController.showEnterChoiceMessage();
 
@@ -48,7 +49,6 @@ public class ShowAvailableSpacesCommand extends CustomerCommand{
         } while (!isValid);
 
         LocalDateTime endTime = LocalDateTime.parse(message, formatter);
-
         generalController.showAvailableSpaces(startTime, endTime);
         return false;
     }

@@ -53,7 +53,7 @@ public class GeneralController {
     }
 
     public void showWelcomeMessage(User currentUser) {
-        //тут пригодится абстракция над контроллером
+
         if (currentUser instanceof Admin) adminController.showWelcomeMessage();
         else customerController.showWelcomeMessage();
     }
@@ -113,6 +113,7 @@ public class GeneralController {
     public void showErrorLoginMessage() {
         generalView.printErrorLoginMessage();
     }
+
     public boolean showAllSpacesMessage() {
         adminController.showAllSpacesMessage();
         List<Workspace> allSpaces = workspaceController.getAllSpaces();
@@ -171,12 +172,13 @@ public class GeneralController {
         return scanner.nextLine().trim();
     }
 
-    public User getUser (User user, String login){
+    public User getUser(User user, String login) {
         if (user instanceof Admin) {
             return getAdmin(user, login);
         }
         return getCustomer(user, login);
     }
+
     public void saveChanges() {
         applicationStateController.saveChanges();
     }
@@ -187,5 +189,33 @@ public class GeneralController {
 
     private User getCustomer(User user, String choice) {
         return customerController.getCustomer(user, choice);
+    }
+
+    public void showAddSpaceMenuItem() {
+        adminController.showAddSpaceMenuItem();
+    }
+
+    public void showRemoveSpaceMenuItem() {
+        adminController.showRemoveSpaceMenuItem();
+    }
+
+    public void showViewReservationMenuItem() {
+        adminController.showViewReservationMenuItem();
+    }
+
+    public void showBrowseSpacesItem() {
+        customerController.showBrowseSpacesItem();
+    }
+
+    public void showMakeReservationItem() {
+        customerController.printMakeReservationItem();
+    }
+
+    public void showViewReservationItem() {
+        customerController.showViewReservationItem();
+    }
+
+    public void showCancelReservationItem() {
+        customerController.showCancelReservationItem();
     }
 }

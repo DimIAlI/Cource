@@ -11,6 +11,7 @@ import java.util.Arrays;
 public class AddWorkspaceCommand implements MenuCommand {
     @Override
     public boolean execute(GeneralController generalController) {
+        generalController.showAddSpaceMenuItem();
         generalController.showAllSpacesMessage();
 
         String message;

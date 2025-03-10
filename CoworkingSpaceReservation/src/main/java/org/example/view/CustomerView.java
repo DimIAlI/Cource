@@ -8,7 +8,8 @@ import java.util.List;
 public class CustomerView {
 
     public void printWelcomeMessage() {
-        System.out.println("\nUser Login");
+        System.out.println("\n=User Login=");
+        System.out.println("(The expected login must be longer than 5 characters, not contain special characters, and be in English)\n");
         System.out.print("Enter your username: ");
     }
 
@@ -29,7 +30,8 @@ public class CustomerView {
     }
 
     public void printAvailableSpaces(List<Workspace> availableSpaces) {
-        System.out.println("\n" + availableSpaces);
+        System.out.println("\nThe List of all available spaces:");
+        System.out.println(availableSpaces);
     }
 
     public void printReservationEndDateMessage() {
@@ -37,7 +39,7 @@ public class CustomerView {
     }
 
     public void printGetIdMessage() {
-        System.out.print("Enter ID");
+        System.out.print("\nEnter ID");
     }
 
     public void printCustomerReservations(List<Reservation> userReservations) {
@@ -56,4 +58,18 @@ public class CustomerView {
     public void printErrorReservationExistMessage() {
         System.out.println("\nThe workspace is already booked for this time!");
     }
+
+    public void printBrowseSpacesItem() {
+        System.out.println("\n=Browse available spaces=");
+    }
+    public void printMakeReservationItem(){
+        System.out.println("\n=Make a reservation=");
+    }
+    public void printViewReservationItem(){
+        System.out.println("\n=View my reservations=");
+    }
+    public void printCancelReservationItem(){
+        System.out.println("\n=Cancel a reservation=");
+    }
+
 }

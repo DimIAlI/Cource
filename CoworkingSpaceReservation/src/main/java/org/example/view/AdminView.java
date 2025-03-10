@@ -9,8 +9,8 @@ import java.util.Map;
 public class AdminView {
 
     public void printWelcomeMessage() {
-        System.out.print("\nAdmin Login");
-        System.out.println(" (The expected login must be longer than 5 characters, not contain special characters, and be in English)");
+        System.out.println("\n=Admin Login=");
+        System.out.println("(The expected login must be longer than 5 characters, not contain special characters, and be in English)\n");
         System.out.print("Enter Admin username: ");
     }
 
@@ -48,7 +48,7 @@ public class AdminView {
     }
 
     public void printEmptySpaceMessage() {
-        System.out.println(" No spaces have been added yet!");
+        System.out.println("No spaces have been added yet!");
     }
 
     public void printAllSpacesMessage() {
@@ -68,5 +68,17 @@ public class AdminView {
 
     public void printEmptyReservationMessage() {
         System.out.println("System has no reservations");
+    }
+
+    public void printAddSpaceMenuItem() {
+        System.out.println("\n=Add a new coworking space=");
+    }
+
+    public void printRemoveSpaceMenuItem(){
+        System.out.println("\n=Remove a coworking space=");
+    }
+
+    public void printViewReservationMenuItem(){
+        System.out.println("\n=View all reservations=");
     }
 }
