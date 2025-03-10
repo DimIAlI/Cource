@@ -1,23 +1,30 @@
 package org.example.model;
 
+import lombok.Getter;
 import org.example.exceptions.ReservationAlreadyExistException;
 import org.example.exceptions.ReservationDoesNotExistException;
 import org.example.exceptions.UnauthorizedReservationAccessException;
+import org.example.model.storage.ApplicationState;
 import org.example.model.storage.ApplicationStateManager;
 
 import java.time.LocalDateTime;
 import java.util.*;
+
 
 public class ReservationManager {
 
     private static final ReservationManager INSTANCE = new ReservationManager();
     private final Map<Long, Reservation> RESERVATIONS_ID;
     private final Map<String, List<Reservation>> RESERVATIONS_CUSTOMER;
-    private long id;
+    @Getter
+    private Long id;
 
     private ReservationManager() {
-        RESERVATIONS_ID = ApplicationStateManager.getInstance().getState().getReservationsById();
-        RESERVATIONS_CUSTOMER = ApplicationStateManager.getInstance().getState().getReservationsByCustomer();
+        ApplicationState appState = ApplicationStateManager.getInstance().getState();
+
+        RESERVATIONS_ID = appState.getReservationsById();
+        RESERVATIONS_CUSTOMER = appState.getReservationsByCustomer();
+        id = appState.getLastReservationId();
     }
 
     public static ReservationManager getInstance() {

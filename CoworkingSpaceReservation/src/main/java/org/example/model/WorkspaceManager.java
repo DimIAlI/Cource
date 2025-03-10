@@ -1,7 +1,9 @@
 package org.example.model;
 
+import lombok.Getter;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
+import org.example.model.storage.ApplicationState;
 import org.example.model.storage.ApplicationStateManager;
 
 import java.time.LocalDateTime;
@@ -10,13 +12,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 public class WorkspaceManager {
     private static final WorkspaceManager INSTANCE = new WorkspaceManager();
     private final Map<Long, Workspace> WORKSPACES;
-    private long id;
+    @Getter
+    private Long id;
 
     private WorkspaceManager() {
-        WORKSPACES = ApplicationStateManager.getInstance().getState().getWorkspaces();
+        ApplicationState appState = ApplicationStateManager.getInstance().getState();
+
+        WORKSPACES = appState.getWorkspaces();
+        id = appState.getLastWorkspaceId();
     }
 
     public static WorkspaceManager getInstance() {

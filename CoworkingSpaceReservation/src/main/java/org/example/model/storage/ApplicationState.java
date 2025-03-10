@@ -3,6 +3,7 @@ package org.example.model.storage;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.example.model.Admin;
 import org.example.model.Customer;
 import org.example.model.Reservation;
@@ -22,10 +23,16 @@ public class ApplicationState {
 
     private final Map<String, List<Reservation>> reservationsByCustomer = new HashMap<>();
     private final Map<Long, Workspace> workspaces = new HashMap<>();
+    @Setter
+    private Long lastWorkspaceId = 0L;
+    @Setter
+    private Long lastReservationId = 0L;
+
     @JsonDeserialize(keyAs = Long.class)
     public Map<Long, Reservation> getReservationsById() {
         return reservationsById;
     }
+
     @JsonDeserialize(keyAs = Long.class)
     public Map<Long, Workspace> getWorkspaces() {
         return workspaces;
