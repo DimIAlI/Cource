@@ -4,6 +4,8 @@ import org.example.model.Reservation;
 import org.example.model.Workspace;
 
 import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class CustomerView {
 
@@ -31,7 +33,16 @@ public class CustomerView {
 
     public void printAvailableSpaces(List<Workspace> availableSpaces) {
         System.out.println("\nThe List of all available spaces:");
-        System.out.println(availableSpaces);
+
+        System.out.println("----------------------------------------------------------------------");
+        System.out.printf("| %-10s | %-20s | %-30s |%n", "ID", "Type", "Price");
+        System.out.println("----------------------------------------------------------------------");
+
+        for (Workspace space : availableSpaces) {
+            System.out.printf("| %-10d | %-20s | %-30.2f |%n",
+                    space.getId(), space.getType(), space.getPrice());
+        }
+        System.out.println("----------------------------------------------------------------------");
     }
 
     public void printReservationEndDateMessage() {
@@ -44,7 +55,19 @@ public class CustomerView {
 
     public void printCustomerReservations(List<Reservation> userReservations) {
         System.out.println("The list of your reservations:");
-        System.out.println(userReservations);
+
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-15s | %-10s | %-20s | %-30s | %-20s | %-20s |%n",
+                "Reservation ID", "Space ID", "Type", "Price", "Booking Start", "Booking End");
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+
+        for (Reservation reservation : userReservations) {
+            Workspace space = reservation.getSpace();
+            System.out.printf("| %-15d | %-10d | %-20s | %-30.2f | %-20s | %-20s |%n",
+                    reservation.getId(), space.getId(), space.getType(), space.getPrice(),
+                    formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
+        }
+        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     public void printErrorRemoveReservationMessage(long id) {
@@ -62,14 +85,20 @@ public class CustomerView {
     public void printBrowseSpacesItem() {
         System.out.println("\n=Browse available spaces=");
     }
-    public void printMakeReservationItem(){
+
+    public void printMakeReservationItem() {
         System.out.println("\n=Make a reservation=");
     }
-    public void printViewReservationItem(){
+
+    public void printViewReservationItem() {
         System.out.println("\n=View my reservations=");
     }
-    public void printCancelReservationItem(){
+
+    public void printCancelReservationItem() {
         System.out.println("\n=Cancel a reservation=");
     }
-
+    private String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+        return dateTime.format(formatter);
+    }
 }
