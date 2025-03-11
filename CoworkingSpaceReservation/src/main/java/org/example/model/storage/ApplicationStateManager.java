@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
+import org.example.model.ReservationManager;
+import org.example.model.WorkspaceManager;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -47,6 +49,8 @@ public class ApplicationStateManager {
     }
 
     public void saveState() {
+        state.setLastWorkspaceId(WorkspaceManager.getInstance().getId());
+        state.setLastReservationId(ReservationManager.getInstance().getId());
         try {
             Path path = Paths.get(FILE_PATH);
             objectMapper.writeValue(Files.newOutputStream(path, StandardOpenOption.TRUNCATE_EXISTING), state);

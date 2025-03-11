@@ -64,4 +64,19 @@ class CustomerController {
         return CustomerManager.getInstance().getCustomer(user, choice);
     }
 
+    void showBrowseSpacesItem() {
+        customerView.printBrowseSpacesItem();
+    }
+
+    void printMakeReservationItem() {
+        customerView.printMakeReservationItem();
+    }
+
+    void showViewReservationItem() {
+        customerView.printViewReservationItem();
+    }
+
+    void showCancelReservationItem() {
+        customerView.printCancelReservationItem();
+    }
 }

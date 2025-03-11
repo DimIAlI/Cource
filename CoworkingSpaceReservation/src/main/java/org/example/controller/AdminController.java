@@ -68,4 +68,16 @@ class AdminController {
     User getAdmin(User user, String login) {
         return AdminManager.getInstance().getAdmin(user, login);
     }
+
+    void showAddSpaceMenuItem() {
+        adminView.printAddSpaceMenuItem();
+    }
+
+    void showRemoveSpaceMenuItem() {
+        adminView.printRemoveSpaceMenuItem();
+    }
+
+    void showViewReservationMenuItem() {
+        adminView.printViewReservationMenuItem();
+    }
 }

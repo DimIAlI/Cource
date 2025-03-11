@@ -20,7 +20,7 @@ public class MakeReservationCommand extends CustomerCommand {
     public boolean execute(GeneralController generalController) {
         String message;
         boolean isValid;
-
+        generalController.showMakeReservationItem();
         generalController.showGetIdMessage();
         generalController.showEnterChoiceMessage();
 

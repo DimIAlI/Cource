@@ -1,16 +1,19 @@
 package org.example.view;
 
+import org.example.model.Customer;
 import org.example.model.Reservation;
 import org.example.model.Workspace;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
 public class AdminView {
 
     public void printWelcomeMessage() {
-        System.out.print("\nAdmin Login");
-        System.out.println(" (The expected login must be longer than 5 characters, not contain special characters, and be in English)");
+        System.out.println("\n=Admin Login=");
+        System.out.println("(The expected login must be longer than 5 characters, not contain special characters, and be in English)\n");
         System.out.print("Enter Admin username: ");
     }
 
@@ -25,8 +28,15 @@ public class AdminView {
     }
 
     public void printAllSpaces(List<Workspace> allSpaces) {
-        System.out.println(allSpaces);
+        System.out.println("------------------------------------------------------------------------------------");
+        System.out.printf("| %-10s | %-20s | %-30s | %-9s |%n", "ID", "Type", "Price", "Available");
+        System.out.println("------------------------------------------------------------------------------------");
 
+        for (Workspace space : allSpaces) {
+            System.out.printf("| %-10d | %-20s | %-30.2f | %-9s |%n",
+                    space.getId(), space.getType(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
+        }
+        System.out.println("------------------------------------------------------------------------------------");
     }
 
     public void printAddType() {
@@ -44,11 +54,25 @@ public class AdminView {
 
     public void printAllReservations(Map<Long, Reservation> allReservations) {
         System.out.println("The list of all reservations:");
-        System.out.println(allReservations);
+
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.printf("| %-15s | %-35s | %-15s | %-20s | %-30s | %-20s | %-20s |%n",
+                "Reservation ID", "User Login", "Space ID", "Type", "Price", "Booking Start", "Booking End");
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
+        for (Reservation reservation : allReservations.values()) {
+            Workspace space = reservation.getSpace();
+            Customer customer = reservation.getCustomer();
+
+            System.out.printf("| %-15d | %-35s | %-15d | %-20s | %-30.2f | %-20s | %-20s |%n",
+                    reservation.getId(), customer.getLogin(), space.getId(), space.getType(), space.getPrice(),
+                    formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
+        }
+        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     public void printEmptySpaceMessage() {
-        System.out.println(" No spaces have been added yet!");
+        System.out.println("No spaces have been added yet!");
     }
 
     public void printAllSpacesMessage() {
@@ -68,5 +92,21 @@ public class AdminView {
 
     public void printEmptyReservationMessage() {
         System.out.println("System has no reservations");
+    }
+
+    public void printAddSpaceMenuItem() {
+        System.out.println("\n=Add a new coworking space=");
+    }
+
+    public void printRemoveSpaceMenuItem(){
+        System.out.println("\n=Remove a coworking space=");
+    }
+
+    public void printViewReservationMenuItem(){
+        System.out.println("\n=View all reservations=");
+    }
+    private String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+        return dateTime.format(formatter);
     }
 }

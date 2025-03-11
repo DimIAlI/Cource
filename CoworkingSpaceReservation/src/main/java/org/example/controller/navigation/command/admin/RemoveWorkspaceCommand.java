@@ -8,7 +8,7 @@ import org.example.exceptions.IdNotFoundException;
 public class RemoveWorkspaceCommand implements MenuCommand {
     @Override
     public boolean execute(GeneralController generalController) {
-
+        generalController.showRemoveSpaceMenuItem();
         if (!generalController.showAllSpacesMessage()) {
             return false;
         }
@@ -31,7 +31,7 @@ public class RemoveWorkspaceCommand implements MenuCommand {
 
         try {
             generalController.removeWorkspace(id);
-
+            generalController.showSuccessMessage();
         } catch (IdNotFoundException e) {
             generalController.showErrorIdMessage(e.getId());
         }

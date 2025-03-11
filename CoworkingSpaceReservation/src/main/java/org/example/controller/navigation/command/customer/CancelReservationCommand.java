@@ -15,7 +15,7 @@ public class CancelReservationCommand extends CustomerCommand {
     public boolean execute(GeneralController generalController) {
         String message;
         boolean isValid;
-
+        generalController.showCancelReservationItem();
         generalController.showIdMessage();
         generalController.showEnterChoiceMessage();
 
@@ -33,6 +33,7 @@ public class CancelReservationCommand extends CustomerCommand {
 
         try {
             generalController.cancelReservation(id, getCustomer());
+            generalController.showSuccessMessage();
         } catch (ReservationDoesNotExistException | UnauthorizedReservationAccessException e) {
 
             generalController.showErrorRemoveReservationMessage(e.getId());

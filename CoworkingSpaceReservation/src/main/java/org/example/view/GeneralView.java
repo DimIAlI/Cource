@@ -2,7 +2,7 @@ package org.example.view;
 
 public class GeneralView {
     public void printWelcomeMessage() {
-        System.out.println("Welcome to the Coworking Space Reservation System!");
+        System.out.println("\n=Welcome to the Coworking Space Reservation System!=");
     }
 
     public void printMenu() {
