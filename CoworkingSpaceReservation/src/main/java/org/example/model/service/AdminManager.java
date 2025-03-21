@@ -1,4 +1,7 @@
-package org.example.model;
+package org.example.model.service;
+
+import org.example.model.entity.Admin;
+import org.example.model.entity.User;
 
 public class AdminManager {
 

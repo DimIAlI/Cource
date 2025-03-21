@@ -1,6 +1,6 @@
-package org.example.model.factory;
+package org.example.model.service.factory;
 
-import org.example.model.User;
+import org.example.model.entity.User;
 
 import java.util.Map;
 import java.util.Optional;

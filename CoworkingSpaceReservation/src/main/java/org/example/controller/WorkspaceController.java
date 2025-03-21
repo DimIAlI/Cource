@@ -1,8 +1,8 @@
 package org.example.controller;
 
-import org.example.model.SpaceType;
-import org.example.model.Workspace;
-import org.example.model.WorkspaceManager;
+import org.example.model.entity.SpaceType;
+import org.example.model.entity.Workspace;
+import org.example.model.service.WorkspaceManager;
 import java.time.LocalDateTime;
 import java.util.List;
 

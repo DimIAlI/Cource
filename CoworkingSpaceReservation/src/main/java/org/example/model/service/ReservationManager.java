@@ -1,9 +1,12 @@
-package org.example.model;
+package org.example.model.service;
 
 import lombok.Getter;
 import org.example.exceptions.ReservationAlreadyExistException;
 import org.example.exceptions.ReservationDoesNotExistException;
 import org.example.exceptions.UnauthorizedReservationAccessException;
+import org.example.model.entity.Customer;
+import org.example.model.entity.Reservation;
+import org.example.model.entity.Workspace;
 import org.example.model.storage.ApplicationState;
 import org.example.model.storage.ApplicationStateManager;
 

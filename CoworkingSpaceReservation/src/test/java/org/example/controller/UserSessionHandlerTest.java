@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.model.User;
-import org.example.model.factory.UserFactorySelector;
+import org.example.model.entity.User;
+import org.example.model.service.factory.UserFactorySelector;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

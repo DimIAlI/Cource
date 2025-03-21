@@ -1,9 +1,9 @@
 package org.example.controller;
 
 import lombok.experimental.UtilityClass;
-import org.example.model.Admin;
-import org.example.model.SpaceType;
-import org.example.model.User;
+import org.example.model.entity.Admin;
+import org.example.model.entity.SpaceType;
+import org.example.model.entity.User;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

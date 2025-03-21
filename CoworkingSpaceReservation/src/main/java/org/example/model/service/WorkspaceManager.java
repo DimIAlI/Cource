@@ -1,8 +1,11 @@
-package org.example.model;
+package org.example.model.service;
 
 import lombok.Getter;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
+import org.example.model.entity.Reservation;
+import org.example.model.entity.SpaceType;
+import org.example.model.entity.Workspace;
 import org.example.model.storage.ApplicationState;
 import org.example.model.storage.ApplicationStateManager;
 

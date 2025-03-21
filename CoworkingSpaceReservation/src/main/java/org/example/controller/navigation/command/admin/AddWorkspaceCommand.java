@@ -4,7 +4,7 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.controller.navigation.command.MenuCommand;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.SpaceType;
+import org.example.model.entity.SpaceType;
 
 import java.util.Arrays;
 

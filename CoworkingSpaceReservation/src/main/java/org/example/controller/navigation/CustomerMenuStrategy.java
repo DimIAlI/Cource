@@ -7,7 +7,7 @@ import org.example.controller.navigation.command.customer.CancelReservationComma
 import org.example.controller.navigation.command.customer.MakeReservationCommand;
 import org.example.controller.navigation.command.customer.ShowAvailableSpacesCommand;
 import org.example.controller.navigation.command.customer.ViewReservationsCommand;
-import org.example.model.Customer;
+import org.example.model.entity.Customer;
 
 import java.util.Map;
 

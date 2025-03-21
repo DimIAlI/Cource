@@ -2,9 +2,9 @@ package org.example.controller.navigation;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
-import org.example.model.Admin;
-import org.example.model.Customer;
-import org.example.model.User;
+import org.example.model.entity.Admin;
+import org.example.model.entity.Customer;
+import org.example.model.entity.User;
 
 
 public class MenuNavigator {

@@ -1,8 +1,8 @@
 package org.example.view;
 
-import org.example.model.Customer;
-import org.example.model.Reservation;
-import org.example.model.Workspace;
+import org.example.model.entity.Customer;
+import org.example.model.entity.Reservation;
+import org.example.model.entity.Workspace;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

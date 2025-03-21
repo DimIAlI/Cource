@@ -4,10 +4,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.example.model.Admin;
-import org.example.model.Customer;
-import org.example.model.Reservation;
-import org.example.model.Workspace;
+import org.example.model.entity.Admin;
+import org.example.model.entity.Customer;
+import org.example.model.entity.Reservation;
+import org.example.model.entity.Workspace;
 
 import java.util.HashMap;
 import java.util.List;

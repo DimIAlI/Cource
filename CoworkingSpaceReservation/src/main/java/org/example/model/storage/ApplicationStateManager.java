@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Getter;
-import org.example.model.ReservationManager;
-import org.example.model.WorkspaceManager;
+import org.example.model.service.ReservationManager;
+import org.example.model.service.WorkspaceManager;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -4,7 +4,7 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.exceptions.ReservationDoesNotExistException;
 import org.example.exceptions.UnauthorizedReservationAccessException;
-import org.example.model.Customer;
+import org.example.model.entity.Customer;
 
 public class CancelReservationCommand extends CustomerCommand {
     public CancelReservationCommand(Customer customer) {

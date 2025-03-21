@@ -1,7 +1,7 @@
 package org.example.view;
 
-import org.example.model.Reservation;
-import org.example.model.Workspace;
+import org.example.model.entity.Reservation;
+import org.example.model.entity.Workspace;
 
 import java.util.List;
 import java.time.LocalDateTime;

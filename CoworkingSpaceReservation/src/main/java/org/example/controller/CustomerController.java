@@ -1,9 +1,9 @@
 package org.example.controller;
 
-import org.example.model.CustomerManager;
-import org.example.model.Reservation;
-import org.example.model.User;
-import org.example.model.Workspace;
+import org.example.model.service.CustomerManager;
+import org.example.model.entity.Reservation;
+import org.example.model.entity.User;
+import org.example.model.entity.Workspace;
 import org.example.view.CustomerView;
 
 import java.util.List;

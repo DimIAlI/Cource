@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.model.*;
+import org.example.model.entity.*;
 import org.example.view.GeneralView;
 
 import java.time.LocalDateTime;

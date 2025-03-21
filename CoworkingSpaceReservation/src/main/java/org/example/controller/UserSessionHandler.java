@@ -1,8 +1,7 @@
 package org.example.controller;
 
-import org.example.model.factory.UserFactorySelector;
-import org.example.model.Admin;
-import org.example.model.User;
+import org.example.model.service.factory.UserFactorySelector;
+import org.example.model.entity.User;
 
 import java.util.Optional;
 

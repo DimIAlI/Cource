@@ -1,10 +1,9 @@
-package org.example.model;
+package org.example.model.entity;
 
 import lombok.*;
 
-
-@Builder
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -16,3 +15,4 @@ public class Workspace {
     private double price;
     private boolean available;
 }
+
