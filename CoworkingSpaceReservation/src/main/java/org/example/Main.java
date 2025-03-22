@@ -12,8 +12,7 @@ public class Main {
 
     @SneakyThrows
     private void start() {
-
-        ProgramRunnerInvoker programRunnerInvoker = new ProgramRunnerInvoker("lib");
-        programRunnerInvoker.run();
+        ProgramRunnerInvoker.initialize("lib");
+        ProgramRunnerInvoker.run();
     }
 }

@@ -1,18 +1,26 @@
 package org.example.util;
 
 import lombok.SneakyThrows;
+import lombok.experimental.UtilityClass;
 
 import java.lang.reflect.Method;
 
+@UtilityClass
 public class ProgramRunnerInvoker {
-    private static final String CLASS_NAME = "ProgramRunner";
-    private static final String INIT_METHOD_NAME = "createRunner";
-    private static final String RUN = "run";
-    private final Object runnerInstance;
+    private final String CLASS_NAME = "ProgramRunner";
+    private final String INIT_METHOD_NAME = "createRunner";
+    private final String RUN = "run";
+    private Object runnerInstance;
 
-    public ProgramRunnerInvoker(String classpath) {
+    @SneakyThrows
+    public void initialize(String classpath) {
         Class<?> programRunnerClass = loadClassFromClasspath(classpath);
         runnerInstance = invokeFactoryMethod(programRunnerClass);
+    }
+
+    @SneakyThrows
+    public void run() {
+        invokeMethod(runnerInstance);
     }
 
     @SneakyThrows
@@ -25,11 +33,6 @@ public class ProgramRunnerInvoker {
     private Object invokeFactoryMethod(Class<?> clazz) {
         Method method = clazz.getMethod(INIT_METHOD_NAME);
         return method.invoke(null);
-    }
-
-    @SneakyThrows
-    public void run() {
-        invokeMethod(runnerInstance);
     }
 
     @SneakyThrows
