@@ -1,9 +1,9 @@
 package org.example.model.service;
 
 
-import org.example.model.entity.Admin;
-import org.example.model.entity.Customer;
-import org.example.model.entity.User;
+import org.example.model.entity.AdminEntity;
+import org.example.model.entity.CustomerEntity;
+import org.example.model.entity.UserEntity;
 import org.example.model.storage.ApplicationStateManager;
 
 import java.util.Map;
@@ -15,25 +15,25 @@ class LoginManager {
         return INSTANCE;
     }
 
-    private final Map<String, Customer> registeredCustomers;
-    private final Map<String, Admin> registeredAdmins;
+    private final Map<String, CustomerEntity> registeredCustomers;
+    private final Map<String, AdminEntity> registeredAdmins;
 
     private LoginManager() {
         registeredCustomers = ApplicationStateManager.getInstance().getState().getRegisteredCustomers();
         registeredAdmins = ApplicationStateManager.getInstance().getState().getRegisteredAdmins();
     }
 
-    User authenticateOrRegister(User user, String login) {
+    UserEntity authenticateOrRegister(UserEntity user, String login) {
 
-            if (user instanceof Admin) {
+            if (user instanceof AdminEntity) {
                 return registeredAdmins.computeIfAbsent(login, k -> {
-                    User editedUser = AdminManager.getInstance().setAdminLogin(user, login);
-                    return (Admin) editedUser;
+                    UserEntity editedUser = AdminManager.getInstance().setAdminLogin(user, login);
+                    return (AdminEntity) editedUser;
                 });
             } else {
                 return registeredCustomers.computeIfAbsent(login, k -> {
-                    User editedUser = CustomerManager.getInstance().setCustomerLogin(user, login);
-                    return (Customer) editedUser;
+                    UserEntity editedUser = CustomerManager.getInstance().setCustomerLogin(user, login);
+                    return (CustomerEntity) editedUser;
                 });
             }
     }

@@ -3,9 +3,9 @@ package org.example.model;
 import lombok.SneakyThrows;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.entity.Reservation;
-import org.example.model.entity.SpaceType;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.ReservationEntity;
+import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.model.service.ReservationManager;
 import org.example.model.service.WorkspaceManager;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,13 +78,13 @@ class WorkspaceManagerTest {
     @ParameterizedTest(name = "Price: {0}, Space Type: {1}")
     @MethodSource("provideUniqueWorkspaceData")
     @DisplayName("Should add a new workspace and assign correct parameters when place does not exist")
-    void add_shouldAddNewWorkspace_andAssignCorrectParameters_whenPlaceDoesNotExist(double price, SpaceType type) {
+    void add_shouldAddNewWorkspace_andAssignCorrectParameters_whenPlaceDoesNotExist(double price, SpaceTypeEntity type) {
 
         //given
 
         //when
         workspaceManager.add(type, price);
-        Workspace addedWorkspace = workspaceManager.getWorkspace(workspaceManager.getId());
+        WorkspaceEntity addedWorkspace = workspaceManager.getWorkspace(workspaceManager.getId());
 
         //then
         assertThat(addedWorkspace).isNotNull();
@@ -96,7 +96,7 @@ class WorkspaceManagerTest {
     @ParameterizedTest(name = "Unique Price: {0}, Repeated Price: {1}, Unique Space Type: {2}, Repeated Space Type: {3}")
     @MethodSource("provideNonUniqueWorkspaceData")
     @DisplayName("Should throw PlaceAlreadyExistException when place already exists")
-    void add_shouldThrowPlaceAlreadyExistException_whenPlaceAlreadyExists(double firstPrice, double secondPrice, SpaceType firstType, SpaceType secondType) {
+    void add_shouldThrowPlaceAlreadyExistException_whenPlaceAlreadyExists(double firstPrice, double secondPrice, SpaceTypeEntity firstType, SpaceTypeEntity secondType) {
 
         //given
 
@@ -144,7 +144,7 @@ class WorkspaceManagerTest {
         addWorkspaces();
 
         //when
-        List<Workspace> availableSpaces = workspaceManager.getAvailable(START_TIME, END_TIME);
+        List<WorkspaceEntity> availableSpaces = workspaceManager.getAvailable(START_TIME, END_TIME);
 
         //then
         assertThat(availableSpaces).isNotNull();
@@ -159,12 +159,12 @@ class WorkspaceManagerTest {
         addWorkspaces();
         long workspaceIdForReservation = 2;
 
-        Workspace reservedSpace = workspaceManager.getWorkspace(workspaceIdForReservation);
+        WorkspaceEntity reservedSpace = workspaceManager.getWorkspace(workspaceIdForReservation);
 
         try (MockedStatic<ReservationManager> reservationManagerMockedStatic = Mockito.mockStatic(ReservationManager.class)) {
             given(ReservationManager.getInstance()).willReturn(reservationManager);
 
-            Reservation reservation = Mockito.mock(Reservation.class);
+            ReservationEntity reservation = Mockito.mock(ReservationEntity.class);
 
             given(reservation.getSpace()).willReturn(reservedSpace);
             given(reservation.getStartTime()).willReturn(START_TIME);
@@ -173,7 +173,7 @@ class WorkspaceManagerTest {
             given(reservationManager.getAll()).willReturn(Map.of(1L, reservation));
 
             //when
-            List<Workspace> availableWorkspaces = workspaceManager.getAvailable(START_TIME, END_TIME);
+            List<WorkspaceEntity> availableWorkspaces = workspaceManager.getAvailable(START_TIME, END_TIME);
 
             //then
             assertThat(availableWorkspaces).hasSize(4);
@@ -188,12 +188,12 @@ class WorkspaceManagerTest {
         // given
         workspaceManager.add(SpaceType.OPEN_SPACE, 1000);
 
-        Workspace reservedSpace = workspaceManager.getWorkspace(1);
+        WorkspaceEntity reservedSpace = workspaceManager.getWorkspace(1);
 
         try (MockedStatic<ReservationManager> reservationManagerMockedStatic = Mockito.mockStatic(ReservationManager.class)) {
             given(ReservationManager.getInstance()).willReturn(reservationManager);
 
-            Reservation reservation = Mockito.mock(Reservation.class);
+            ReservationEntity reservation = Mockito.mock(ReservationEntity.class);
 
             given(reservation.getSpace()).willReturn(reservedSpace);
             given(reservation.getStartTime()).willReturn(START_TIME);
@@ -202,7 +202,7 @@ class WorkspaceManagerTest {
             given(reservationManager.getAll()).willReturn(Map.of(1L, reservation));
 
             //when
-            List<Workspace> availableWorkspaces = workspaceManager.getAvailable(START_TIME, END_TIME);
+            List<WorkspaceEntity> availableWorkspaces = workspaceManager.getAvailable(START_TIME, END_TIME);
 
             //then
             assertThat(availableWorkspaces).isEmpty();
@@ -212,14 +212,14 @@ class WorkspaceManagerTest {
     @ParameterizedTest(name = "Price: {0}, Space Type: {1}")
     @MethodSource("provideUniqueWorkspaceData")
     @DisplayName("Should return workspace when ID exists")
-    void getWorkspace_shouldReturnWorkspace_whenIdExists(double price, SpaceType type) {
+    void getWorkspace_shouldReturnWorkspace_whenIdExists(double price, SpaceTypeEntity type) {
 
         //given
         workspaceManager.add(type, price);
         long id = workspaceManager.getId();
 
         // when
-        Workspace result = workspaceManager.getWorkspace(id);
+        WorkspaceEntity result = workspaceManager.getWorkspace(id);
 
         // then
         assertThat(result).isNotNull();
@@ -280,7 +280,7 @@ class WorkspaceManagerTest {
         Class<WorkspaceManager> workspaceManagerClass = WorkspaceManager.class;
         Field managerField = workspaceManagerClass.getDeclaredField("WORKSPACES");
         managerField.setAccessible(true);
-        managerField.set(workspaceManager, new HashMap<Long, Workspace>());
+        managerField.set(workspaceManager, new HashMap<Long, WorkspaceEntity>());
     }
 
     @SneakyThrows

@@ -2,7 +2,7 @@ package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
-import org.example.model.entity.Customer;
+import org.example.model.entity.CustomerEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 public class ShowAvailableSpacesCommand extends CustomerCommand {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public ShowAvailableSpacesCommand(Customer customer) {
+    public ShowAvailableSpacesCommand(CustomerEntity customer) {
         super(customer);
     }
 

@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Reservation {
+public class ReservationEntity {
     private long id;
-    private Customer customer;
-    private Workspace space;
+    private CustomerEntity customer;
+    private WorkspaceEntity space;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 }

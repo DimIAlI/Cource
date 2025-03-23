@@ -1,6 +1,6 @@
-package org.example.model.service.factory;
+package org.example.model.entity.factory;
 
-import org.example.model.entity.User;
+import org.example.model.entity.UserEntity;
 
 import java.util.Map;
 import java.util.Optional;
@@ -13,7 +13,7 @@ public class UserFactorySelector {
                 "2", new CustomerFactory());
     }
 
-    public Optional<User> getEmptyUser(String choice) {
+    public Optional<UserEntity> getEmptyUser(String choice) {
         UserFactory factory = userFactories.get(choice);
         if (factory == null) {
             return Optional.empty();

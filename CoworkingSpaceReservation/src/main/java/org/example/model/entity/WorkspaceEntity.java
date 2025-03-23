@@ -7,10 +7,10 @@ import lombok.*;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class Workspace {
+public class WorkspaceEntity {
     private long id;
     @EqualsAndHashCode.Include
-    private SpaceType type;
+    private SpaceTypeEntity type;
     @EqualsAndHashCode.Include
     private double price;
     private boolean available;

@@ -1,7 +1,7 @@
 package org.example.model.service;
 
-import org.example.model.entity.Customer;
-import org.example.model.entity.User;
+import org.example.model.entity.CustomerEntity;
+import org.example.model.entity.UserEntity;
 
 public class CustomerManager {
 
@@ -14,15 +14,15 @@ public class CustomerManager {
         return INSTANCE;
     }
 
-    public User getCustomer(User user, String login) {
+    public UserEntity getCustomer(UserEntity user, String login) {
         return LoginManager.getInstance().authenticateOrRegister(user, login);
     }
 
-    public Customer buildCustomer() {
-        return Customer.builder().build();
+    public CustomerEntity buildCustomer() {
+        return CustomerEntity.builder().build();
     }
 
-    User setCustomerLogin(User user, String choice) {
+    UserEntity setCustomerLogin(UserEntity user, String choice) {
         user.setLogin(choice);
         return user;
     }

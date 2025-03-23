@@ -4,9 +4,7 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.controller.navigation.command.MenuCommand;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.entity.SpaceType;
-
-import java.util.Arrays;
+import org.example.model.entity.SpaceTypeEntity;
 
 public class AddWorkspaceCommand implements MenuCommand {
     @Override
@@ -30,7 +28,7 @@ public class AddWorkspaceCommand implements MenuCommand {
 
         //used to avoid the effectively final restriction
         String finalMessage = message;
-        SpaceType type = Arrays.stream(SpaceType.values())
+        SpaceTypeEntity type = SpaceTypeEntity.getValues().values().stream()
                 .filter(t -> t.getDisplayName().equalsIgnoreCase(finalMessage))
                 .findFirst().get();
 

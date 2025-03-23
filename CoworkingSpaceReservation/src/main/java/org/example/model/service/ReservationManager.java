@@ -4,9 +4,9 @@ import lombok.Getter;
 import org.example.exceptions.ReservationAlreadyExistException;
 import org.example.exceptions.ReservationDoesNotExistException;
 import org.example.exceptions.UnauthorizedReservationAccessException;
-import org.example.model.entity.Customer;
-import org.example.model.entity.Reservation;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.CustomerEntity;
+import org.example.model.entity.ReservationEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.model.storage.ApplicationState;
 import org.example.model.storage.ApplicationStateManager;
 
@@ -17,8 +17,8 @@ import java.util.*;
 public class ReservationManager {
 
     private static final ReservationManager INSTANCE = new ReservationManager();
-    private final Map<Long, Reservation> RESERVATIONS_ID;
-    private final Map<String, List<Reservation>> RESERVATIONS_CUSTOMER;
+    private final Map<Long, ReservationEntity> RESERVATIONS_ID;
+    private final Map<String, List<ReservationEntity>> RESERVATIONS_CUSTOMER;
     @Getter
     private Long id;
 
@@ -34,11 +34,11 @@ public class ReservationManager {
         return INSTANCE;
     }
 
-    public void add(Customer customer, Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
+    public void add(CustomerEntity customer, WorkspaceEntity space, LocalDateTime startTime, LocalDateTime endTime) {
 
         if (isWorkSpaceAvailable(space, startTime, endTime)) {
 
-            Reservation reservation = buildReservation(customer, space, startTime, endTime);
+            ReservationEntity reservation = buildReservation(customer, space, startTime, endTime);
 
             space.setAvailable(false);
 
@@ -51,8 +51,8 @@ public class ReservationManager {
         } else throw new ReservationAlreadyExistException();
     }
 
-    public void remove(long id, Customer currentUser) {
-        Reservation reservation = RESERVATIONS_ID.get(id);
+    public void remove(long id, CustomerEntity currentUser) {
+        ReservationEntity reservation = RESERVATIONS_ID.get(id);
 
         if (reservation == null) {
             throw new ReservationDoesNotExistException(id);
@@ -64,7 +64,7 @@ public class ReservationManager {
         RESERVATIONS_ID.remove(id);
 
         String login = reservation.getCustomer().getLogin();
-        List<Reservation> reservations = RESERVATIONS_CUSTOMER.get(login);
+        List<ReservationEntity> reservations = RESERVATIONS_CUSTOMER.get(login);
 
         if (reservations != null) {
             reservations.remove(reservation);
@@ -74,7 +74,7 @@ public class ReservationManager {
             }
         }
 
-        Workspace workspace = reservation.getSpace();
+        WorkspaceEntity workspace = reservation.getSpace();
 
         boolean hasOtherReservations = RESERVATIONS_ID.values().stream()
                 .anyMatch(reserv -> reserv.getSpace().equals(workspace));
@@ -84,17 +84,17 @@ public class ReservationManager {
         }
     }
 
-    public Optional<List<Reservation>> getCustomerReservations(Customer customer) {
+    public Optional<List<ReservationEntity>> getCustomerReservations(CustomerEntity customer) {
         return Optional.ofNullable(RESERVATIONS_CUSTOMER.get(customer.getLogin()));
     }
 
-    public Map<Long, Reservation> getAll() {
+    public Map<Long, ReservationEntity> getAll() {
         return RESERVATIONS_ID;
     }
 
-    private boolean isWorkSpaceAvailable(Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
+    private boolean isWorkSpaceAvailable(WorkspaceEntity space, LocalDateTime startTime, LocalDateTime endTime) {
 
-        for (Reservation reservation : RESERVATIONS_ID.values()) {
+        for (ReservationEntity reservation : RESERVATIONS_ID.values()) {
 
             if (reservation.getSpace().equals(space)) {
                 if (startTime.isBefore(reservation.getEndTime()) && endTime.isAfter(reservation.getStartTime())) {
@@ -105,8 +105,8 @@ public class ReservationManager {
         return true;
     }
 
-    private Reservation buildReservation(Customer customer, Workspace space, LocalDateTime startTime, LocalDateTime endTime) {
-        return Reservation.builder()
+    private ReservationEntity buildReservation(CustomerEntity customer, WorkspaceEntity space, LocalDateTime startTime, LocalDateTime endTime) {
+        return ReservationEntity.builder()
                 .id(generateId())
                 .customer(customer)
                 .space(space)

@@ -3,9 +3,9 @@ package org.example.model.service;
 import lombok.Getter;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.entity.Reservation;
-import org.example.model.entity.SpaceType;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.ReservationEntity;
+import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.model.storage.ApplicationState;
 import org.example.model.storage.ApplicationStateManager;
 
@@ -17,7 +17,7 @@ import java.util.Map;
 
 public class WorkspaceManager {
     private static final WorkspaceManager INSTANCE = new WorkspaceManager();
-    private final Map<Long, Workspace> WORKSPACES;
+    private final Map<Long, WorkspaceEntity> WORKSPACES;
     @Getter
     private Long id;
 
@@ -32,11 +32,11 @@ public class WorkspaceManager {
         return INSTANCE;
     }
 
-    public void add(SpaceType type, double price) {
+    public void add(SpaceTypeEntity type, double price) {
 
         if (!isWorkplaceExisted(type, price)) {
 
-            Workspace workspace = buildWorkspace(type, price);
+            WorkspaceEntity workspace = buildWorkspace(type, price);
             WORKSPACES.put(workspace.getId(), workspace);
         } else throw new PlaceAlreadyExistException(type.toString(), String.valueOf(price));
     }
@@ -47,17 +47,17 @@ public class WorkspaceManager {
         } else throw new IdNotFoundException(id);
     }
 
-    public List<Workspace> getAvailable(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<WorkspaceEntity> getAvailable(LocalDateTime startTime, LocalDateTime endTime) {
 
         ReservationManager reservationManager = ReservationManager.getInstance();
 
-        List<Workspace> availablePlaces = new ArrayList<>(WORKSPACES.values());
+        List<WorkspaceEntity> availablePlaces = new ArrayList<>(WORKSPACES.values());
 
-        Map<Long, Reservation> reservedPlaces = reservationManager.getAll();
+        Map<Long, ReservationEntity> reservedPlaces = reservationManager.getAll();
 
-        List<Workspace> occupiedPlaces = reservedPlaces.values().stream()
+        List<WorkspaceEntity> occupiedPlaces = reservedPlaces.values().stream()
                 .filter(reservation -> hasConflictWithTimeRange(reservation, startTime, endTime))
-                .map(Reservation::getSpace)
+                .map(ReservationEntity::getSpace)
                 .distinct()
                 .toList();
 
@@ -66,18 +66,18 @@ public class WorkspaceManager {
         return availablePlaces;
     }
 
-    public List<Workspace> getAll() {
+    public List<WorkspaceEntity> getAll() {
         return new ArrayList<>(WORKSPACES.values());
     }
 
-    public Workspace getWorkspace(long id) {
+    public WorkspaceEntity getWorkspace(long id) {
         if (WORKSPACES.containsKey(id)) {
             return WORKSPACES.get(id);
         } else throw new IdNotFoundException(id);
     }
 
-    private Workspace buildWorkspace(SpaceType type, double price) {
-        return Workspace.builder()
+    private WorkspaceEntity buildWorkspace(SpaceTypeEntity type, double price) {
+        return WorkspaceEntity.builder()
                 .id(generateId())
                 .type(type)
                 .price(price)
@@ -85,7 +85,7 @@ public class WorkspaceManager {
                 .build();
     }
 
-    private boolean isWorkplaceExisted(SpaceType type, double price) {
+    private boolean isWorkplaceExisted(SpaceTypeEntity type, double price) {
         return WORKSPACES.values().stream()
                 .anyMatch(existingWorkspace ->
                         existingWorkspace.getType().equals(type) && existingWorkspace.getPrice() == price);
@@ -95,7 +95,7 @@ public class WorkspaceManager {
         return ++id;
     }
 
-    private boolean hasConflictWithTimeRange(Reservation reservation, LocalDateTime startTime, LocalDateTime endTime) {
+    private boolean hasConflictWithTimeRange(ReservationEntity reservation, LocalDateTime startTime, LocalDateTime endTime) {
         return reservation.getStartTime().isBefore(endTime) && reservation.getEndTime().isAfter(startTime);
     }
 }

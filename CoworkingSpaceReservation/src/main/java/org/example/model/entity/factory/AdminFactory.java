@@ -1,12 +1,12 @@
-package org.example.model.service.factory;
+package org.example.model.entity.factory;
 
 
 import org.example.model.service.AdminManager;
-import org.example.model.entity.User;
+import org.example.model.entity.UserEntity;
 
 class AdminFactory implements UserFactory {
     @Override
-    public User createUser() {
+    public UserEntity createUser() {
         return AdminManager.getInstance().buildAdmin();
     }
 }

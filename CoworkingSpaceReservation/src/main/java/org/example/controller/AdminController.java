@@ -1,8 +1,8 @@
 package org.example.controller;
 
-import org.example.model.entity.Reservation;
-import org.example.model.entity.User;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.ReservationEntity;
+import org.example.model.entity.UserEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.model.service.AdminManager;
 import org.example.view.AdminView;
 
@@ -31,7 +31,7 @@ class AdminController {
         adminView.printMenu();
     }
 
-    void showAllSpaces(List<Workspace> allSpaces) {
+    void showAllSpaces(List<WorkspaceEntity> allSpaces) {
         adminView.printAllSpaces(allSpaces);
     }
 
@@ -47,7 +47,7 @@ class AdminController {
         adminView.printIdMessage();
     }
 
-    void showAllReservations(Optional<Map<Long, Reservation>> allReservations) {
+    void showAllReservations(Optional<Map<Long, ReservationEntity>> allReservations) {
         allReservations.ifPresentOrElse(adminView::printAllReservations,
                 adminView::printEmptyReservationMessage);
     }
@@ -68,7 +68,7 @@ class AdminController {
         adminView.printErrorAddMessage(price, type);
     }
 
-    User getAdmin(User user, String login) {
+    UserEntity getAdmin(UserEntity user, String login) {
         return AdminManager.getInstance().getAdmin(user, login);
     }
 

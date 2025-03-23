@@ -1,7 +1,7 @@
 package org.example.model.service;
 
-import org.example.model.entity.Admin;
-import org.example.model.entity.User;
+import org.example.model.entity.AdminEntity;
+import org.example.model.entity.UserEntity;
 
 public class AdminManager {
 
@@ -14,16 +14,16 @@ public class AdminManager {
         return INSTANCE;
     }
 
-    public User getAdmin(User user, String login) {
+    public UserEntity getAdmin(UserEntity user, String login) {
         return LoginManager.getInstance().authenticateOrRegister(user, login);
     }
 
-   public User setAdminLogin(User user, String login) {
+   public UserEntity setAdminLogin(UserEntity user, String login) {
         user.setLogin(login);
         return user;
     }
 
-    public Admin buildAdmin() {
-        return Admin.builder().build();
+    public AdminEntity buildAdmin() {
+        return AdminEntity.builder().build();
     }
 }

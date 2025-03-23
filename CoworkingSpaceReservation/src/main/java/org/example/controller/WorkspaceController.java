@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.model.entity.SpaceType;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.model.service.WorkspaceManager;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,7 +16,7 @@ public class WorkspaceController {
         return new WorkspaceController();
     }
 
-    public void addWorkspace(SpaceType type, double price) {
+    public void addWorkspace(SpaceTypeEntity type, double price) {
         workspaceManager.add(type, price);
     }
 
@@ -24,15 +24,15 @@ public class WorkspaceController {
         workspaceManager.remove(id);
     }
 
-    public List<Workspace> getAllSpaces() {
+    public List<WorkspaceEntity> getAllSpaces() {
         return workspaceManager.getAll();
     }
 
-    public List<Workspace> getAvailableSpaces(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<WorkspaceEntity> getAvailableSpaces(LocalDateTime startTime, LocalDateTime endTime) {
         return workspaceManager.getAvailable(startTime, endTime);
     }
 
-    public Workspace getWorkspace(long id) {
+    public WorkspaceEntity getWorkspace(long id) {
         return workspaceManager.getWorkspace(id);
     }
 }

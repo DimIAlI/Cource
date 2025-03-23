@@ -52,9 +52,9 @@ public class GeneralController {
         generalView.printExitMessage();
     }
 
-    public void showWelcomeMessage(User currentUser) {
+    public void showWelcomeMessage(UserEntity currentUser) {
 
-        if (currentUser instanceof Admin) adminController.showWelcomeMessage();
+        if (currentUser instanceof AdminEntity) adminController.showWelcomeMessage();
         else customerController.showWelcomeMessage();
     }
 
@@ -62,8 +62,8 @@ public class GeneralController {
         generalView.printMenu();
     }
 
-    public void showMenu(User currentUser) {
-        if (currentUser instanceof Admin) adminController.showMenu();
+    public void showMenu(UserEntity currentUser) {
+        if (currentUser instanceof AdminEntity) adminController.showMenu();
         else customerController.showMenu();
     }
 
@@ -72,17 +72,17 @@ public class GeneralController {
     }
 
     public void showAllReservations() {
-        Optional<Map<Long, Reservation>> allReservations = Optional.ofNullable(reservationController.getAllReservations());
+        Optional<Map<Long, ReservationEntity>> allReservations = Optional.ofNullable(reservationController.getAllReservations());
         adminController.showAllReservations(allReservations);
     }
 
     public void showAvailableSpaces(LocalDateTime startTime, LocalDateTime endTime) {
-        List<Workspace> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
+        List<WorkspaceEntity> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
         customerController.showAvailableSpaces(availableSpaces);
     }
 
-    public void showViewCustomerReservations(User currentUser) {
-        Optional<List<Reservation>> userReservations = reservationController.getUserReservations(currentUser);
+    public void showViewCustomerReservations(UserEntity currentUser) {
+        Optional<List<ReservationEntity>> userReservations = reservationController.getUserReservations(currentUser);
         customerController.showUserReservations(userReservations);
     }
 
@@ -116,7 +116,7 @@ public class GeneralController {
 
     public boolean showAllSpacesMessage() {
         adminController.showAllSpacesMessage();
-        List<Workspace> allSpaces = workspaceController.getAllSpaces();
+        List<WorkspaceEntity> allSpaces = workspaceController.getAllSpaces();
 
         if (allSpaces.isEmpty()) {
             adminController.showEmptySpaceMessage();
@@ -151,16 +151,16 @@ public class GeneralController {
         customerController.showErrorReservationExistMessage();
     }
 
-    public void cancelReservation(long id, User currentUser) {
+    public void cancelReservation(long id, UserEntity currentUser) {
         reservationController.cancelReservation(id, currentUser);
     }
 
-    public void addReservation(User currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
-        Workspace workspace = workspaceController.getWorkspace(id);
+    public void addReservation(UserEntity currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
+        WorkspaceEntity workspace = workspaceController.getWorkspace(id);
         reservationController.addReservation(currentUser, workspace, startTime, endTime);
     }
 
-    public void addWorkspace(SpaceType type, double price) {
+    public void addWorkspace(SpaceTypeEntity type, double price) {
         workspaceController.addWorkspace(type, price);
     }
 
@@ -172,8 +172,8 @@ public class GeneralController {
         return scanner.nextLine().trim();
     }
 
-    public User getUser(User user, String login) {
-        if (user instanceof Admin) {
+    public UserEntity getUser(UserEntity user, String login) {
+        if (user instanceof AdminEntity) {
             return getAdmin(user, login);
         }
         return getCustomer(user, login);
@@ -183,11 +183,11 @@ public class GeneralController {
         applicationStateController.saveChanges();
     }
 
-    private User getAdmin(User user, String login) {
+    private UserEntity getAdmin(UserEntity user, String login) {
         return adminController.getAdmin(user, login);
     }
 
-    private User getCustomer(User user, String choice) {
+    private UserEntity getCustomer(UserEntity user, String choice) {
         return customerController.getCustomer(user, choice);
     }
 

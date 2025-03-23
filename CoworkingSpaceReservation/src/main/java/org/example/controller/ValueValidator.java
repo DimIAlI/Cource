@@ -1,14 +1,13 @@
 package org.example.controller;
 
 import lombok.experimental.UtilityClass;
-import org.example.model.entity.Admin;
-import org.example.model.entity.SpaceType;
-import org.example.model.entity.User;
+import org.example.model.entity.AdminEntity;
+import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.entity.UserEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 
 @UtilityClass
 public class ValueValidator {
@@ -29,12 +28,12 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkValue(User currentUser, String message) {
+    public static boolean checkValue(UserEntity currentUser, String message) {
         if (message == null || message.length() != 1) return false;
 
         try {
             int number = Integer.parseInt(message);
-            int maxAllowed = (currentUser instanceof Admin) ? MAX_ALLOWED_FOR_ADMIN : MAX_ALLOWED_FOR_CUSTOMER;
+            int maxAllowed = (currentUser instanceof AdminEntity) ? MAX_ALLOWED_FOR_ADMIN : MAX_ALLOWED_FOR_CUSTOMER;
 
             return number >= MIN_ALLOWED_VALUE && number <= maxAllowed;
         } catch (NumberFormatException e) {

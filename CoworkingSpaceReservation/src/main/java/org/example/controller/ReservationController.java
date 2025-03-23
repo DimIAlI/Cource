@@ -1,9 +1,9 @@
 package org.example.controller;
 
-import org.example.model.entity.Customer;
-import org.example.model.entity.Reservation;
-import org.example.model.entity.User;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.CustomerEntity;
+import org.example.model.entity.ReservationEntity;
+import org.example.model.entity.UserEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.model.service.ReservationManager;
 
 import java.time.LocalDateTime;
@@ -23,19 +23,19 @@ class ReservationController {
         return new ReservationController();
     }
 
-    Map<Long, Reservation> getAllReservations() {
+    Map<Long, ReservationEntity> getAllReservations() {
         return reservationManager.getAll();
     }
 
-    void addReservation(User currentUser, Workspace workspace, LocalDateTime startTime, LocalDateTime endTime) {
-        reservationManager.add((Customer) currentUser, workspace, startTime, endTime);
+    void addReservation(UserEntity currentUser, WorkspaceEntity workspace, LocalDateTime startTime, LocalDateTime endTime) {
+        reservationManager.add((CustomerEntity) currentUser, workspace, startTime, endTime);
     }
 
-    Optional<List<Reservation>> getUserReservations(User currentUser) {
-        return reservationManager.getCustomerReservations((Customer) currentUser);
+    Optional<List<ReservationEntity>> getUserReservations(UserEntity currentUser) {
+        return reservationManager.getCustomerReservations((CustomerEntity) currentUser);
     }
 
-    void cancelReservation(long id, User currentUser) {
-        reservationManager.remove(id, (Customer) currentUser);
+    void cancelReservation(long id, UserEntity currentUser) {
+        reservationManager.remove(id, (CustomerEntity) currentUser);
     }
 }

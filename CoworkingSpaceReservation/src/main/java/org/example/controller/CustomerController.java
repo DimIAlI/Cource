@@ -1,9 +1,9 @@
 package org.example.controller;
 
 import org.example.model.service.CustomerManager;
-import org.example.model.entity.Reservation;
-import org.example.model.entity.User;
-import org.example.model.entity.Workspace;
+import org.example.model.entity.ReservationEntity;
+import org.example.model.entity.UserEntity;
+import org.example.model.entity.WorkspaceEntity;
 import org.example.view.CustomerView;
 
 import java.util.List;
@@ -30,7 +30,7 @@ class CustomerController {
         customerView.printMenu();
     }
 
-    void showAvailableSpaces(List<Workspace> availableSpaces) {
+    void showAvailableSpaces(List<WorkspaceEntity> availableSpaces) {
         customerView.printAvailableSpaces(availableSpaces);
     }
 
@@ -46,7 +46,7 @@ class CustomerController {
         customerView.printGetIdMessage();
     }
 
-    void showUserReservations(Optional<List<Reservation>> userReservations) {
+    void showUserReservations(Optional<List<ReservationEntity>> userReservations) {
         userReservations.ifPresentOrElse(
                 customerView::printCustomerReservations,
                 customerView::printEmptyReservationMessage);
@@ -60,7 +60,7 @@ class CustomerController {
         customerView.printErrorReservationExistMessage();
     }
 
-    User getCustomer(User user, String choice) {
+    UserEntity getCustomer(UserEntity user, String choice) {
         return CustomerManager.getInstance().getCustomer(user, choice);
     }
 

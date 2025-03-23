@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.model.entity.User;
-import org.example.model.service.factory.UserFactorySelector;
+import org.example.model.entity.UserEntity;
+import org.example.model.entity.factory.UserFactorySelector;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -130,7 +130,7 @@ class UserSessionHandlerTest {
         given(userFactorySelector.getEmptyUser(anyString())).willReturn(Optional.empty());
 
         // when
-        Optional<User> result = userSessionHandler.getEmptyUser(anyString());
+        Optional<UserEntity> result = userSessionHandler.getEmptyUser(anyString());
 
         // then
         assertThat(result).isEmpty();
@@ -141,11 +141,11 @@ class UserSessionHandlerTest {
     void getEmptyUser_shouldReturnNonEmptyOptional_whenChoiceIsValid() {
 
         // given
-        User user = mock(User.class);
+        UserEntity user = mock(UserEntity.class);
         given(userFactorySelector.getEmptyUser(anyString())).willReturn(Optional.of(user));
 
         // when
-        Optional<User> result = userSessionHandler.getEmptyUser(anyString());
+        Optional<UserEntity> result = userSessionHandler.getEmptyUser(anyString());
 
         // then
         assertThat(result).isNotEmpty();
@@ -160,7 +160,7 @@ class UserSessionHandlerTest {
         given(userFactorySelector.getEmptyUser(isNull())).willReturn(Optional.empty());
 
         // when
-        Optional<User> result = userSessionHandler.getEmptyUser(isNull());
+        Optional<UserEntity> result = userSessionHandler.getEmptyUser(isNull());
 
         // then
         assertThat(result).isEmpty();

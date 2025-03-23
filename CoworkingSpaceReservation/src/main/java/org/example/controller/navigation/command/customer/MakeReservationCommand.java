@@ -4,7 +4,7 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.ReservationAlreadyExistException;
-import org.example.model.entity.Customer;
+import org.example.model.entity.CustomerEntity;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 public class MakeReservationCommand extends CustomerCommand {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public MakeReservationCommand(Customer customer) {
+    public MakeReservationCommand(CustomerEntity customer) {
         super(customer);
     }
 

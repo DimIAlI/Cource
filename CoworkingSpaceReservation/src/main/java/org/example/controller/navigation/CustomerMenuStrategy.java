@@ -7,14 +7,14 @@ import org.example.controller.navigation.command.customer.CancelReservationComma
 import org.example.controller.navigation.command.customer.MakeReservationCommand;
 import org.example.controller.navigation.command.customer.ShowAvailableSpacesCommand;
 import org.example.controller.navigation.command.customer.ViewReservationsCommand;
-import org.example.model.entity.Customer;
+import org.example.model.entity.CustomerEntity;
 
 import java.util.Map;
 
 public class CustomerMenuStrategy implements MenuStrategy {
     private final Map<String, MenuCommand> commands;
 
-    public CustomerMenuStrategy(Customer currentCustomer) {
+    public CustomerMenuStrategy(CustomerEntity currentCustomer) {
         commands = Map.of("1", new ShowAvailableSpacesCommand(currentCustomer),
                 "2", new MakeReservationCommand(currentCustomer),
                 "3", new ViewReservationsCommand(currentCustomer),

@@ -8,5 +8,5 @@ import lombok.experimental.SuperBuilder;
 @Data
 @SuperBuilder
 @NoArgsConstructor
-public class Customer extends User {
+public class CustomerEntity extends UserEntity {
 }
