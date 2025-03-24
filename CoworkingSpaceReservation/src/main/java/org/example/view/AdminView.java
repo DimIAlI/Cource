@@ -34,7 +34,7 @@ public class AdminView {
 
         for (WorkspaceEntity space : allSpaces) {
             System.out.printf("| %-10d | %-20s | %-30.2f | %-9s |%n",
-                    space.getId(), space.getType(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
+                    space.getId(), space.getTypeId(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
         }
         System.out.println("------------------------------------------------------------------------------------");
     }
@@ -65,7 +65,7 @@ public class AdminView {
             CustomerEntity customer = reservation.getCustomer();
 
             System.out.printf("| %-15d | %-35s | %-15d | %-20s | %-30.2f | %-20s | %-20s |%n",
-                    reservation.getId(), customer.getLogin(), space.getId(), space.getType(), space.getPrice(),
+                    reservation.getId(), customer.getLogin(), space.getId(), space.getTypeId(), space.getPrice(),
                     formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
         }
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");

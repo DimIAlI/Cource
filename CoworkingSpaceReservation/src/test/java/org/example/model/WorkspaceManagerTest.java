@@ -89,7 +89,7 @@ class WorkspaceManagerTest {
         //then
         assertThat(addedWorkspace).isNotNull();
         assertThat(addedWorkspace.getId()).isGreaterThan(0);
-        assertThat(addedWorkspace.getType()).isEqualTo(type);
+        assertThat(addedWorkspace.getTypeId()).isEqualTo(type);
         assertThat(addedWorkspace.getPrice()).isEqualTo(price);
     }
 
@@ -186,7 +186,8 @@ class WorkspaceManagerTest {
     void getAvailable_shouldReturnEmptyList_whenAllWorkspacesAreReserved() {
 
         // given
-        workspaceManager.add(SpaceType.OPEN_SPACE, 1000);
+        SpaceTypeEntity type = SpaceTypeEntity.getValues().get("OPEN_SPACE");
+        workspaceManager.add(type, 1000);
 
         WorkspaceEntity reservedSpace = workspaceManager.getWorkspace(1);
 
@@ -225,7 +226,7 @@ class WorkspaceManagerTest {
         assertThat(result).isNotNull();
         assertThat(result.getId()).isEqualTo(id);
         assertThat(result.getPrice()).isEqualTo(price);
-        assertThat(result.getType()).isEqualTo(type);
+        assertThat(result.getTypeId()).isEqualTo(type);
     }
 
     @Test
@@ -253,20 +254,21 @@ class WorkspaceManagerTest {
     }
 
     private static Stream<Arguments> provideUniqueWorkspaceData() {
+        Map<String, SpaceTypeEntity> types = SpaceTypeEntity.getValues();
         return Stream.of(
-                Arguments.of(100.1, SpaceType.EVENT_SPACE),
-                Arguments.of(100.1, SpaceType.MEETING_ROOM),
-                Arguments.of(150, SpaceType.DEDICATED_DESK),
-                Arguments.of(150, SpaceType.PRIVATE_OFFICE),
-                Arguments.of(200.20, SpaceType.PRIVATE_OFFICE)
-        );
+                Arguments.of(100.1, types.get("EVENT_SPACE")),
+                Arguments.of(100.1, types.get("MEETING_ROOM")),
+                Arguments.of(150, types.get("DEDICATED_DESK")),
+                Arguments.of(150, types.get("PRIVATE_OFFICE")),
+                Arguments.of(200.20, types.get("PRIVATE_OFFICE")));
     }
 
     private static Stream<Arguments> provideNonUniqueWorkspaceData() {
+        Map<String, SpaceTypeEntity> types = SpaceTypeEntity.getValues();
         return Stream.of(
-                Arguments.of(100.1, 100.1, SpaceType.EVENT_SPACE, SpaceType.EVENT_SPACE),
-                Arguments.of(150, 150, SpaceType.DEDICATED_DESK, SpaceType.DEDICATED_DESK),
-                Arguments.of(200.20, 200.20, SpaceType.PRIVATE_OFFICE, SpaceType.PRIVATE_OFFICE)
+                Arguments.of(100.1, 100.1, types.get("EVENT_SPACE"), types.get("EVENT_SPACE"),
+                        Arguments.of(150, 150, types.get("DEDICATED_DESK"), types.get("DEDICATED_DESK")),
+                        Arguments.of(200.20, 200.20, types.get("PRIVATE_OFFICE"), types.get("PRIVATE_OFFICE")))
         );
     }
 
@@ -292,10 +294,11 @@ class WorkspaceManagerTest {
     }
 
     private void addWorkspaces() {
-        workspaceManager.add(SpaceType.OPEN_SPACE, 1000);
-        workspaceManager.add(SpaceType.HOT_DESK, 222.01);
-        workspaceManager.add(SpaceType.SHARED_OFFICE, 11.11);
-        workspaceManager.add(SpaceType.MEETING_ROOM, 20);
-        workspaceManager.add(SpaceType.OPEN_SPACE, 100);
+        Map<String, SpaceTypeEntity> types = SpaceTypeEntity.getValues();
+        workspaceManager.add(types.get("OPEN_SPACE"), 1000);
+        workspaceManager.add(types.get("HOT_DESK"), 222.01);
+        workspaceManager.add(types.get("SHARED_OFFICE"), 11.11);
+        workspaceManager.add(types.get("MEETING_ROOM"), 20);
+        workspaceManager.add(types.get("OPEN_SPACE"), 100);
     }
 }

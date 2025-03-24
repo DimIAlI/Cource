@@ -53,8 +53,8 @@ public class ValueValidator {
         if (message == null || message.isEmpty()) {
             return false;
         }
-        return Arrays.stream(SpaceType.values())
-                .anyMatch(type -> type.getDisplayName().equalsIgnoreCase(message));
+        return SpaceTypeEntity.getValues().values().stream()
+                .anyMatch(type -> type.getDisplayName().equals(message));
     }
 
     public static boolean checkIdValue(String message) {

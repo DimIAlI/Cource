@@ -10,7 +10,7 @@ import lombok.*;
 public class WorkspaceEntity {
     private long id;
     @EqualsAndHashCode.Include
-    private SpaceTypeEntity type;
+    private long typeId;
     @EqualsAndHashCode.Include
     private double price;
     private boolean available;

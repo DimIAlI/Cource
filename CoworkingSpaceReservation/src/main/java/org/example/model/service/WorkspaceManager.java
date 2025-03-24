@@ -38,7 +38,7 @@ public class WorkspaceManager {
 
             WorkspaceEntity workspace = buildWorkspace(type, price);
             WORKSPACES.put(workspace.getId(), workspace);
-        } else throw new PlaceAlreadyExistException(type.toString(), String.valueOf(price));
+        } else throw new PlaceAlreadyExistException(type.getDisplayName(), String.valueOf(price));
     }
 
     public void remove(long id) {
@@ -79,7 +79,7 @@ public class WorkspaceManager {
     private WorkspaceEntity buildWorkspace(SpaceTypeEntity type, double price) {
         return WorkspaceEntity.builder()
                 .id(generateId())
-                .type(type)
+                .typeId(type.getId())
                 .price(price)
                 .available(true)
                 .build();
@@ -88,7 +88,7 @@ public class WorkspaceManager {
     private boolean isWorkplaceExisted(SpaceTypeEntity type, double price) {
         return WORKSPACES.values().stream()
                 .anyMatch(existingWorkspace ->
-                        existingWorkspace.getType().equals(type) && existingWorkspace.getPrice() == price);
+                        existingWorkspace.getTypeId() == type.getId() && existingWorkspace.getPrice() == price);
     }
 
     private long generateId() {
