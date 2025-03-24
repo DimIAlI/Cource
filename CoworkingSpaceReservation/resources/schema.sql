@@ -1,0 +1,39 @@
+CREATE TABLE IF NOT EXISTS admins
+(
+    id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    login VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS customers
+(
+    id    BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    login VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS space_types
+(
+    id           BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    name         VARCHAR(50)  NOT NULL UNIQUE,
+    display_name VARCHAR(100) NOT NULL
+);
+
+
+CREATE TABLE IF NOT EXISTS workspaces
+(
+    id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    type_id   BIGINT           NOT NULL,
+    price     DOUBLE PRECISION NOT NULL,
+    available BOOLEAN          NOT NULL,
+    FOREIGN KEY (type_id) REFERENCES space_types (id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS reservations
+(
+    id           BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    customer_id  BIGINT    NOT NULL,
+    workspace_id BIGINT    NOT NULL,
+    start_time   TIMESTAMP NOT NULL,
+    end_time     TIMESTAMP NOT NULL,
+    FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE,
+    FOREIGN KEY (workspace_id) REFERENCES workspaces (id) ON DELETE CASCADE
+);
