@@ -1,7 +1,7 @@
 package org.example.view;
 
-import org.example.model.entity.ReservationEntity;
-import org.example.model.entity.WorkspaceEntity;
+import org.example.model.dto.ReservationDto;
+import org.example.model.dto.WorkspaceDto;
 
 import java.util.List;
 import java.time.LocalDateTime;
@@ -31,16 +31,16 @@ public class CustomerView {
         System.out.print("\nEnter the start date and time of the booking (format: dd-MM-yyyy HH:mm)");
     }
 
-    public void printAvailableSpaces(List<WorkspaceEntity> availableSpaces) {
+    public void printAvailableSpaces(List<WorkspaceDto> availableSpaces) {
         System.out.println("\nThe List of all available spaces:");
 
         System.out.println("----------------------------------------------------------------------");
         System.out.printf("| %-10s | %-20s | %-30s |%n", "ID", "Type", "Price");
         System.out.println("----------------------------------------------------------------------");
 
-        for (WorkspaceEntity space : availableSpaces) {
+        for (WorkspaceDto space : availableSpaces) {
             System.out.printf("| %-10d | %-20s | %-30.2f |%n",
-                    space.getId(), space.getTypeId(), space.getPrice());
+                    space.getId(), space.getType().getDisplayName(), space.getPrice());
         }
         System.out.println("----------------------------------------------------------------------");
     }
@@ -53,7 +53,7 @@ public class CustomerView {
         System.out.print("\nEnter ID");
     }
 
-    public void printCustomerReservations(List<ReservationEntity> userReservations) {
+    public void printCustomerReservations(List<ReservationDto> userReservations) {
         System.out.println("The list of your reservations:");
 
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
@@ -61,10 +61,10 @@ public class CustomerView {
                 "Reservation ID", "Space ID", "Type", "Price", "Booking Start", "Booking End");
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
 
-        for (ReservationEntity reservation : userReservations) {
-            WorkspaceEntity space = reservation.getSpace();
+        for (ReservationDto reservation : userReservations) {
+            WorkspaceDto space = reservation.getSpace();
             System.out.printf("| %-15d | %-10d | %-20s | %-30.2f | %-20s | %-20s |%n",
-                    reservation.getId(), space.getId(), space.getTypeId(), space.getPrice(),
+                    reservation.getId(), space.getId(), space.getType().getDisplayName(), space.getPrice(),
                     formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
         }
         System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
@@ -79,7 +79,7 @@ public class CustomerView {
     }
 
     public void printErrorReservationExistMessage() {
-        System.out.println("\nThe workspace is already booked for this time!");
+        System.out.println("\nReservation with these details already exists");
     }
 
     public void printBrowseSpacesItem() {
@@ -97,8 +97,16 @@ public class CustomerView {
     public void printCancelReservationItem() {
         System.out.println("\n=Cancel a reservation=");
     }
+
+    public void printErrorAddReservationMessage(){
+        System.out.println("\nThe workspace is already booked for this time!");
+    }
     private String formatDateTime(LocalDateTime dateTime) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
         return dateTime.format(formatter);
+    }
+
+    public void printErrorNoAvailableSpacesMessage() {
+        System.out.println("\nNo available spaces during this period!");
     }
 }

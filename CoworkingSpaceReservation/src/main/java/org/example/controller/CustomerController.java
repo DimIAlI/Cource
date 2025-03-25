@@ -1,13 +1,12 @@
 package org.example.controller;
 
+import org.example.model.dto.ReservationDto;
+import org.example.model.dto.UserDto;
+import org.example.model.dto.WorkspaceDto;
 import org.example.model.service.CustomerManager;
-import org.example.model.entity.ReservationEntity;
-import org.example.model.entity.UserEntity;
-import org.example.model.entity.WorkspaceEntity;
 import org.example.view.CustomerView;
 
 import java.util.List;
-import java.util.Optional;
 
 class CustomerController {
 
@@ -30,7 +29,7 @@ class CustomerController {
         customerView.printMenu();
     }
 
-    void showAvailableSpaces(List<WorkspaceEntity> availableSpaces) {
+    void showAvailableSpaces(List<WorkspaceDto> availableSpaces) {
         customerView.printAvailableSpaces(availableSpaces);
     }
 
@@ -46,10 +45,11 @@ class CustomerController {
         customerView.printGetIdMessage();
     }
 
-    void showUserReservations(Optional<List<ReservationEntity>> userReservations) {
-        userReservations.ifPresentOrElse(
-                customerView::printCustomerReservations,
-                customerView::printEmptyReservationMessage);
+    void showUserReservations(List<ReservationDto> userReservations) {
+        if (userReservations.isEmpty()) {
+            customerView.printEmptyReservationMessage();
+
+        } else customerView.printCustomerReservations(userReservations);
     }
 
     void showErrorRemoveReservationMessage(long id) {
@@ -60,7 +60,7 @@ class CustomerController {
         customerView.printErrorReservationExistMessage();
     }
 
-    UserEntity getCustomer(UserEntity user, String choice) {
+    UserDto getCustomer(UserDto user, String choice) {
         return CustomerManager.getInstance().getCustomer(user, choice);
     }
 
@@ -78,5 +78,13 @@ class CustomerController {
 
     void showCancelReservationItem() {
         customerView.printCancelReservationItem();
+    }
+
+    void showErrorAddReservationMessage() {
+        customerView.printErrorAddReservationMessage();
+    }
+
+    public void showErrorNoAvailableSpacesMessage() {
+        customerView.printErrorNoAvailableSpacesMessage();
     }
 }

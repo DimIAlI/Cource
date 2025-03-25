@@ -1,11 +1,11 @@
-package org.example.model.entity.factory;
+package org.example.controller.factory;
 
+import org.example.model.dto.UserDto;
 import org.example.model.service.CustomerManager;
-import org.example.model.entity.UserEntity;
 
 class CustomerFactory implements UserFactory {
     @Override
-    public UserEntity createUser() {
+    public UserDto createUser() {
         return CustomerManager.getInstance().buildCustomer();
     }
 }

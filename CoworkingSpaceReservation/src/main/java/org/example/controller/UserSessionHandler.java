@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.model.entity.factory.UserFactorySelector;
-import org.example.model.entity.UserEntity;
+import org.example.model.dto.UserDto;
+import org.example.controller.factory.UserFactorySelector;
 
 import java.util.Optional;
 
@@ -36,11 +36,11 @@ public class UserSessionHandler {
         return message;
     }
 
-    public Optional<UserEntity> getEmptyUser(String choice) {
+    public Optional<UserDto> getEmptyUser(String choice) {
         return userFactorySelector.getEmptyUser(choice);
     }
 
-    public String getUserLogin(UserEntity emptyUser) {
+    public String getUserLogin(UserDto emptyUser) {
         String login;
         boolean isValid;
 

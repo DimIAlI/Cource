@@ -4,11 +4,12 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.controller.navigation.command.MenuCommand;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.dto.SpaceTypeDto;
+import org.example.model.service.SpaceTypeManager;
 
 public class AddWorkspaceCommand implements MenuCommand {
     @Override
-    public boolean execute(GeneralController generalController) {
+    public boolean execute(GeneralController generalController){
         generalController.showAddSpaceMenuItem();
         generalController.showAllSpacesMessage();
 
@@ -28,7 +29,7 @@ public class AddWorkspaceCommand implements MenuCommand {
 
         //used to avoid the effectively final restriction
         String finalMessage = message;
-        SpaceTypeEntity type = SpaceTypeEntity.getValues().values().stream()
+        SpaceTypeDto type = SpaceTypeManager.getInstance().getValues().values().stream()
                 .filter(t -> t.getDisplayName().equalsIgnoreCase(finalMessage))
                 .findFirst().get();
 

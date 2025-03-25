@@ -9,5 +9,4 @@ public interface UserDao<T extends UserEntity> {
     T save(T user);
 
     Optional<T> findByLogin(String login);
-
 }

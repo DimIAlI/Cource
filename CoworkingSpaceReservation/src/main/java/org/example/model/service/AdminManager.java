@@ -1,7 +1,7 @@
 package org.example.model.service;
 
-import org.example.model.entity.AdminEntity;
-import org.example.model.entity.UserEntity;
+import org.example.model.dto.AdminDto;
+import org.example.model.dto.UserDto;
 
 public class AdminManager {
 
@@ -14,16 +14,11 @@ public class AdminManager {
         return INSTANCE;
     }
 
-    public UserEntity getAdmin(UserEntity user, String login) {
+    public UserDto getAdmin(UserDto user, String login) {
         return LoginManager.getInstance().authenticateOrRegister(user, login);
     }
 
-   public UserEntity setAdminLogin(UserEntity user, String login) {
-        user.setLogin(login);
-        return user;
-    }
-
-    public AdminEntity buildAdmin() {
-        return AdminEntity.builder().build();
+    public AdminDto buildAdmin() {
+        return AdminDto.builder().build();
     }
 }

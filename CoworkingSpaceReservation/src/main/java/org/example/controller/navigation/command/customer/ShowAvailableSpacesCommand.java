@@ -2,7 +2,8 @@ package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
-import org.example.model.entity.CustomerEntity;
+import org.example.exceptions.NoAvailableSpacesException;
+import org.example.model.dto.CustomerDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 public class ShowAvailableSpacesCommand extends CustomerCommand {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public ShowAvailableSpacesCommand(CustomerEntity customer) {
+    public ShowAvailableSpacesCommand(CustomerDto customer) {
         super(customer);
     }
 
@@ -49,7 +50,11 @@ public class ShowAvailableSpacesCommand extends CustomerCommand {
         } while (!isValid);
 
         LocalDateTime endTime = LocalDateTime.parse(message, formatter);
-        generalController.showAvailableSpaces(startTime, endTime);
+        try {
+            generalController.showAvailableSpaces(startTime, endTime);
+        }catch (NoAvailableSpacesException e){
+            generalController.showErrorNoAvailableSpacesMessage();
+        }
         return false;
     }
 }

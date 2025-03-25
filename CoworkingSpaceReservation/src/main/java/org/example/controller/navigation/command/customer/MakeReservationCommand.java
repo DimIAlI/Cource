@@ -4,7 +4,8 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.ReservationAlreadyExistException;
-import org.example.model.entity.CustomerEntity;
+import org.example.exceptions.WorkspaceAlreadyBookedAtTimeException;
+import org.example.model.dto.CustomerDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 public class MakeReservationCommand extends CustomerCommand {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
-    public MakeReservationCommand(CustomerEntity customer) {
+    public MakeReservationCommand(CustomerDto customer) {
         super(customer);
     }
 
@@ -69,10 +70,13 @@ public class MakeReservationCommand extends CustomerCommand {
         try {
             generalController.addReservation(getCustomer(), id, startTime, endTime);
             generalController.showSuccessMessage();
+
         } catch (IdNotFoundException e) {
             generalController.showErrorIdMessage(e.getId());
         } catch (ReservationAlreadyExistException e) {
             generalController.showErrorReservationExistMessage();
+        } catch (WorkspaceAlreadyBookedAtTimeException e) {
+            generalController.showErrorAddReservationMessage();
         }
         return false;
     }

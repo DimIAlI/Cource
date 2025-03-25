@@ -1,12 +1,10 @@
 package org.example.controller;
 
-import org.example.model.entity.*;
+import org.example.model.dto.*;
 import org.example.view.GeneralView;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Scanner;
 
 
@@ -17,7 +15,6 @@ public class GeneralController {
     private final CustomerController customerController;
     private final WorkspaceController workspaceController;
     private final ReservationController reservationController;
-    private final ApplicationStateController applicationStateController;
 
     public GeneralController(Scanner scanner,
                              AdminController adminController,
@@ -56,9 +53,9 @@ public class GeneralController {
         generalView.printExitMessage();
     }
 
-    public void showWelcomeMessage(UserEntity currentUser) {
+    public void showWelcomeMessage(UserDto currentUser) {
 
-        if (currentUser instanceof AdminEntity) adminController.showWelcomeMessage();
+        if (currentUser instanceof AdminDto) adminController.showWelcomeMessage();
         else customerController.showWelcomeMessage();
     }
 
@@ -66,8 +63,8 @@ public class GeneralController {
         generalView.printMenu();
     }
 
-    public void showMenu(UserEntity currentUser) {
-        if (currentUser instanceof AdminEntity) adminController.showMenu();
+    public void showMenu(UserDto currentUser) {
+        if (currentUser instanceof AdminDto) adminController.showMenu();
         else customerController.showMenu();
     }
 
@@ -76,17 +73,17 @@ public class GeneralController {
     }
 
     public void showAllReservations() {
-        Optional<Map<Long, ReservationEntity>> allReservations = Optional.ofNullable(reservationController.getAllReservations());
+        List<ReservationDto> allReservations = reservationController.getAllReservations();
         adminController.showAllReservations(allReservations);
     }
 
     public void showAvailableSpaces(LocalDateTime startTime, LocalDateTime endTime) {
-        List<WorkspaceEntity> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
+        List<WorkspaceDto> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
         customerController.showAvailableSpaces(availableSpaces);
     }
 
-    public void showViewCustomerReservations(UserEntity currentUser) {
-        Optional<List<ReservationEntity>> userReservations = reservationController.getUserReservations(currentUser);
+    public void showViewCustomerReservations(UserDto currentUser) {
+        List<ReservationDto> userReservations = reservationController.getUserReservations(currentUser);
         customerController.showUserReservations(userReservations);
     }
 
@@ -120,7 +117,7 @@ public class GeneralController {
 
     public boolean showAllSpacesMessage() {
         adminController.showAllSpacesMessage();
-        List<WorkspaceEntity> allSpaces = workspaceController.getAllSpaces();
+        List<WorkspaceDto> allSpaces = workspaceController.getAllSpaces();
 
         if (allSpaces.isEmpty()) {
             adminController.showEmptySpaceMessage();
@@ -155,16 +152,16 @@ public class GeneralController {
         customerController.showErrorReservationExistMessage();
     }
 
-    public void cancelReservation(long id, UserEntity currentUser) {
+    public void cancelReservation(long id, UserDto currentUser) {
         reservationController.cancelReservation(id, currentUser);
     }
 
-    public void addReservation(UserEntity currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
-        WorkspaceEntity workspace = workspaceController.getWorkspace(id);
+    public void addReservation(UserDto currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
+        WorkspaceDto workspace = workspaceController.getWorkspace(id);
         reservationController.addReservation(currentUser, workspace, startTime, endTime);
     }
 
-    public void addWorkspace(SpaceTypeEntity type, double price) {
+    public void addWorkspace(SpaceTypeDto type, double price) {
         workspaceController.addWorkspace(type, price);
     }
 
@@ -176,8 +173,8 @@ public class GeneralController {
         return scanner.nextLine().trim();
     }
 
-    public UserEntity getUser(UserEntity user, String login) {
-        if (user instanceof AdminEntity) {
+    public UserDto getUser(UserDto user, String login) {
+        if (user instanceof AdminDto) {
             return getAdmin(user, login);
         }
         return getCustomer(user, login);
@@ -187,7 +184,7 @@ public class GeneralController {
         return adminController.getAdmin(user, login);
     }
 
-    private UserEntity getCustomer(UserEntity user, String choice) {
+    private UserDto getCustomer(UserDto user, String choice) {
         return customerController.getCustomer(user, choice);
     }
 
@@ -217,5 +214,13 @@ public class GeneralController {
 
     public void showCancelReservationItem() {
         customerController.showCancelReservationItem();
+    }
+
+    public void showErrorAddReservationMessage() {
+        customerController.showErrorAddReservationMessage();
+    }
+
+    public void showErrorNoAvailableSpacesMessage() {
+        customerController.showErrorNoAvailableSpacesMessage();
     }
 }

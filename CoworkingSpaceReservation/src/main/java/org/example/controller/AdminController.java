@@ -1,14 +1,12 @@
 package org.example.controller;
 
-import org.example.model.entity.ReservationEntity;
-import org.example.model.entity.UserEntity;
-import org.example.model.entity.WorkspaceEntity;
+import org.example.model.dto.ReservationDto;
+import org.example.model.dto.UserDto;
+import org.example.model.dto.WorkspaceDto;
 import org.example.model.service.AdminManager;
 import org.example.view.AdminView;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 class AdminController {
 
@@ -31,7 +29,7 @@ class AdminController {
         adminView.printMenu();
     }
 
-    void showAllSpaces(List<WorkspaceEntity> allSpaces) {
+    void showAllSpaces(List<WorkspaceDto> allSpaces) {
         adminView.printAllSpaces(allSpaces);
     }
 
@@ -47,9 +45,11 @@ class AdminController {
         adminView.printIdMessage();
     }
 
-    void showAllReservations(Optional<Map<Long, ReservationEntity>> allReservations) {
-        allReservations.ifPresentOrElse(adminView::printAllReservations,
-                adminView::printEmptyReservationMessage);
+    void showAllReservations(List<ReservationDto> allReservations) {
+        if (!allReservations.isEmpty()) {
+            adminView.printAllReservations(allReservations);
+
+        } else adminView.printEmptyReservationMessage();
     }
 
     void showEmptySpaceMessage() {
@@ -68,7 +68,7 @@ class AdminController {
         adminView.printErrorAddMessage(price, type);
     }
 
-    UserEntity getAdmin(UserEntity user, String login) {
+    UserDto getAdmin(UserDto user, String login) {
         return AdminManager.getInstance().getAdmin(user, login);
     }
 

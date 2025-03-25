@@ -1,13 +1,12 @@
 package org.example.view;
 
-import org.example.model.entity.CustomerEntity;
-import org.example.model.entity.ReservationEntity;
-import org.example.model.entity.WorkspaceEntity;
+import org.example.model.dto.CustomerDto;
+import org.example.model.dto.ReservationDto;
+import org.example.model.dto.WorkspaceDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
 
 public class AdminView {
 
@@ -27,12 +26,12 @@ public class AdminView {
         System.out.print("\nEnter your choice: ");
     }
 
-    public void printAllSpaces(List<WorkspaceEntity> allSpaces) {
+    public void printAllSpaces(List<WorkspaceDto> allSpaces) {
         System.out.println("------------------------------------------------------------------------------------");
         System.out.printf("| %-10s | %-20s | %-30s | %-9s |%n", "ID", "Type", "Price", "Available");
         System.out.println("------------------------------------------------------------------------------------");
 
-        for (WorkspaceEntity space : allSpaces) {
+        for (WorkspaceDto space : allSpaces) {
             System.out.printf("| %-10d | %-20s | %-30.2f | %-9s |%n",
                     space.getId(), space.getTypeId(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
         }
@@ -52,7 +51,7 @@ public class AdminView {
         System.out.print("\nEnter the space ID");
     }
 
-    public void printAllReservations(Map<Long, ReservationEntity> allReservations) {
+    public void printAllReservations(List<ReservationDto> allReservations) {
         System.out.println("The list of all reservations:");
 
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
@@ -60,9 +59,9 @@ public class AdminView {
                 "Reservation ID", "User Login", "Space ID", "Type", "Price", "Booking Start", "Booking End");
         System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 
-        for (ReservationEntity reservation : allReservations.values()) {
-            WorkspaceEntity space = reservation.getSpace();
-            CustomerEntity customer = reservation.getCustomer();
+        for (ReservationDto reservation : allReservations) {
+            WorkspaceDto space = reservation.getSpace();
+            CustomerDto customer = reservation.getCustomer();
 
             System.out.printf("| %-15d | %-35s | %-15d | %-20s | %-30.2f | %-20s | %-20s |%n",
                     reservation.getId(), customer.getLogin(), space.getId(), space.getTypeId(), space.getPrice(),
