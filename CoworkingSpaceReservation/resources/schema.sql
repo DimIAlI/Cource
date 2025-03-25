@@ -21,9 +21,10 @@ CREATE TABLE IF NOT EXISTS space_types
 CREATE TABLE IF NOT EXISTS workspaces
 (
     id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    type_id   BIGINT           NOT NULL,
-    price     DOUBLE PRECISION NOT NULL,
-    available BOOLEAN          NOT NULL,
+    type_id   BIGINT         NOT NULL,
+    price     NUMERIC(15, 2) NOT NULL,
+    available BOOLEAN        NOT NULL,
+    CONSTRAINT unique_type_price UNIQUE (type_id, price),
     FOREIGN KEY (type_id) REFERENCES space_types (id) ON DELETE CASCADE
 );
 
@@ -34,6 +35,7 @@ CREATE TABLE IF NOT EXISTS reservations
     workspace_id BIGINT    NOT NULL,
     start_time   TIMESTAMP NOT NULL,
     end_time     TIMESTAMP NOT NULL,
+    CONSTRAINT unique_workspace_time UNIQUE (workspace_id, start_time, end_time),
     FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE,
     FOREIGN KEY (workspace_id) REFERENCES workspaces (id) ON DELETE CASCADE
 );
