@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 
 public class WorkspaceManager {
@@ -32,7 +31,6 @@ public class WorkspaceManager {
 
     public void add(SpaceType type, double price) {
 
-
         if (!isWorkplaceExisted(type, price)) {
 
             Workspace workspace = buildWorkspace(type, price);
@@ -50,18 +48,15 @@ public class WorkspaceManager {
 
         ReservationManager reservationManager = ReservationManager.getInstance();
 
-        List<Workspace> availablePlaces = WORKSPACES.values()
-                .stream()
-                .filter(Workspace::isAvailable)
-                .collect(Collectors.toList());
+        List<Workspace> availablePlaces = new ArrayList<>(WORKSPACES.values());
 
         Map<Long, Reservation> reservedPlaces = reservationManager.getAll();
 
         List<Workspace> occupiedPlaces = reservedPlaces.values().stream()
-                .filter(reservation -> !isAvailableAtTimeRange(reservation, startTime, endTime))
+                .filter(reservation -> hasConflictWithTimeRange(reservation, startTime, endTime))
                 .map(Reservation::getSpace)
                 .distinct()
-                .collect(Collectors.toList());
+                .toList();
 
         availablePlaces.removeAll(occupiedPlaces);
 
@@ -97,7 +92,7 @@ public class WorkspaceManager {
         return ++id;
     }
 
-    private boolean isAvailableAtTimeRange(Reservation reservation, LocalDateTime startTime, LocalDateTime endTime) {
+    private boolean hasConflictWithTimeRange(Reservation reservation, LocalDateTime startTime, LocalDateTime endTime) {
         return reservation.getStartTime().isBefore(endTime) && reservation.getEndTime().isAfter(startTime);
     }
 }
