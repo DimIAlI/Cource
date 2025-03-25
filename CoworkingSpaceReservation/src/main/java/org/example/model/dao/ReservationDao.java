@@ -15,7 +15,7 @@ public class ReservationDao extends AbstractDao<ReservationEntity> {
             RETURNING id;
             """;
     private static final String DELETE_SQL = """
-            DELETE FROM reservations WHERE reservations.id = ?;
+            DELETE FROM reservations WHERE id = ?;
             """;
     private static final String FIND_ALL_SQL = """
             SELECT

@@ -87,4 +87,8 @@ class CustomerController {
     public void showErrorNoAvailableSpacesMessage() {
         customerView.printErrorNoAvailableSpacesMessage();
     }
+
+    public void showIdReservationMessage() {
+        customerView.printIdReservationMessage();
+    }
 }

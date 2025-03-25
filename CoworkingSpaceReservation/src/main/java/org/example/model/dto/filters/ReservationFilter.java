@@ -26,7 +26,7 @@ public class ReservationFilter implements Filter {
         List<String> conditions = new ArrayList<>();
 
         if (id != null) {
-            conditions.add("id = ?");
+            conditions.add("res.id = ?");
             parameters.add(id);
         }
         if (customer != null) {

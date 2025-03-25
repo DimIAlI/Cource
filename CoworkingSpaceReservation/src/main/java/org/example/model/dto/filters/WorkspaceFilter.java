@@ -27,7 +27,7 @@ public class WorkspaceFilter implements Filter{
         */
 
         if (id != null) {
-            conditions.add("customer_id = ?");
+            conditions.add("id = ?");
             parameters.add(id);
         }
 

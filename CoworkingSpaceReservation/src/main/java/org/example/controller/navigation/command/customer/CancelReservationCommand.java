@@ -15,7 +15,7 @@ public class CancelReservationCommand extends CustomerCommand {
         String message;
         boolean isValid;
         generalController.showCancelReservationItem();
-        generalController.showIdMessage();
+        generalController.showIdReservationMessage();
         generalController.showEnterChoiceMessage();
 
         do {

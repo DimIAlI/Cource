@@ -223,4 +223,8 @@ public class GeneralController {
     public void showErrorNoAvailableSpacesMessage() {
         customerController.showErrorNoAvailableSpacesMessage();
     }
+
+    public void showIdReservationMessage() {
+        customerController.showIdReservationMessage();
+    }
 }

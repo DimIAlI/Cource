@@ -99,7 +99,6 @@ public class ConnectionManager {
             String dbName = getValue(DB_NAME_KEY);
             String checkDbQuery = "SELECT 1 FROM pg_database WHERE datname = '" + dbName + "'";
 
-
             try (Connection connection = DriverManager.getConnection(connectionKey, getValue(USER_KEY), getValue(PASSWORD_KEY));
                  Statement statement = connection.createStatement()) {
 

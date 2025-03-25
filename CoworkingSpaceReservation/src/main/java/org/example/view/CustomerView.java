@@ -109,4 +109,8 @@ public class CustomerView {
     public void printErrorNoAvailableSpacesMessage() {
         System.out.println("\nNo available spaces during this period!");
     }
+
+    public void printIdReservationMessage() {
+        System.out.println("\nEnter the reservation ID");
+    }
 }
