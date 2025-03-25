@@ -26,7 +26,7 @@ public class ConnectionManager {
     private final String POOL_SIZE_KEY = "db.pool.size";
     private final String INIT_DB_KEY = "db.init.db.name";
     private final String DB_NAME_KEY = "db.new.db.name";
-    private final Integer DEFAULT_POOL_SIZE = 5;
+    private final Integer DEFAULT_POOL_SIZE = 1;
 
     private BlockingQueue<Connection> proxyPool;
     private List<Connection> connectionPool;
@@ -119,13 +119,15 @@ public class ConnectionManager {
         private void initData() {
             String counterQuery = "SELECT * FROM space_types";
 
+            boolean hasResult;
             try (Connection connection = get();
                  Statement statement = connection.createStatement()) {
 
                 ResultSet resultSet = statement.executeQuery(counterQuery);
-                if (!resultSet.next()) {
-                    executeSql("initial.sql");
-                }
+                hasResult = resultSet.next();
+            }
+            if (hasResult) {
+                executeSql("initial.sql");
             }
         }
 
