@@ -7,8 +7,6 @@ import org.example.exceptions.UnauthorizedReservationAccessException;
 import org.example.model.entity.CustomerEntity;
 import org.example.model.entity.ReservationEntity;
 import org.example.model.entity.WorkspaceEntity;
-import org.example.model.storage.ApplicationState;
-import org.example.model.storage.ApplicationStateManager;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -23,11 +21,7 @@ public class ReservationManager {
     private Long id;
 
     private ReservationManager() {
-        ApplicationState appState = ApplicationStateManager.getInstance().getState();
 
-        RESERVATIONS_ID = appState.getReservationsById();
-        RESERVATIONS_CUSTOMER = appState.getReservationsByCustomer();
-        id = appState.getLastReservationId();
     }
 
     public static ReservationManager getInstance() {

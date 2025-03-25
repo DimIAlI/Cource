@@ -19,14 +19,19 @@ public class GeneralController {
     private final ReservationController reservationController;
     private final ApplicationStateController applicationStateController;
 
-    public GeneralController(Scanner scanner, AdminController adminController, CustomerController customerController, WorkspaceController workspaceController, ReservationController reservationController, GeneralView generalView, ApplicationStateController applicationStateController) {
+    public GeneralController(Scanner scanner,
+                             AdminController adminController,
+                             CustomerController customerController,
+                             WorkspaceController workspaceController,
+                             ReservationController reservationController,
+                             GeneralView generalView) {
+
         this.scanner = scanner;
         this.adminController = adminController;
         this.customerController = customerController;
         this.workspaceController = workspaceController;
         this.reservationController = reservationController;
         this.generalView = generalView;
-        this.applicationStateController = applicationStateController;
     }
 
     public static GeneralController createGeneralController() {
@@ -36,8 +41,7 @@ public class GeneralController {
         CustomerController customerController = CustomerController.createCustomerController();
         WorkspaceController workspaceController = WorkspaceController.createWorkspaceController();
         ReservationController reservationController = ReservationController.createReservationController();
-        ApplicationStateController applicationStateController = new ApplicationStateController();
-        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView, applicationStateController);
+        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView);
     }
 
     public void showWelcomeMessage() {
@@ -179,11 +183,7 @@ public class GeneralController {
         return getCustomer(user, login);
     }
 
-    public void saveChanges() {
-        applicationStateController.saveChanges();
-    }
-
-    private UserEntity getAdmin(UserEntity user, String login) {
+    private UserDto getAdmin(UserDto user, String login) {
         return adminController.getAdmin(user, login);
     }
 
