@@ -1,7 +1,6 @@
 package org.example;
 
 import lombok.SneakyThrows;
-import org.example.util.ProgramRunnerInvoker;
 
 public class Main {
 
@@ -12,7 +11,7 @@ public class Main {
 
     @SneakyThrows
     private void start() {
-        ProgramRunnerInvoker.initialize("lib");
-        ProgramRunnerInvoker.run();
+        ProgramRunner runner = ProgramRunner.createRunner();
+        runner.run();
     }
 }
