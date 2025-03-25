@@ -1,6 +1,7 @@
 package org.example.model.dao;
 
 import lombok.SneakyThrows;
+import org.example.model.dto.filters.Filter;
 import org.example.model.util.ConnectionManager;
 
 import java.sql.*;
@@ -9,9 +10,8 @@ import java.util.List;
 
 public abstract class AbstractDao<T> implements Dao<T> {
 
-    @SneakyThrows
     @Override
-    public T save(T entity) {
+    public T save(T entity) throws SQLException {
         try (Connection connection = ConnectionManager.get();
              PreparedStatement preparedStatement = connection.prepareStatement(getSaveSql())) {
 
@@ -47,6 +47,30 @@ public abstract class AbstractDao<T> implements Dao<T> {
 
              ResultSet resultSet = statement.executeQuery(getFindAllSql())) {
 
+            while (resultSet.next()) {
+                entities.add(buildEntity(resultSet));
+            }
+        }
+        return entities;
+    }
+
+    @SneakyThrows
+    @Override
+    public List<T> getAllWithFilter(Filter filter) {
+
+        List<Object> parameters = new ArrayList<>();
+        List<T> entities = new ArrayList<>();
+
+        String resultWhereCondition = getFindAllSql() + filter.buildWhereCondition(parameters);
+
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement statement = connection.prepareStatement(resultWhereCondition)) {
+
+            for (int i = 0; i < parameters.size(); i++) {
+                statement.setObject(i + 1, parameters.get(i));
+            }
+
+            ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
                 entities.add(buildEntity(resultSet));
             }

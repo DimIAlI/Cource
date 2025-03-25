@@ -31,6 +31,11 @@ public class WorkspaceDao extends AbstractDao<WorkspaceEntity> {
                         res.end_time <= ?
                         OR res.start_time >= ?));
             """;
+    private static final String UPDATE_SQL = """
+            UPDATE workspaces
+            SET available = ?
+            WHERE id = ?
+            """;
 
     private WorkspaceDao() {
     }
@@ -67,6 +72,19 @@ public class WorkspaceDao extends AbstractDao<WorkspaceEntity> {
             }
         }
         return workspaces;
+    }
+
+    @SneakyThrows
+    public void update(WorkspaceEntity workspace) {
+
+        try (Connection connection = ConnectionManager.get();
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
+
+            preparedStatement.setBoolean(1, workspace.isAvailable());
+            preparedStatement.setLong(2, workspace.getId());
+
+            preparedStatement.executeUpdate();
+        }
     }
 
     @Override

@@ -48,7 +48,7 @@ public class ConnectionManager {
 
     @SneakyThrows
     public void closePool() {
-        for (Connection connection : proxyPool) {
+        for (Connection connection : connectionPool) {
             connection.close();
         }
     }

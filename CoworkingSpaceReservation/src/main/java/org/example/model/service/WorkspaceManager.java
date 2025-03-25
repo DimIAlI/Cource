@@ -1,101 +1,81 @@
 package org.example.model.service;
 
-import lombok.Getter;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.entity.ReservationEntity;
-import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.dao.WorkspaceDao;
+import org.example.model.dto.SpaceTypeDto;
+import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.filters.Filter;
+import org.example.model.dto.filters.WorkspaceFilter;
 import org.example.model.entity.WorkspaceEntity;
-import org.example.model.storage.ApplicationState;
-import org.example.model.storage.ApplicationStateManager;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
+import static java.util.stream.Collectors.*;
 
 
 public class WorkspaceManager {
     private static final WorkspaceManager INSTANCE = new WorkspaceManager();
-    private final Map<Long, WorkspaceEntity> WORKSPACES;
-    @Getter
-    private Long id;
+    private final WorkspaceDao workspaceDaoInstance = WorkspaceDao.getInstance();
 
     private WorkspaceManager() {
-        ApplicationState appState = ApplicationStateManager.getInstance().getState();
-
-        WORKSPACES = appState.getWorkspaces();
-        id = appState.getLastWorkspaceId();
     }
 
     public static WorkspaceManager getInstance() {
         return INSTANCE;
     }
 
-    public void add(SpaceTypeEntity type, double price) {
+    public void add(SpaceTypeDto type, double price) {
 
-        if (!isWorkplaceExisted(type, price)) {
-
-            WorkspaceEntity workspace = buildWorkspace(type, price);
-            WORKSPACES.put(workspace.getId(), workspace);
-        } else throw new PlaceAlreadyExistException(type.getDisplayName(), String.valueOf(price));
-    }
-
-    public void remove(long id) {
-        if (WORKSPACES.containsKey(id)) {
-            WORKSPACES.remove(id);
-        } else throw new IdNotFoundException(id);
-    }
-
-    public List<WorkspaceEntity> getAvailable(LocalDateTime startTime, LocalDateTime endTime) {
-
-        ReservationManager reservationManager = ReservationManager.getInstance();
-
-        List<WorkspaceEntity> availablePlaces = new ArrayList<>(WORKSPACES.values());
-
-        Map<Long, ReservationEntity> reservedPlaces = reservationManager.getAll();
-
-        List<WorkspaceEntity> occupiedPlaces = reservedPlaces.values().stream()
-                .filter(reservation -> hasConflictWithTimeRange(reservation, startTime, endTime))
-                .map(ReservationEntity::getSpace)
-                .distinct()
-                .toList();
-
-        availablePlaces.removeAll(occupiedPlaces);
-
-        return availablePlaces;
-    }
-
-    public List<WorkspaceEntity> getAll() {
-        return new ArrayList<>(WORKSPACES.values());
-    }
-
-    public WorkspaceEntity getWorkspace(long id) {
-        if (WORKSPACES.containsKey(id)) {
-            return WORKSPACES.get(id);
-        } else throw new IdNotFoundException(id);
-    }
-
-    private WorkspaceEntity buildWorkspace(SpaceTypeEntity type, double price) {
-        return WorkspaceEntity.builder()
-                .id(generateId())
+        WorkspaceEntity entity = WorkspaceEntity.builder()
                 .typeId(type.getId())
                 .price(price)
                 .available(true)
                 .build();
+        try {
+            workspaceDaoInstance.save(entity);
+            //need to specify the exception so as not to catch the general
+        } catch (SQLException exception) {
+            throw new PlaceAlreadyExistException(type.getDisplayName(), price + "");
+        }
     }
 
-    private boolean isWorkplaceExisted(SpaceTypeEntity type, double price) {
-        return WORKSPACES.values().stream()
-                .anyMatch(existingWorkspace ->
-                        existingWorkspace.getTypeId() == type.getId() && existingWorkspace.getPrice() == price);
+    public void remove(long id) {
+        if (!workspaceDaoInstance.delete(id)) throw new IdNotFoundException(id);
     }
 
-    private long generateId() {
-        return ++id;
+    public List<WorkspaceDto> getAll() {
+
+        return workspaceDaoInstance.getAll().stream()
+                .map(this::convertToDto)
+                .collect(toList());
     }
 
-    private boolean hasConflictWithTimeRange(ReservationEntity reservation, LocalDateTime startTime, LocalDateTime endTime) {
-        return reservation.getStartTime().isBefore(endTime) && reservation.getEndTime().isAfter(startTime);
+    public List<WorkspaceDto> getAvailable(LocalDateTime startTime, LocalDateTime endTime) {
+
+        return workspaceDaoInstance.getAvailableBetween(startTime, endTime).stream()
+                .map(this::convertToDto)
+                .collect(toList());
+    }
+
+    public WorkspaceDto getWorkspace(long id) {
+
+        Filter filter = WorkspaceFilter.builder().id(id).build();
+
+        return workspaceDaoInstance.getAllWithFilter(filter).stream()
+                .map(this::convertToDto)
+                .findFirst()
+                .orElseThrow(() -> new IdNotFoundException(id));
+    }
+
+    private WorkspaceDto convertToDto(WorkspaceEntity space) {
+        return WorkspaceDto.builder()
+                .id(space.getId())
+                .type(SpaceTypeManager.getInstance().getValue(space.getTypeId()))
+                .price(space.getPrice())
+                .available(space.isAvailable())
+                .build();
     }
 }

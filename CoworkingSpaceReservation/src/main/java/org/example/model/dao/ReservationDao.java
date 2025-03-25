@@ -1,16 +1,10 @@
 package org.example.model.dao;
 
-import lombok.SneakyThrows;
-import org.example.model.dto.ReservationFilter;
 import org.example.model.entity.CustomerEntity;
 import org.example.model.entity.ReservationEntity;
 import org.example.model.entity.WorkspaceEntity;
-import org.example.model.util.ConnectionManager;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class ReservationDao extends AbstractDao<ReservationEntity> {
     private static final ReservationDao INSTANCE = new ReservationDao();
@@ -29,11 +23,11 @@ public class ReservationDao extends AbstractDao<ReservationEntity> {
             customer_id,
             start_time,
             end_time,
-            
+                        
             work.id work_id,
             type_id,
             price,
-            
+                        
             login
             FROM reservations as res
             JOIN workspaces as work ON res.workspace_id = work.id
@@ -68,30 +62,6 @@ public class ReservationDao extends AbstractDao<ReservationEntity> {
                 .build();
     }
 
-    @SneakyThrows
-    public List<ReservationEntity> getAll(ReservationFilter filter) {
-
-        List<Object> parameters = new ArrayList<>();
-        List<String> whereParams = new ArrayList<>();
-        List<ReservationEntity> reservations = new ArrayList<>();
-
-        String resultWhereCondition = buildWhereCondition(filter, parameters, whereParams);
-
-        try (Connection connection = ConnectionManager.get();
-             PreparedStatement statement = connection.prepareStatement(resultWhereCondition)) {
-
-            for (int i = 0; i < parameters.size(); i++) {
-                statement.setObject(i + 1, parameters.get(i));
-            }
-
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                reservations.add(buildReservation(resultSet));
-            }
-        }
-        return reservations;
-    }
-
     @Override
     protected String getSaveSql() {
         return SAVE_SQL;
@@ -124,25 +94,5 @@ public class ReservationDao extends AbstractDao<ReservationEntity> {
     protected ReservationEntity setGeneratedKey(ReservationEntity entity, long id) {
         entity.setId(id);
         return entity;
-    }
-
-    private String buildWhereCondition(ReservationFilter filter, List<Object> parameters, List<String> whereParams) {
-
-        /*
-        If new queries with additional WHERE parameters are required
-        need to add a new if block with the same logic
-        */
-        if (filter.getCustomer() != null) {
-            whereParams.add("customer_id = ?");
-            parameters.add(filter.getCustomer().getId());
-        }
-
-        String resultSql = FIND_ALL_SQL;
-        if (!whereParams.isEmpty()) {
-            String where = whereParams.stream().collect(Collectors.joining(" AND", " WHERE ", ";"));
-            resultSql += where;
-        }
-
-        return resultSql;
     }
 }
