@@ -1,112 +1,109 @@
 package org.example.view;
 
-import org.example.model.Customer;
-import org.example.model.Reservation;
-import org.example.model.Workspace;
+import org.example.model.dto.CustomerDto;
+import org.example.model.dto.ReservationDto;
+import org.example.model.dto.WorkspaceDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Map;
+
+import static org.example.util.PropertiesUtil.*;
 
 public class AdminView {
 
     public void printWelcomeMessage() {
-        System.out.println("\n=Admin Login=");
-        System.out.println("(The expected login must be longer than 5 characters, not contain special characters, and be in English)\n");
-        System.out.print("Enter Admin username: ");
+        System.out.println(getValue("admin.welcome"));
+        System.out.println(getValue("common.login.rules"));
+        System.out.print(getValue("admin.enter.username"));
     }
 
     public void printMenu() {
-        System.out.println("\nAdmin Menu:");
-        System.out.println("1. Add a new coworking space");
-        System.out.println("2. Remove a coworking space");
-        System.out.println("3. View all reservations");
-        System.out.println("4. Logout");
+        System.out.println(getValue("admin.menu"));
+        System.out.println(getValue("admin.menu.option1"));
+        System.out.println(getValue("admin.menu.option2"));
+        System.out.println(getValue("admin.menu.option3"));
+        System.out.println(getValue("admin.menu.option4"));
 
-        System.out.print("\nEnter your choice: ");
+        System.out.print(getValue("common.enter.choice"));
     }
 
-    public void printAllSpaces(List<Workspace> allSpaces) {
-        System.out.println("------------------------------------------------------------------------------------");
-        System.out.printf("| %-10s | %-20s | %-30s | %-9s |%n", "ID", "Type", "Price", "Available");
-        System.out.println("------------------------------------------------------------------------------------");
+    public void printAllSpaces(List<WorkspaceDto> allSpaces) {
+        System.out.println(getValue("admin.space.separator"));
+        System.out.printf(getValue("admin.space.format.table"));
+        System.out.println(getValue("admin.space.separator"));
 
-        for (Workspace space : allSpaces) {
-            System.out.printf("| %-10d | %-20s | %-30.2f | %-9s |%n",
-                    space.getId(), space.getType(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
+        for (WorkspaceDto space : allSpaces) {
+            System.out.printf(getValue("admin.space.format"),
+                    space.getId(), space.getType().getDisplayName(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
         }
-        System.out.println("------------------------------------------------------------------------------------");
+        System.out.println(getValue("admin.space.separator"));
     }
 
     public void printAddType() {
-        System.out.print("\nEnter the type of space from the options provided " +
-                "(Open Space, Dedicated Desk, Private Office, Meeting Room, Event Space, Hot Desk, Shared Office)");
+        System.out.print(getValue("admin.enter.space.type"));
     }
 
     public void printSuccessMessage() {
-        System.out.print("\nOperation completed");
+        System.out.print(getValue("common.success.operation"));
     }
 
     public void printIdMessage() {
-        System.out.print("\nEnter the space ID");
+        System.out.print(getValue("common.enter.space.id"));
     }
 
-    public void printAllReservations(Map<Long, Reservation> allReservations) {
-        System.out.println("The list of all reservations:");
+    public void printAllReservations(List<ReservationDto> allReservations) {
+        System.out.println(getValue("admin.list.reservations"));
 
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("| %-15s | %-35s | %-15s | %-20s | %-30s | %-20s | %-20s |%n",
-                "Reservation ID", "User Login", "Space ID", "Type", "Price", "Booking Start", "Booking End");
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println(getValue("admin.reservation.separator"));
+        System.out.printf(getValue("admin.reservation.format.table"));
+        System.out.println(getValue("admin.reservation.separator"));
 
-        for (Reservation reservation : allReservations.values()) {
-            Workspace space = reservation.getSpace();
-            Customer customer = reservation.getCustomer();
+        for (ReservationDto reservation : allReservations) {
+            WorkspaceDto space = reservation.getSpace();
+            CustomerDto customer = reservation.getCustomer();
 
-            System.out.printf("| %-15d | %-35s | %-15d | %-20s | %-30.2f | %-20s | %-20s |%n",
-                    reservation.getId(), customer.getLogin(), space.getId(), space.getType(), space.getPrice(),
+            System.out.printf(getValue("admin.reservation.format"),
+                    reservation.getId(), customer.getLogin(), space.getId(), space.getType().getDisplayName(), space.getPrice(),
                     formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
         }
-        System.out.println("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println(getValue("admin.reservation.separator"));
     }
 
     public void printEmptySpaceMessage() {
-        System.out.println("No spaces have been added yet!");
+        System.out.println(getValue("admin.error.spaces"));
     }
 
     public void printAllSpacesMessage() {
-        System.out.println("\nList of all spaces: ");
+        System.out.println(getValue("admin.list.spaces"));
     }
 
     public void printAddPrice() {
-        System.out.println("\nEnter the price (as an integer or a decimal number, with a dot as the separator between the integer and fractional parts,");
-        System.out.print("and the value must be greater than 0)");
+        System.out.println(getValue("admin.enter.price"));
     }
 
     public void printErrorAddMessage(String price, String type) {
-        System.out.printf("""
-                          \nThe space with type %s and price %s already exists!
-                          """, type, price);
+        System.out.printf(getValue("admin.error.space.exists"), type, price);
     }
 
     public void printEmptyReservationMessage() {
-        System.out.println("System has no reservations");
+        System.out.println(getValue("admin.error.reservations"));
     }
 
     public void printAddSpaceMenuItem() {
-        System.out.println("\n=Add a new coworking space=");
+        System.out.println(getValue("admin.add.space"));
     }
 
-    public void printRemoveSpaceMenuItem(){
-        System.out.println("\n=Remove a coworking space=");
+    public void printRemoveSpaceMenuItem() {
+        System.out.println(getValue("admin.remove.space"));
     }
 
-    public void printViewReservationMenuItem(){
-        System.out.println("\n=View all reservations=");
+    public void printViewReservationMenuItem() {
+        System.out.println(getValue("admin.view.reservations"));
     }
+
     private String formatDateTime(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getValue("common.date.format"));
         return dateTime.format(formatter);
     }
 }

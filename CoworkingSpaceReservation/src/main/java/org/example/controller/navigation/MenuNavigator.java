@@ -2,9 +2,9 @@ package org.example.controller.navigation;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
-import org.example.model.Admin;
-import org.example.model.Customer;
-import org.example.model.User;
+import org.example.model.dto.AdminDto;
+import org.example.model.dto.CustomerDto;
+import org.example.model.dto.UserDto;
 
 
 public class MenuNavigator {
@@ -19,7 +19,7 @@ public class MenuNavigator {
         return new MenuNavigator(generalController);
     }
 
-    public void navigateMainMenu(User currentUser) {
+    public void navigateMainMenu(UserDto currentUser) {
         while (true) {
             boolean isValid;
             String message;
@@ -39,9 +39,9 @@ public class MenuNavigator {
         }
     }
 
-    private boolean navigateWithStrategy(User currentUser, String message) {
+    private boolean navigateWithStrategy(UserDto currentUser, String message) {
 
-        MenuStrategy strategy = (currentUser instanceof Admin) ? new AdminMenuStrategy() : new CustomerMenuStrategy((Customer) currentUser);
+        MenuStrategy strategy = (currentUser instanceof AdminDto) ? new AdminMenuStrategy() : new CustomerMenuStrategy((CustomerDto) currentUser);
         boolean exit = strategy.navigate(message, generalController);
 
         generalController.showPressAnySymbolMessage();

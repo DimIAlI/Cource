@@ -1,38 +1,40 @@
 package org.example.view;
 
+import static org.example.util.PropertiesUtil.*;
+
 public class GeneralView {
     public void printWelcomeMessage() {
-        System.out.println("\n=Welcome to the Coworking Space Reservation System!=");
+        System.out.println(getValue("general.welcome"));
     }
 
     public void printMenu() {
-        System.out.println("\nPlease select an option:");
-        System.out.println("1. Admin Login");
-        System.out.println("2. User Login");
-        System.out.println("3. Exit");
+        System.out.println(getValue("general.select.choice"));
+        System.out.println(getValue("general.menu.option1"));
+        System.out.println(getValue("general.menu.option2"));
+        System.out.println(getValue("general.menu.option3"));
     }
 
     public void printEnterChoiceMessage() {
-        System.out.print("\nEnter your choice: ");
-    }
-
-    public void printErrorMessage() {
-        System.out.print("\nError value, try to choose another value!\n");
-    }
-
-    public void printExitMessage() {
-        System.out.println("\nThank you for using the Coworking Space Reservation System! Goodbye!");
+        System.out.print(getValue("common.enter.choice"));
     }
 
     public void printPressAnySymbolMessage() {
-        System.out.print("\nPress any key to exit:");
+        System.out.print(getValue("general.press.any.key"));
+    }
+
+    public void printErrorMessage() {
+        System.out.print(getValue("general.error.value"));
     }
 
     public void printErrorLoginMessage() {
-        System.out.println("\nYour login does not meet the validation requirements!");
+        System.out.println(getValue("general.error.login"));
     }
 
     public void printErrorIdMessage(Long id) {
-        System.out.printf("\nId %s is not valid!%n", id);
+        System.out.printf(getValue("general.error.id"), id);
+    }
+
+    public void printExitMessage() {
+        System.out.println(getValue("general.exit.message"));
     }
 }

@@ -1,12 +1,10 @@
 package org.example.controller;
 
-import org.example.model.*;
+import org.example.model.dto.*;
 import org.example.view.GeneralView;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Scanner;
 
 
@@ -17,16 +15,20 @@ public class GeneralController {
     private final CustomerController customerController;
     private final WorkspaceController workspaceController;
     private final ReservationController reservationController;
-    private final ApplicationStateController applicationStateController;
 
-    public GeneralController(Scanner scanner, AdminController adminController, CustomerController customerController, WorkspaceController workspaceController, ReservationController reservationController, GeneralView generalView, ApplicationStateController applicationStateController) {
+    public GeneralController(Scanner scanner,
+                             AdminController adminController,
+                             CustomerController customerController,
+                             WorkspaceController workspaceController,
+                             ReservationController reservationController,
+                             GeneralView generalView) {
+
         this.scanner = scanner;
         this.adminController = adminController;
         this.customerController = customerController;
         this.workspaceController = workspaceController;
         this.reservationController = reservationController;
         this.generalView = generalView;
-        this.applicationStateController = applicationStateController;
     }
 
     public static GeneralController createGeneralController() {
@@ -36,8 +38,7 @@ public class GeneralController {
         CustomerController customerController = CustomerController.createCustomerController();
         WorkspaceController workspaceController = WorkspaceController.createWorkspaceController();
         ReservationController reservationController = ReservationController.createReservationController();
-        ApplicationStateController applicationStateController = new ApplicationStateController();
-        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView, applicationStateController);
+        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView);
     }
 
     public void showWelcomeMessage() {
@@ -52,9 +53,9 @@ public class GeneralController {
         generalView.printExitMessage();
     }
 
-    public void showWelcomeMessage(User currentUser) {
+    public void showWelcomeMessage(UserDto currentUser) {
 
-        if (currentUser instanceof Admin) adminController.showWelcomeMessage();
+        if (currentUser instanceof AdminDto) adminController.showWelcomeMessage();
         else customerController.showWelcomeMessage();
     }
 
@@ -62,8 +63,8 @@ public class GeneralController {
         generalView.printMenu();
     }
 
-    public void showMenu(User currentUser) {
-        if (currentUser instanceof Admin) adminController.showMenu();
+    public void showMenu(UserDto currentUser) {
+        if (currentUser instanceof AdminDto) adminController.showMenu();
         else customerController.showMenu();
     }
 
@@ -72,17 +73,17 @@ public class GeneralController {
     }
 
     public void showAllReservations() {
-        Optional<Map<Long, Reservation>> allReservations = Optional.ofNullable(reservationController.getAllReservations());
+        List<ReservationDto> allReservations = reservationController.getAllReservations();
         adminController.showAllReservations(allReservations);
     }
 
     public void showAvailableSpaces(LocalDateTime startTime, LocalDateTime endTime) {
-        List<Workspace> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
+        List<WorkspaceDto> availableSpaces = workspaceController.getAvailableSpaces(startTime, endTime);
         customerController.showAvailableSpaces(availableSpaces);
     }
 
-    public void showViewCustomerReservations(User currentUser) {
-        Optional<List<Reservation>> userReservations = reservationController.getUserReservations(currentUser);
+    public void showViewCustomerReservations(UserDto currentUser) {
+        List<ReservationDto> userReservations = reservationController.getUserReservations(currentUser);
         customerController.showUserReservations(userReservations);
     }
 
@@ -116,7 +117,7 @@ public class GeneralController {
 
     public boolean showAllSpacesMessage() {
         adminController.showAllSpacesMessage();
-        List<Workspace> allSpaces = workspaceController.getAllSpaces();
+        List<WorkspaceDto> allSpaces = workspaceController.getAllSpaces();
 
         if (allSpaces.isEmpty()) {
             adminController.showEmptySpaceMessage();
@@ -151,16 +152,16 @@ public class GeneralController {
         customerController.showErrorReservationExistMessage();
     }
 
-    public void cancelReservation(long id, User currentUser) {
+    public void cancelReservation(long id, UserDto currentUser) {
         reservationController.cancelReservation(id, currentUser);
     }
 
-    public void addReservation(User currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
-        Workspace workspace = workspaceController.getWorkspace(id);
+    public void addReservation(UserDto currentUser, long id, LocalDateTime startTime, LocalDateTime endTime) {
+        WorkspaceDto workspace = workspaceController.getWorkspace(id);
         reservationController.addReservation(currentUser, workspace, startTime, endTime);
     }
 
-    public void addWorkspace(SpaceType type, double price) {
+    public void addWorkspace(SpaceTypeDto type, double price) {
         workspaceController.addWorkspace(type, price);
     }
 
@@ -172,22 +173,18 @@ public class GeneralController {
         return scanner.nextLine().trim();
     }
 
-    public User getUser(User user, String login) {
-        if (user instanceof Admin) {
+    public UserDto getUser(UserDto user, String login) {
+        if (user instanceof AdminDto) {
             return getAdmin(user, login);
         }
         return getCustomer(user, login);
     }
 
-    public void saveChanges() {
-        applicationStateController.saveChanges();
-    }
-
-    private User getAdmin(User user, String login) {
+    private UserDto getAdmin(UserDto user, String login) {
         return adminController.getAdmin(user, login);
     }
 
-    private User getCustomer(User user, String choice) {
+    private UserDto getCustomer(UserDto user, String choice) {
         return customerController.getCustomer(user, choice);
     }
 
@@ -217,5 +214,17 @@ public class GeneralController {
 
     public void showCancelReservationItem() {
         customerController.showCancelReservationItem();
+    }
+
+    public void showErrorAddReservationMessage() {
+        customerController.showErrorAddReservationMessage();
+    }
+
+    public void showErrorNoAvailableSpacesMessage() {
+        customerController.showErrorNoAvailableSpacesMessage();
+    }
+
+    public void showIdReservationMessage() {
+        customerController.showIdReservationMessage();
     }
 }

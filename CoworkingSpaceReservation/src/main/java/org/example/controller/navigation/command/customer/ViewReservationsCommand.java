@@ -1,10 +1,10 @@
 package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
-import org.example.model.Customer;
+import org.example.model.dto.CustomerDto;
 
 public class ViewReservationsCommand extends CustomerCommand {
-    public ViewReservationsCommand(Customer customer) {
+    public ViewReservationsCommand(CustomerDto customer) {
         super(customer);
     }
 

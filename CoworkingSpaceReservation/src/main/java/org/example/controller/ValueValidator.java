@@ -1,14 +1,13 @@
 package org.example.controller;
 
 import lombok.experimental.UtilityClass;
-import org.example.model.Admin;
-import org.example.model.SpaceType;
-import org.example.model.User;
+import org.example.model.dto.AdminDto;
+import org.example.model.dto.UserDto;
+import org.example.model.service.SpaceTypeManager;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Arrays;
 
 @UtilityClass
 public class ValueValidator {
@@ -29,12 +28,12 @@ public class ValueValidator {
         }
     }
 
-    public static boolean checkValue(User currentUser, String message) {
+    public static boolean checkValue(UserDto currentUser, String message) {
         if (message == null || message.length() != 1) return false;
 
         try {
             int number = Integer.parseInt(message);
-            int maxAllowed = (currentUser instanceof Admin) ? MAX_ALLOWED_FOR_ADMIN : MAX_ALLOWED_FOR_CUSTOMER;
+            int maxAllowed = (currentUser instanceof AdminDto) ? MAX_ALLOWED_FOR_ADMIN : MAX_ALLOWED_FOR_CUSTOMER;
 
             return number >= MIN_ALLOWED_VALUE && number <= maxAllowed;
         } catch (NumberFormatException e) {
@@ -54,7 +53,7 @@ public class ValueValidator {
         if (message == null || message.isEmpty()) {
             return false;
         }
-        return Arrays.stream(SpaceType.values())
+        return SpaceTypeManager.getInstance().getValues().values().stream()
                 .anyMatch(type -> type.getDisplayName().equalsIgnoreCase(message));
     }
 

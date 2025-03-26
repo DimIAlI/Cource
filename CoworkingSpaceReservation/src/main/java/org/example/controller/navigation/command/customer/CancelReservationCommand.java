@@ -2,12 +2,11 @@ package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
-import org.example.exceptions.ReservationDoesNotExistException;
-import org.example.exceptions.UnauthorizedReservationAccessException;
-import org.example.model.Customer;
+import org.example.exceptions.ReservationNotFoundForUserException;
+import org.example.model.dto.CustomerDto;
 
 public class CancelReservationCommand extends CustomerCommand {
-    public CancelReservationCommand(Customer customer) {
+    public CancelReservationCommand(CustomerDto customer) {
         super(customer);
     }
 
@@ -16,7 +15,7 @@ public class CancelReservationCommand extends CustomerCommand {
         String message;
         boolean isValid;
         generalController.showCancelReservationItem();
-        generalController.showIdMessage();
+        generalController.showIdReservationMessage();
         generalController.showEnterChoiceMessage();
 
         do {
@@ -34,7 +33,8 @@ public class CancelReservationCommand extends CustomerCommand {
         try {
             generalController.cancelReservation(id, getCustomer());
             generalController.showSuccessMessage();
-        } catch (ReservationDoesNotExistException | UnauthorizedReservationAccessException e) {
+
+        } catch (ReservationNotFoundForUserException e) {
 
             generalController.showErrorRemoveReservationMessage(e.getId());
         }
