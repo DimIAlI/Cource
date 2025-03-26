@@ -7,110 +7,111 @@ import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static org.example.util.PropertiesUtil.*;
+
 public class CustomerView {
 
     public void printWelcomeMessage() {
-        System.out.println("\n=User Login=");
-        System.out.println("(The expected login must be longer than 5 characters, not contain special characters, and be in English)\n");
-        System.out.print("Enter your username: ");
+        System.out.println(getValue("customer.welcome"));
+        System.out.println(getValue("common.login.rules"));
+        System.out.print(getValue("customer.enter.username"));
     }
 
     public void printMenu() {
-        System.out.println("\nCustomer Menu:");
-        System.out.println("1. Browse available spaces");
-        System.out.println("2. Make a reservation");
-        System.out.println("3. View my reservations");
-        System.out.println("4. Cancel a reservation");
-        System.out.println("5. Logout");
+        System.out.println(getValue("customer.menu"));
+        System.out.println(getValue("customer.menu.option1"));
+        System.out.println(getValue("customer.menu.option2"));
+        System.out.println(getValue("customer.menu.option3"));
+        System.out.println(getValue("customer.menu.option4"));
+        System.out.println(getValue("customer.menu.option5"));
 
-        System.out.print("\nEnter your choice: ");
-
+        System.out.print(getValue("common.enter.choice"));
     }
 
     public void printReservationStartDateMessage() {
-        System.out.print("\nEnter the start date and time of the booking (format: dd-MM-yyyy HH:mm)");
+        System.out.print(getValue("customer.enter.start.date"));
     }
 
     public void printAvailableSpaces(List<WorkspaceDto> availableSpaces) {
-        System.out.println("\nThe List of all available spaces:");
+        System.out.println(getValue("customer.available.spaces"));
 
-        System.out.println("----------------------------------------------------------------------");
-        System.out.printf("| %-10s | %-20s | %-30s |%n", "ID", "Type", "Price");
-        System.out.println("----------------------------------------------------------------------");
+        System.out.println(getValue("customer.space.separator"));
+        System.out.printf(getValue("customer.space.format.table"));
+        System.out.println(getValue("customer.space.separator"));
 
         for (WorkspaceDto space : availableSpaces) {
-            System.out.printf("| %-10d | %-20s | %-30.2f |%n",
+            System.out.printf(getValue("customer.space.format"),
                     space.getId(), space.getType().getDisplayName(), space.getPrice());
         }
-        System.out.println("----------------------------------------------------------------------");
+        System.out.println(getValue("customer.space.separator"));
     }
 
     public void printReservationEndDateMessage() {
-        System.out.print("\nEnter the end date and time of the booking (format: dd-MM-yyyy HH:mm)");
+        System.out.print(getValue("customer.enter.end.date"));
     }
 
     public void printGetIdMessage() {
-        System.out.print("\nEnter ID");
+        System.out.print(getValue("common.enter.space.id"));
     }
 
     public void printCustomerReservations(List<ReservationDto> userReservations) {
-        System.out.println("The list of your reservations:");
+        System.out.println(getValue("customer.view.reservations"));
 
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
-        System.out.printf("| %-15s | %-10s | %-20s | %-30s | %-20s | %-20s |%n",
-                "Reservation ID", "Space ID", "Type", "Price", "Booking Start", "Booking End");
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println(getValue("customer.reservation.separator"));
+        System.out.printf(getValue("customer.reservation.format.table"));
+        System.out.println(getValue("customer.reservation.separator"));
 
         for (ReservationDto reservation : userReservations) {
             WorkspaceDto space = reservation.getSpace();
-            System.out.printf("| %-15d | %-10d | %-20s | %-30.2f | %-20s | %-20s |%n",
+            System.out.printf(getValue("customer.reservation.format"),
                     reservation.getId(), space.getId(), space.getType().getDisplayName(), space.getPrice(),
                     formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
         }
-        System.out.println("--------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println(getValue("customer.reservation.separator"));
     }
 
     public void printErrorRemoveReservationMessage(long id) {
-        System.out.printf("\nReservation with ID %s cannot be deleted", id);
+        System.out.printf(getValue("customer.error.remove.reservation"), id);
     }
 
     public void printEmptyReservationMessage() {
-        System.out.println("You have no reservations.");
+        System.out.println(getValue("customer.error.reservations"));
     }
 
     public void printErrorReservationExistMessage() {
-        System.out.println("\nReservation with these details already exists");
+        System.out.println(getValue("customer.error.reservation.exists"));
     }
 
     public void printBrowseSpacesItem() {
-        System.out.println("\n=Browse available spaces=");
+        System.out.println(getValue("customer.browse.spaces"));
     }
 
     public void printMakeReservationItem() {
-        System.out.println("\n=Make a reservation=");
+        System.out.println(getValue("customer.make.reservation"));
     }
 
     public void printViewReservationItem() {
-        System.out.println("\n=View my reservations=");
+        System.out.println(getValue("customer.view.reservations.menu"));
     }
 
     public void printCancelReservationItem() {
-        System.out.println("\n=Cancel a reservation=");
+        System.out.println(getValue("customer.cancel.reservation"));
     }
 
-    public void printErrorAddReservationMessage(){
-        System.out.println("\nThe workspace is already booked for this time!");
-    }
-    private String formatDateTime(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy, HH:mm");
-        return dateTime.format(formatter);
+    public void printErrorAddReservationMessage() {
+        System.out.println(getValue("customer.error.already.booked"));
     }
 
     public void printErrorNoAvailableSpacesMessage() {
-        System.out.println("\nNo available spaces during this period!");
+        System.out.println(getValue("customer.error.available.spaces"));
     }
 
     public void printIdReservationMessage() {
-        System.out.println("\nEnter the reservation ID");
+        System.out.println(getValue("customer.enter.reservation.id"));
+    }
+
+    private String formatDateTime(LocalDateTime dateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getValue("common.date.format"));
+        return dateTime.format(formatter);
     }
 }

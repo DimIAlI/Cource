@@ -126,7 +126,7 @@ public class ConnectionManager {
                 ResultSet resultSet = statement.executeQuery(counterQuery);
                 hasResult = resultSet.next();
             }
-            if (hasResult) {
+            if (!hasResult) {
                 executeSql("initial.sql");
             }
         }
