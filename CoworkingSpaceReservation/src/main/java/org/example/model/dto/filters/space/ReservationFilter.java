@@ -1,10 +1,11 @@
-package org.example.model.dto.filters;
+package org.example.model.dto.filters.space;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.model.entity.CustomerEntity;
-import org.example.model.entity.WorkspaceEntity;
+import lombok.experimental.SuperBuilder;
+import org.example.model.dto.CustomerDto;
+import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.filters.BaseFilter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -12,11 +13,10 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
-public class ReservationFilter implements Filter {
-    private Long id;
-    private CustomerEntity customer;
-    private WorkspaceEntity space;
+@SuperBuilder
+public class ReservationFilter extends BaseFilter<Long> {
+    private CustomerDto customer;
+    private WorkspaceDto space;
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
@@ -25,25 +25,25 @@ public class ReservationFilter implements Filter {
 
         List<String> conditions = new ArrayList<>();
 
-        if (id != null) {
+        if (getId() != null) {
             conditions.add("res.id = ?");
-            parameters.add(id);
+            parameters.add(getId());
         }
         if (customer != null) {
             conditions.add("customer_id = ?");
             parameters.add(customer.getId());
         }
+        if (space != null) {
+            conditions.add("space_id = ?");
+            parameters.add(space.getId());
+        }
         if (startTime != null) {
             conditions.add("start_time = ?");
             parameters.add(startTime);
         }
-        if (startTime != null) {
+        if (endTime != null) {
             conditions.add("end_time = ?");
-            parameters.add(startTime);
-        }
-        if (space != null) {
-            conditions.add("space_id = ?");
-            parameters.add(space.getId());
+            parameters.add(endTime);
         }
 
         return conditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", conditions);
