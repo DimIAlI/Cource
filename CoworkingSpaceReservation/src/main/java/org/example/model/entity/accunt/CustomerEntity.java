@@ -1,12 +1,13 @@
-package org.example.model.entity;
+package org.example.model.entity.accunt;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.example.model.entity.BaseEntity;
+
 @EqualsAndHashCode(callSuper = true)
 @Data
 @SuperBuilder
-@NoArgsConstructor
-public class AdminEntity extends UserEntity {
+public class CustomerEntity extends BaseEntity<Long> {
+
 }
