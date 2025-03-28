@@ -2,10 +2,11 @@ package org.example.model.dto;
 
 import lombok.*;
 
-@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@Setter
 public class WorkspaceDto {
     private long id;
     private SpaceTypeDto type;
