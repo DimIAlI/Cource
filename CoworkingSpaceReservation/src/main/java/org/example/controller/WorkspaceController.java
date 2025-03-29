@@ -1,7 +1,7 @@
 package org.example.controller;
 
-import org.example.model.dto.SpaceTypeDto;
-import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.space.SpaceTypeDto;
+import org.example.model.dto.space.WorkspaceDto;
 import org.example.model.service.WorkspaceManager;
 
 import java.time.LocalDateTime;

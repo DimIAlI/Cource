@@ -1,8 +1,8 @@
 package org.example.view;
 
-import org.example.model.dto.CustomerDto;
-import org.example.model.dto.ReservationDto;
-import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.account.CustomerDto;
+import org.example.model.dto.space.ReservationDto;
+import org.example.model.dto.space.WorkspaceDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -30,12 +30,13 @@ public class AdminView {
 
     public void printAllSpaces(List<WorkspaceDto> allSpaces) {
         System.out.println(getValue("admin.space.separator"));
-        System.out.printf(getValue("admin.space.format.table"));
+        String tableHeaderFormat = getValue("admin.space.format.table");
+        System.out.printf(tableHeaderFormat, "ID", "Type", "Price", "Available");
         System.out.println(getValue("admin.space.separator"));
 
         for (WorkspaceDto space : allSpaces) {
             System.out.printf(getValue("admin.space.format"),
-                    space.getId(), space.getType().getDisplayName(), space.getPrice(), space.isAvailable() ? "Yes" : "No");
+                    space.getId(), space.getType().getDisplayName(), space.getPrice(), space.getAvailable() ? "Yes" : "No");
         }
         System.out.println(getValue("admin.space.separator"));
     }
@@ -56,7 +57,9 @@ public class AdminView {
         System.out.println(getValue("admin.list.reservations"));
 
         System.out.println(getValue("admin.reservation.separator"));
-        System.out.printf(getValue("admin.reservation.format.table"));
+
+        String tableHeaderFormat = getValue("admin.reservation.format.table");
+        System.out.printf(tableHeaderFormat, "Reservation ID", "User Login", "Space ID", "Type", "Price", "Booking Start", "Booking End");
         System.out.println(getValue("admin.reservation.separator"));
 
         for (ReservationDto reservation : allReservations) {

@@ -1,14 +1,20 @@
 package org.example.model.service;
 
-import org.example.model.dao.AdminDao;
-import org.example.model.dao.CustomerDao;
-import org.example.model.dto.AdminDto;
-import org.example.model.dto.CustomerDto;
-import org.example.model.dto.UserDto;
-import org.example.model.entity.AdminEntity;
-import org.example.model.entity.CustomerEntity;
+import org.example.model.dto.account.AdminDto;
+import org.example.model.dto.account.CustomerDto;
+import org.example.model.dto.account.UserDto;
+import org.example.model.dto.filters.account.AdminFilter;
+import org.example.model.dto.filters.account.CustomerFilter;
+import org.example.model.entity.account.AdminEntity;
+import org.example.model.entity.account.CustomerEntity;
+import org.example.model.repository.account.AdminRepository;
+import org.example.model.repository.account.CustomerRepository;
+import org.example.model.util.SessionManager;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import java.util.Optional;
+import java.util.List;
 
 class LoginManager {
     private static final LoginManager INSTANCE = new LoginManager();

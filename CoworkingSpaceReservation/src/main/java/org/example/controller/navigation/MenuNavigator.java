@@ -2,10 +2,9 @@ package org.example.controller.navigation;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
-import org.example.model.dto.AdminDto;
-import org.example.model.dto.CustomerDto;
-import org.example.model.dto.UserDto;
-
+import org.example.model.dto.account.AdminDto;
+import org.example.model.dto.account.CustomerDto;
+import org.example.model.dto.account.UserDto;
 
 public class MenuNavigator {
 

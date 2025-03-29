@@ -1,8 +1,12 @@
 package org.example.model.service;
 
-import org.example.model.dao.SpaceTypeDao;
-import org.example.model.dto.SpaceTypeDto;
-import org.example.model.entity.SpaceTypeEntity;
+import org.example.model.dto.space.SpaceTypeDto;
+import org.example.model.entity.space.SpaceTypeEntity;
+import org.example.model.repository.space.SpaceTypeRepository;
+import org.example.model.util.SessionManager;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.Collections;
 import java.util.HashMap;

@@ -1,6 +1,6 @@
 package org.example.controller;
 
-import org.example.model.dto.UserDto;
+import org.example.model.dto.account.UserDto;
 import org.example.controller.factory.UserFactorySelector;
 
 import java.util.Optional;

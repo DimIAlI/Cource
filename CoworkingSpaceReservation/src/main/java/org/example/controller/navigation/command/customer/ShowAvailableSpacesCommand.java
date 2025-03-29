@@ -3,7 +3,7 @@ package org.example.controller.navigation.command.customer;
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.exceptions.NoAvailableSpacesException;
-import org.example.model.dto.CustomerDto;
+import org.example.model.dto.account.CustomerDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

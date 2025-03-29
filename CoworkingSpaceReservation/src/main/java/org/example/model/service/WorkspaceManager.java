@@ -2,14 +2,17 @@ package org.example.model.service;
 
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.dao.WorkspaceDao;
-import org.example.model.dto.SpaceTypeDto;
-import org.example.model.dto.WorkspaceDto;
-import org.example.model.dto.filters.Filter;
-import org.example.model.dto.filters.WorkspaceFilter;
-import org.example.model.entity.WorkspaceEntity;
+import org.example.model.dto.space.SpaceTypeDto;
+import org.example.model.dto.space.WorkspaceDto;
+import org.example.model.dto.filters.space.WorkspaceFilter;
+import org.example.model.entity.space.SpaceTypeEntity;
+import org.example.model.entity.space.WorkspaceEntity;
+import org.example.model.repository.space.WorkspaceRepository;
+import org.example.model.util.SessionManager;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 

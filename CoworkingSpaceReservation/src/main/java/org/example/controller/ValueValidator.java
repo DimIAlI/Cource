@@ -1,8 +1,8 @@
 package org.example.controller;
 
 import lombok.experimental.UtilityClass;
-import org.example.model.dto.AdminDto;
-import org.example.model.dto.UserDto;
+import org.example.model.dto.account.AdminDto;
+import org.example.model.dto.account.UserDto;
 import org.example.model.service.SpaceTypeManager;
 
 import java.time.LocalDateTime;

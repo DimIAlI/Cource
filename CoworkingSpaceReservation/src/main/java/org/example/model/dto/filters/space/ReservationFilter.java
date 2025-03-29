@@ -3,8 +3,7 @@ package org.example.model.dto.filters.space;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.example.model.dto.CustomerDto;
-import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.account.CustomerDto;
 import org.example.model.dto.filters.BaseFilter;
 
 import java.time.LocalDateTime;
