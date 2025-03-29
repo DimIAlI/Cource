@@ -1,6 +1,6 @@
-package org.example.model.dto;
+package org.example.model.dto.account;
 
-import lombok.*;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder

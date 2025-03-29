@@ -1,6 +1,7 @@
-package org.example.model.dto;
+package org.example.model.dto.space;
 
 import lombok.*;
+import org.example.model.dto.account.CustomerDto;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 public class ReservationDto {
-    private long id;
+    private Long id;
     private CustomerDto customer;
     private WorkspaceDto space;
     private LocalDateTime startTime;

@@ -1,4 +1,4 @@
-package org.example.model.dto;
+package org.example.model.dto.space;
 
 import lombok.*;
 
@@ -8,8 +8,8 @@ import lombok.*;
 @Getter
 @Setter
 public class WorkspaceDto {
-    private long id;
+    private Long id;
     private SpaceTypeDto type;
-    private double price;
-    private boolean available;
+    private Double price;
+    private Boolean available;
 }

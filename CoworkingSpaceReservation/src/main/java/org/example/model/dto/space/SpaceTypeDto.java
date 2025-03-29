@@ -1,4 +1,4 @@
-package org.example.model.dto;
+package org.example.model.dto.space;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SpaceTypeDto {
-    private final long id;
+    private final Long id;
     private final String name;
     private final String displayName;
 }

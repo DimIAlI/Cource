@@ -1,4 +1,4 @@
-package org.example.model.dto;
+package org.example.model.dto.account;
 
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;

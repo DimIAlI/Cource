@@ -1,4 +1,4 @@
-package org.example.model.dto;
+package org.example.model.dto.account;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.experimental.SuperBuilder;
 @Getter
 @Setter
 public abstract class UserDto {
-    private long id;
+    private Long id;
     private String login;
 }
