@@ -6,14 +6,13 @@ import org.example.model.dto.account.CustomerDto;
 import java.time.LocalDateTime;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class ReservationDto {
-    private Long id;
-    private CustomerDto customer;
-    private WorkspaceDto space;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private final Long id;
+    private final CustomerDto customer;
+    private final WorkspaceDto space;
+    private final LocalDateTime startTime;
+    private final LocalDateTime endTime;
 }

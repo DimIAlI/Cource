@@ -1,15 +1,13 @@
 package org.example.model.dto.account;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public abstract class UserDto {
-    private Long id;
-    private String login;
+    private final Long id;
+    private final String login;
 }

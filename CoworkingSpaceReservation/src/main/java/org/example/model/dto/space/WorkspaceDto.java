@@ -3,13 +3,12 @@ package org.example.model.dto.space;
 import lombok.*;
 
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Getter
 @Setter
 public class WorkspaceDto {
-    private Long id;
-    private SpaceTypeDto type;
-    private Double price;
-    private Boolean available;
+    private final Long id;
+    private final SpaceTypeDto type;
+    private final Double price;
+    private final Boolean available;
 }
