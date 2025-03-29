@@ -11,21 +11,26 @@ import java.util.List;
 @Getter
 @Setter
 @SuperBuilder
-public abstract class UserFilter extends BaseFilter<Long> {
+public abstract class UserFilter extends BaseFilter {
     private String login;
 
     @Override
     public String buildWhereCondition(List<Object> parameters) {
 
         List<String> conditions = new ArrayList<>();
+        int paramIndex = 1;
 
         if (getId() != null) {
-            conditions.add("id = ?");
+            conditions.add("id = ?" + paramIndex);
             parameters.add(getId());
+
+            paramIndex++;
         }
         if (login != null) {
-            conditions.add("login = ?");
+            conditions.add("login = ?"+ paramIndex);
             parameters.add(login);
+
+            paramIndex++;
         }
         return conditions.isEmpty() ? "" : " WHERE " + String.join(" AND ", conditions);
     }
