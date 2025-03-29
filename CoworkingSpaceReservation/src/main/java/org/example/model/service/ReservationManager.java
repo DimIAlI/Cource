@@ -24,11 +24,10 @@ import java.util.stream.Collectors;
 
 public class ReservationManager {
     private static final ReservationManager INSTANCE = new ReservationManager();
-    private final ReservationDao reservationDaoInstance = ReservationDao.getInstance();
     private final SpaceTypeManager spaceTypeManager = SpaceTypeManager.getInstance();
+    private static final SessionFactory sessionFactory = SessionManager.getFactory();
 
     private ReservationManager() {
-
     }
 
     public static ReservationManager getInstance() {
@@ -37,65 +36,111 @@ public class ReservationManager {
 
     public void add(CustomerDto customer, WorkspaceDto space, LocalDateTime startTime, LocalDateTime endTime) {
 
-        WorkspaceDao workspaceDao = WorkspaceDao.getInstance();
-
-        ReservationEntity reservationEntity = convertToEntity(customer, space, startTime, endTime);
         WorkspaceEntity workspace = convertToEntity(space);
 
-        checkWorkspaceAvailability(startTime, endTime, workspace);
-
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
         try {
-            reservationDaoInstance.save(reservationEntity);
-        } catch (SQLException e) {
+            checkWorkspaceAvailability(startTime, endTime, workspace);
+        } catch (ReservationAlreadyExistException exception) {
+            transaction.rollback();
+            throw exception;
+        }
+        ReservationFilter reservationFilter = ReservationFilter.builder()
+                .space(space)
+                .startTime(startTime)
+                .endTime(endTime)
+                .build();
+
+        ReservationRepository reservationRepository = new ReservationRepository(session);
+
+        List<ReservationEntity> notUniqueReservations = reservationRepository.findAll(reservationFilter);
+
+        if (!notUniqueReservations.isEmpty()) {
+            transaction.rollback();
             throw new ReservationAlreadyExistException();
         }
 
-        workspaceDao.update(workspace);
+        ReservationEntity reservationEntity = convertToEntity(customer, space, startTime, endTime);
+        reservationRepository.save(reservationEntity);
+
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
+        workspaceRepository.update(workspace);
+
+        transaction.commit();
     }
 
-    public void remove(long id, CustomerDto currentUser) {
+    public void remove(Long id, CustomerDto currentUser) {
 
-        CustomerEntity customerEntity = convertToEntity(currentUser);
-
-        Filter filter = ReservationFilter.builder()
-                .id(id)
-                .customer(customerEntity)
+        ReservationFilter filter = ReservationFilter.builder().
+                id(id)
+                .customer(currentUser)
                 .build();
 
-        List<ReservationEntity> allWithFilter = reservationDaoInstance.getAllWithFilter(filter);
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-        if (allWithFilter.isEmpty())
+        ReservationRepository reservationRepository = new ReservationRepository(session);
+
+        List<ReservationEntity> existedReservations = reservationRepository.findAll(filter);
+
+        if (existedReservations.isEmpty()) {
+            transaction.rollback();
             throw new ReservationNotFoundForUserException(id);
+        }
 
-        reservationDaoInstance.delete(id);
+        ReservationEntity entityToRemove = existedReservations.get(0);
+
+        reservationRepository.delete(entityToRemove);
+        transaction.commit();
     }
 
     public List<ReservationDto> getAll() {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-        return reservationDaoInstance.getAll().stream()
+        ReservationRepository reservationRepository = new ReservationRepository(session);
+
+        List<ReservationEntity> reservations = reservationRepository.findAll();
+
+        transaction.commit();
+
+        return reservations.stream()
                 .map(this::convertToReservationDto)
                 .collect(Collectors.toList());
     }
 
     public List<ReservationDto> getCustomerReservations(CustomerDto customer) {
 
-        CustomerEntity customerEntity = convertToEntity(customer);
-
-        Filter filter = ReservationFilter.builder()
-                .customer(customerEntity).
+        ReservationFilter filter = ReservationFilter.builder()
+                .customer(customer).
                 build();
 
-        return reservationDaoInstance.getAllWithFilter(filter).stream().
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        ReservationRepository reservationRepository = new ReservationRepository(session);
+
+        List<ReservationEntity> reservations = reservationRepository.findAll(filter);
+
+        transaction.commit();
+
+        return reservations.stream().
                 map(this::convertToReservationDto)
                 .collect(Collectors.toList());
     }
 
     private void checkWorkspaceAvailability(LocalDateTime startTime, LocalDateTime endTime, WorkspaceEntity workspace) {
+
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(sessionFactory.getCurrentSession());
+
         //variable to avoid effectively final constraint
         long id = workspace.getId();
 
-        WorkspaceDao.getInstance().getAvailableBetween(startTime, endTime)
+        List<WorkspaceEntity> availableSpaces = workspaceRepository.getAvailableBetween(startTime, endTime);
+
+        availableSpaces
                 .stream()
                 .filter(w -> w.getId() == id)
                 .findFirst()
@@ -103,24 +148,21 @@ public class ReservationManager {
     }
 
     private ReservationDto convertToReservationDto(ReservationEntity entity) {
-        //не нужен вообще для getCustomerRes
+
         CustomerDto customerDto = CustomerDto.builder()
-                //не нужен для getAll
                 .id(entity.getCustomer().getId())
                 .login(entity.getCustomer().getLogin())
                 .build();
 
         WorkspaceDto workspaceDto = WorkspaceDto.builder()
                 .id(entity.getSpace().getId())
-                .type(spaceTypeManager.getValue(entity.getSpace().getTypeId()))
+                .type(spaceTypeManager.getValue(entity.getSpace().getType().getId()))
                 .price(entity.getSpace().getPrice())
-                //не нужен для getAll/getCustomerRes
-                .available(entity.getSpace().isAvailable())
+                .available(entity.getSpace().getAvailable())
                 .build();
 
         return ReservationDto.builder()
                 .id(entity.getId())
-                //не нужен для getCustomerRes
                 .customer(customerDto)
                 .space(workspaceDto)
                 .startTime(entity.getStartTime())
@@ -145,11 +187,17 @@ public class ReservationManager {
     }
 
     private WorkspaceEntity convertToEntity(WorkspaceDto space) {
+
+        SpaceTypeEntity spaceTypeEntity = SpaceTypeEntity
+                .builder()
+                .id(space.getType().getId())
+                .build();
+
         return WorkspaceEntity.builder()
                 .id(space.getId())
-                .typeId(space.getType().getId())
+                .type(spaceTypeEntity)
                 .price(space.getPrice())
-                .available(space.isAvailable())
+                .available(space.getAvailable())
                 .build();
     }
 }

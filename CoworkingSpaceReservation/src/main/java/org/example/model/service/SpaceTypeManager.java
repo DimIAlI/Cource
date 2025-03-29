@@ -15,6 +15,7 @@ import java.util.Map;
 
 public class SpaceTypeManager {
     private static final SpaceTypeManager INSTANCE = new SpaceTypeManager();
+    private static final SessionFactory sessionFactory = SessionManager.getFactory();
     private static Map<String, SpaceTypeDto> cachedByName;
     private static Map<Long, SpaceTypeDto> cachedById;
 
@@ -24,10 +25,12 @@ public class SpaceTypeManager {
 
     private SpaceTypeManager() {
     }
-
+    public static SpaceTypeManager getInstance() {
+        return INSTANCE;
+    }
     private static void loadSpaceTypes() {
 
-        List<SpaceTypeEntity> spaceTypes = SpaceTypeDao.getInstance().findAll();
+        List<SpaceTypeEntity> spaceTypes = getAllSpaces();
 
         Map<String, SpaceTypeDto> byName = new HashMap<>();
         Map<Long, SpaceTypeDto> byId = new HashMap<>();
@@ -48,8 +51,16 @@ public class SpaceTypeManager {
         cachedById = Collections.unmodifiableMap(byId);
     }
 
-    public static SpaceTypeManager getInstance() {
-        return INSTANCE;
+    private static List<SpaceTypeEntity> getAllSpaces() {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        SpaceTypeRepository spaceTypeRepository = new SpaceTypeRepository(session);
+
+        List<SpaceTypeEntity> spaceTypes = spaceTypeRepository.findAll();
+
+        transaction.commit();
+        return spaceTypes;
     }
 
     public Map<String, SpaceTypeDto> getValues() {

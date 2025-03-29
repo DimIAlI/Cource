@@ -18,6 +18,7 @@ import java.util.List;
 
 class LoginManager {
     private static final LoginManager INSTANCE = new LoginManager();
+    private static final SessionFactory sessionFactory = SessionManager.getFactory();
 
     private LoginManager() {
     }
@@ -28,41 +29,83 @@ class LoginManager {
 
     UserDto authenticateOrRegister(UserDto user, String login) {
 
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
         if (user instanceof AdminDto) {
-            AdminDao adminDao = AdminDao.getInstance();
+            return authenticateOrRegisterAdmin(login, session, transaction);
+        } else
+            return authenticateOrRegisterCustomer(login, session, transaction);
+    }
 
-            Optional<AdminEntity> maybeUser = adminDao.findByLogin(login);
-            if (maybeUser.isEmpty()) {
-                AdminEntity newAdmin = AdminEntity.builder().login(login).build();
-                AdminEntity savedAdmin = adminDao.save(newAdmin);
-                return AdminDto.builder()
-                        .id(savedAdmin.getId())
-                        .login(savedAdmin.getLogin())
-                        .build();
-            }
-            AdminEntity adminEntity = maybeUser.get();
-            return AdminDto.builder()
-                    .id(adminEntity.getId())
-                    .login(adminEntity.getLogin())
-                    .build();
-        }
+    private AdminDto authenticateOrRegisterAdmin(String login, Session session, Transaction transaction) {
+        AdminRepository repository = new AdminRepository(session);
 
-        CustomerDao customerDao = CustomerDao.getInstance();
+        AdminFilter loginFilter = AdminFilter.builder()
+                .login(login)
+                .build();
 
-        Optional<CustomerEntity> maybeUser = customerDao.findByLogin(login);
+        List<AdminEntity> maybeUser = repository.findAll(loginFilter);
+
         if (maybeUser.isEmpty()) {
-            CustomerEntity newCustomer = CustomerEntity.builder().login(login).build();
-            CustomerEntity savedCustomer = customerDao.save(newCustomer);
-            return CustomerDto.builder()
-                    .id(savedCustomer.getId())
-                    .login(savedCustomer.getLogin())
-                    .build();
-        }
+            AdminEntity newAdmin = buildAdminEntity(login);
+            AdminEntity savedAdmin = repository.save(newAdmin);
 
-        CustomerEntity customerEntity = maybeUser.get();
+            transaction.commit();
+
+            return buildAdminDto(savedAdmin);
+        }
+        transaction.commit();
+
+        AdminEntity adminEntity = maybeUser.get(0);
+        return buildAdminDto(adminEntity);
+    }
+
+    private CustomerDto authenticateOrRegisterCustomer(String login, Session session, Transaction transaction) {
+        CustomerRepository repository = new CustomerRepository(session);
+
+        CustomerFilter loginFilter = CustomerFilter.builder()
+                .login(login)
+                .build();
+
+        List<CustomerEntity> maybeUser = repository.findAll(loginFilter);
+
+        if (maybeUser.isEmpty()) {
+            CustomerEntity newCustomer = buildCustomerEntity(login);
+            CustomerEntity savedCustomer = repository.save(newCustomer);
+
+            transaction.commit();
+            return buildCustomerDto(savedCustomer);
+        }
+        transaction.commit();
+
+        CustomerEntity customerEntity = maybeUser.get(0);
+        return buildCustomerDto(customerEntity);
+    }
+
+    private AdminDto buildAdminDto(AdminEntity savedAdmin) {
+        return AdminDto.builder()
+                .id(savedAdmin.getId())
+                .login(savedAdmin.getLogin())
+                .build();
+    }
+
+    private CustomerDto buildCustomerDto(CustomerEntity savedCustomer) {
         return CustomerDto.builder()
-                .id(customerEntity.getId())
-                .login(customerEntity.getLogin())
+                .id(savedCustomer.getId())
+                .login(savedCustomer.getLogin())
+                .build();
+    }
+
+    private AdminEntity buildAdminEntity(String login) {
+        return AdminEntity.builder()
+                .login(login)
+                .build();
+    }
+
+    private CustomerEntity buildCustomerEntity(String login) {
+        return CustomerEntity.builder()
+                .login(login)
                 .build();
     }
 }
