@@ -1,15 +1,19 @@
 package org.example.model.service;
 
 import org.example.exceptions.IdNotFoundException;
+import org.example.exceptions.NoAvailableSpacesException;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.dao.WorkspaceDao;
-import org.example.model.dto.SpaceTypeDto;
-import org.example.model.dto.WorkspaceDto;
-import org.example.model.dto.filters.Filter;
-import org.example.model.dto.filters.WorkspaceFilter;
-import org.example.model.entity.WorkspaceEntity;
+import org.example.model.dto.space.SpaceTypeDto;
+import org.example.model.dto.space.WorkspaceDto;
+import org.example.model.dto.filters.space.WorkspaceFilter;
+import org.example.model.entity.space.SpaceTypeEntity;
+import org.example.model.entity.space.WorkspaceEntity;
+import org.example.model.repository.space.WorkspaceRepository;
+import org.example.model.util.SessionManager;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -18,7 +22,7 @@ import static java.util.stream.Collectors.*;
 
 public class WorkspaceManager {
     private static final WorkspaceManager INSTANCE = new WorkspaceManager();
-    private final WorkspaceDao workspaceDaoInstance = WorkspaceDao.getInstance();
+    private static final SessionFactory sessionFactory = SessionManager.getFactory();
 
     private WorkspaceManager() {
     }
@@ -29,53 +33,113 @@ public class WorkspaceManager {
 
     public void add(SpaceTypeDto type, double price) {
 
+        WorkspaceFilter filter = WorkspaceFilter.builder()
+                .type(type)
+                .price(price)
+                .build();
+
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
+
+        List<WorkspaceEntity> notUniqueSpaces = workspaceRepository.findAll(filter);
+
+        if (!notUniqueSpaces.isEmpty()) {
+            transaction.rollback();
+            throw new PlaceAlreadyExistException(type.getDisplayName(), price + "");
+        }
+
+        SpaceTypeEntity spaceTypeEntity = SpaceTypeEntity.builder()
+                .id(type.getId())
+                .build();
+
         WorkspaceEntity entity = WorkspaceEntity.builder()
-                .typeId(type.getId())
+                .type(spaceTypeEntity)
                 .price(price)
                 .available(true)
                 .build();
-        try {
-            workspaceDaoInstance.save(entity);
-            //need to specify the exception so as not to catch the general
-        } catch (SQLException exception) {
-            throw new PlaceAlreadyExistException(type.getDisplayName(), price + "");
-        }
+
+        workspaceRepository.save(entity);
+        transaction.commit();
     }
 
     public void remove(long id) {
-        if (!workspaceDaoInstance.delete(id)) throw new IdNotFoundException(id);
+
+        WorkspaceFilter filter = WorkspaceFilter.builder().id(id).build();
+
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
+
+        List<WorkspaceEntity> all = workspaceRepository.findAll(filter);
+
+        if (all.isEmpty()) {
+            transaction.rollback();
+            throw new IdNotFoundException(id);
+        }
+
+        WorkspaceEntity entity = all.get(0);
+        workspaceRepository.delete(entity);
+        transaction.commit();
     }
 
     public List<WorkspaceDto> getAll() {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-        return workspaceDaoInstance.getAll().stream()
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
+        List<WorkspaceEntity> allWorkspaces = workspaceRepository.findAll();
+
+        transaction.commit();
+        return allWorkspaces.stream()
                 .map(this::convertToDto)
                 .collect(toList());
     }
 
     public List<WorkspaceDto> getAvailable(LocalDateTime startTime, LocalDateTime endTime) {
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
 
-        return workspaceDaoInstance.getAvailableBetween(startTime, endTime).stream()
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
+        List<WorkspaceEntity> allAvailableSpaces = workspaceRepository.getAvailableBetween(startTime, endTime);
+        if (allAvailableSpaces.isEmpty()) {
+            transaction.rollback();
+            throw new NoAvailableSpacesException();
+        }
+        transaction.commit();
+
+        return allAvailableSpaces.stream()
                 .map(this::convertToDto)
                 .collect(toList());
     }
 
     public WorkspaceDto getWorkspace(long id) {
 
-        Filter filter = WorkspaceFilter.builder().id(id).build();
+        WorkspaceFilter filter = WorkspaceFilter.builder().id(id).build();
 
-        return workspaceDaoInstance.getAllWithFilter(filter).stream()
+        Session session = sessionFactory.getCurrentSession();
+        Transaction transaction = session.beginTransaction();
+
+        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
+        List<WorkspaceEntity> allWorkspaces = workspaceRepository.findAll(filter);
+
+        transaction.commit();
+
+        return allWorkspaces.stream()
                 .map(this::convertToDto)
                 .findFirst()
                 .orElseThrow(() -> new IdNotFoundException(id));
     }
 
     private WorkspaceDto convertToDto(WorkspaceEntity space) {
+
         return WorkspaceDto.builder()
                 .id(space.getId())
-                .type(SpaceTypeManager.getInstance().getValue(space.getTypeId()))
+                .type(SpaceTypeManager.getInstance().getValue(space.getType().getId()))
                 .price(space.getPrice())
-                .available(space.isAvailable())
+                .available(space.getAvailable())
                 .build();
     }
 }

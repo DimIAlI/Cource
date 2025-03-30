@@ -1,7 +1,7 @@
 package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
-import org.example.model.dto.CustomerDto;
+import org.example.model.dto.account.CustomerDto;
 
 public class ViewReservationsCommand extends CustomerCommand {
     public ViewReservationsCommand(CustomerDto customer) {

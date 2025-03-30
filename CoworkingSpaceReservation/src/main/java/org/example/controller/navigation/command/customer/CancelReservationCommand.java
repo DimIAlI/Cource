@@ -3,7 +3,7 @@ package org.example.controller.navigation.command.customer;
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.exceptions.ReservationNotFoundForUserException;
-import org.example.model.dto.CustomerDto;
+import org.example.model.dto.account.CustomerDto;
 
 public class CancelReservationCommand extends CustomerCommand {
     public CancelReservationCommand(CustomerDto customer) {

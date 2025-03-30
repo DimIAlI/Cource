@@ -1,6 +1,6 @@
 package org.example.controller.factory;
 
-import org.example.model.dto.UserDto;
+import org.example.model.dto.account.UserDto;
 
 import java.util.Map;
 import java.util.Optional;

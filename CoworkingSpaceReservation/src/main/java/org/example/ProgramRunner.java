@@ -3,8 +3,7 @@ package org.example;
 import org.example.controller.GeneralController;
 import org.example.controller.navigation.MenuNavigator;
 import org.example.controller.UserSessionHandler;
-import org.example.model.dto.UserDto;
-import org.example.model.util.ConnectionManager;
+import org.example.model.dto.account.UserDto;
 
 import java.util.Optional;
 
@@ -53,7 +52,6 @@ public class ProgramRunner {
 
     private void exitProgram() {
         generalController.showExitMessage();
-        ConnectionManager.closePool();
         System.exit(0);
     }
 }

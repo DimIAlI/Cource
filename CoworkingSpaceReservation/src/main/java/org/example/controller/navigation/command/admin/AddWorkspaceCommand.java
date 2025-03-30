@@ -4,7 +4,7 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.controller.navigation.command.MenuCommand;
 import org.example.exceptions.PlaceAlreadyExistException;
-import org.example.model.dto.SpaceTypeDto;
+import org.example.model.dto.space.SpaceTypeDto;
 import org.example.model.service.SpaceTypeManager;
 
 public class AddWorkspaceCommand implements MenuCommand {

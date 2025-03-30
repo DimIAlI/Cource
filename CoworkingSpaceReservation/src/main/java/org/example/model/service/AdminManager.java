@@ -1,7 +1,7 @@
 package org.example.model.service;
 
-import org.example.model.dto.AdminDto;
-import org.example.model.dto.UserDto;
+import org.example.model.dto.account.AdminDto;
+import org.example.model.dto.account.UserDto;
 
 public class AdminManager {
 
@@ -18,7 +18,7 @@ public class AdminManager {
         return LoginManager.getInstance().authenticateOrRegister(user, login);
     }
 
-    public AdminDto buildAdmin() {
+    public AdminDto getEmptyAdmin() {
         return AdminDto.builder().build();
     }
 }

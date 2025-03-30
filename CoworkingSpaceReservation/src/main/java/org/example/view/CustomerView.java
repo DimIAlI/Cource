@@ -1,7 +1,7 @@
 package org.example.view;
 
-import org.example.model.dto.ReservationDto;
-import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.space.ReservationDto;
+import org.example.model.dto.space.WorkspaceDto;
 
 import java.util.List;
 import java.time.LocalDateTime;
@@ -36,7 +36,8 @@ public class CustomerView {
         System.out.println(getValue("customer.available.spaces"));
 
         System.out.println(getValue("customer.space.separator"));
-        System.out.printf(getValue("customer.space.format.table"));
+        String tableHeaderFormat = getValue("customer.space.format.table");
+        System.out.printf(tableHeaderFormat, "ID", "Type", "Price");
         System.out.println(getValue("customer.space.separator"));
 
         for (WorkspaceDto space : availableSpaces) {
@@ -58,7 +59,8 @@ public class CustomerView {
         System.out.println(getValue("customer.view.reservations"));
 
         System.out.println(getValue("customer.reservation.separator"));
-        System.out.printf(getValue("customer.reservation.format.table"));
+        String tableHeaderFormat = getValue("customer.reservation.format.table");
+        System.out.printf(tableHeaderFormat, "Reservation ID", "Space ID", "Type", "Price", "Booking Start", "Booking End");
         System.out.println(getValue("customer.reservation.separator"));
 
         for (ReservationDto reservation : userReservations) {

@@ -5,7 +5,7 @@ import org.example.controller.ValueValidator;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.ReservationAlreadyExistException;
 import org.example.exceptions.WorkspaceAlreadyBookedAtTimeException;
-import org.example.model.dto.CustomerDto;
+import org.example.model.dto.account.CustomerDto;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

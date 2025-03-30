@@ -1,7 +1,7 @@
 package org.example.model.service;
 
-import org.example.model.dto.CustomerDto;
-import org.example.model.dto.UserDto;
+import org.example.model.dto.account.CustomerDto;
+import org.example.model.dto.account.UserDto;
 
 public class CustomerManager {
 
@@ -18,7 +18,7 @@ public class CustomerManager {
         return LoginManager.getInstance().authenticateOrRegister(user, login);
     }
 
-    public CustomerDto buildCustomer() {
+    public CustomerDto getEmptyCustomer() {
         return CustomerDto.builder().build();
     }
 }

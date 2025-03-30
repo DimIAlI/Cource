@@ -1,9 +1,9 @@
 package org.example.controller;
 
-import org.example.model.dto.CustomerDto;
-import org.example.model.dto.ReservationDto;
-import org.example.model.dto.UserDto;
-import org.example.model.dto.WorkspaceDto;
+import org.example.model.dto.account.CustomerDto;
+import org.example.model.dto.space.ReservationDto;
+import org.example.model.dto.account.UserDto;
+import org.example.model.dto.space.WorkspaceDto;
 import org.example.model.service.ReservationManager;
 
 import java.time.LocalDateTime;

@@ -1,6 +1,10 @@
 package org.example.controller;
 
-import org.example.model.dto.*;
+import org.example.model.dto.account.AdminDto;
+import org.example.model.dto.account.UserDto;
+import org.example.model.dto.space.ReservationDto;
+import org.example.model.dto.space.SpaceTypeDto;
+import org.example.model.dto.space.WorkspaceDto;
 import org.example.view.GeneralView;
 
 import java.time.LocalDateTime;
