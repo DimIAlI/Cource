@@ -1,0 +1,50 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Build directories
+target/
+bin/
+
+# Gradle
+.gradle/
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+# Maven
+.mvn/
+!**/pom.xml
+**/target/
+**/dependency-reduced-pom.xml
+**/release.properties
+**/pom.xml.tag
+**/pom.xml.releaseBackup
+**/pom.xml.next
+**/pom.xml.bak
+**/pom.xml.*.backup
+
+# Logs and temp files
+*.log
+*.tmp
+hs_err_pid*
+
+# OS-specific (Windows)
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.bak
+
+# Miscellaneous
+.DS_Store
+.vscode/
+npm-debug.log
+yarn-error.log
