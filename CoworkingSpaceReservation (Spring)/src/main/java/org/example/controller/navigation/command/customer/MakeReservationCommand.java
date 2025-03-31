@@ -2,23 +2,28 @@ package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
+import org.example.controller.navigation.command.MenuCommand;
 import org.example.exceptions.IdNotFoundException;
 import org.example.exceptions.ReservationAlreadyExistException;
 import org.example.exceptions.WorkspaceAlreadyBookedAtTimeException;
-import org.example.model.dto.account.CustomerDto;
+import org.example.model.dto.account.UserDto;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+@Component
+public class MakeReservationCommand implements MenuCommand {
 
-public class MakeReservationCommand extends CustomerCommand {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+    private final ValueValidator valueValidator;
 
-    public MakeReservationCommand(CustomerDto customer) {
-        super(customer);
+
+    public MakeReservationCommand(ValueValidator valueValidator) {
+        this.valueValidator = valueValidator;
     }
 
     @Override
-    public boolean execute(GeneralController generalController) {
+    public boolean execute(GeneralController generalController, UserDto userDto) {
         String message;
         boolean isValid;
         generalController.showMakeReservationItem();
@@ -27,7 +32,7 @@ public class MakeReservationCommand extends CustomerCommand {
 
         do {
             message = generalController.getUserMessage();
-            isValid = ValueValidator.checkIdValue(message);
+            isValid = valueValidator.checkIdValue(message);
 
             if (!isValid) {
                 generalController.showErrorMessage();
@@ -42,7 +47,7 @@ public class MakeReservationCommand extends CustomerCommand {
 
         do {
             message = generalController.getUserMessage();
-            isValid = ValueValidator.checkDataType(message, formatter);
+            isValid = valueValidator.checkDataType(message, formatter);
 
             if (!isValid) {
                 generalController.showErrorMessage();
@@ -57,7 +62,7 @@ public class MakeReservationCommand extends CustomerCommand {
 
         do {
             message = generalController.getUserMessage();
-            isValid = ValueValidator.checkDataTypeAndRange(startTime, message, formatter);
+            isValid = valueValidator.checkDataTypeAndRange(startTime, message, formatter);
 
             if (!isValid) {
                 generalController.showErrorMessage();
@@ -68,7 +73,7 @@ public class MakeReservationCommand extends CustomerCommand {
         LocalDateTime endTime = LocalDateTime.parse(message, formatter);
 
         try {
-            generalController.addReservation(getCustomer(), id, startTime, endTime);
+            generalController.addReservation(userDto, id, startTime, endTime);
             generalController.showSuccessMessage();
 
         } catch (IdNotFoundException e) {
