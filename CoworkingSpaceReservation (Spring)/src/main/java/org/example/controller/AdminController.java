@@ -5,20 +5,18 @@ import org.example.model.dto.account.UserDto;
 import org.example.model.dto.space.WorkspaceDto;
 import org.example.model.service.AdminManager;
 import org.example.view.AdminView;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
-
+@Controller
 class AdminController {
 
     private final AdminView adminView;
+    private final AdminManager adminManager;
 
-    AdminController(AdminView adminView) {
+    AdminController(AdminView adminView, AdminManager adminManager) {
         this.adminView = adminView;
-    }
-
-    static AdminController createAdminController() {
-        AdminView adminView = new AdminView();
-        return new AdminController(adminView);
+        this.adminManager = adminManager;
     }
 
     void showWelcomeMessage() {
@@ -69,7 +67,7 @@ class AdminController {
     }
 
     UserDto getAdmin(UserDto user, String login) {
-        return AdminManager.getInstance().getAdmin(user, login);
+        return adminManager.getAdmin(user, login);
     }
 
     void showAddSpaceMenuItem() {
