@@ -2,118 +2,126 @@ package org.example.view;
 
 import org.example.model.dto.space.ReservationDto;
 import org.example.model.dto.space.WorkspaceDto;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
-import static org.example.util.PropertiesUtil.*;
-
+@Component
 public class CustomerView {
 
+    private final Map<String, String> customerMessages;
+
+    public CustomerView(@Qualifier("customerMessages") Map<String, String> customerMessages) {
+        this.customerMessages = customerMessages;
+    }
+
     public void printWelcomeMessage() {
-        System.out.println(getValue("customer.welcome"));
-        System.out.println(getValue("common.login.rules"));
-        System.out.print(getValue("customer.enter.username"));
+        System.out.println(customerMessages.get("welcome"));
+        System.out.println(customerMessages.get("loginRules"));
+        System.out.print(customerMessages.get("enterUsername"));
     }
 
     public void printMenu() {
-        System.out.println(getValue("customer.menu"));
-        System.out.println(getValue("customer.menu.option1"));
-        System.out.println(getValue("customer.menu.option2"));
-        System.out.println(getValue("customer.menu.option3"));
-        System.out.println(getValue("customer.menu.option4"));
-        System.out.println(getValue("customer.menu.option5"));
+        System.out.println(customerMessages.get("customerMenu"));
+        System.out.println(customerMessages.get("menuOption1"));
+        System.out.println(customerMessages.get("menuOption2"));
+        System.out.println(customerMessages.get("menuOption3"));
+        System.out.println(customerMessages.get("menuOption4"));
+        System.out.println(customerMessages.get("menuOption5"));
 
-        System.out.print(getValue("common.enter.choice"));
+        System.out.print(customerMessages.get("enterChoice"));
     }
 
     public void printReservationStartDateMessage() {
-        System.out.print(getValue("customer.enter.start.date"));
+        System.out.print(customerMessages.get("enterStartDate"));
     }
 
     public void printAvailableSpaces(List<WorkspaceDto> availableSpaces) {
-        System.out.println(getValue("customer.available.spaces"));
+        System.out.println(customerMessages.get("availableSpaces"));
 
-        System.out.println(getValue("customer.space.separator"));
-        String tableHeaderFormat = getValue("customer.space.format.table");
+        System.out.println(customerMessages.get("spaceSeparator"));
+        String tableHeaderFormat = customerMessages.get("spaceFormatTable");
         System.out.printf(tableHeaderFormat, "ID", "Type", "Price");
-        System.out.println(getValue("customer.space.separator"));
+        System.out.println(customerMessages.get("spaceSeparator"));
 
         for (WorkspaceDto space : availableSpaces) {
-            System.out.printf(getValue("customer.space.format"),
+            System.out.printf(customerMessages.get("spaceFormat"),
                     space.getId(), space.getType().getDisplayName(), space.getPrice());
         }
-        System.out.println(getValue("customer.space.separator"));
+        System.out.println(customerMessages.get("spaceSeparator"));
     }
 
     public void printReservationEndDateMessage() {
-        System.out.print(getValue("customer.enter.end.date"));
+        System.out.print(customerMessages.get("enterEndDate"));
     }
 
     public void printGetIdMessage() {
-        System.out.print(getValue("common.enter.space.id"));
+        System.out.print(customerMessages.get("enterSpaceId"));
     }
 
     public void printCustomerReservations(List<ReservationDto> userReservations) {
-        System.out.println(getValue("customer.view.reservations"));
+        System.out.println(customerMessages.get("viewReservations"));
 
-        System.out.println(getValue("customer.reservation.separator"));
-        String tableHeaderFormat = getValue("customer.reservation.format.table");
+        System.out.println(customerMessages.get("reservationSeparator"));
+        String tableHeaderFormat = customerMessages.get("reservationFormatTable");
         System.out.printf(tableHeaderFormat, "Reservation ID", "Space ID", "Type", "Price", "Booking Start", "Booking End");
-        System.out.println(getValue("customer.reservation.separator"));
+        System.out.println(customerMessages.get("reservationSeparator"));
 
         for (ReservationDto reservation : userReservations) {
             WorkspaceDto space = reservation.getSpace();
-            System.out.printf(getValue("customer.reservation.format"),
+            System.out.printf(customerMessages.get("reservationFormat"),
                     reservation.getId(), space.getId(), space.getType().getDisplayName(), space.getPrice(),
                     formatDateTime(reservation.getStartTime()), formatDateTime(reservation.getEndTime()));
         }
-        System.out.println(getValue("customer.reservation.separator"));
+        System.out.println(customerMessages.get("reservationSeparator"));
     }
 
     public void printErrorRemoveReservationMessage(long id) {
-        System.out.printf(getValue("customer.error.remove.reservation"), id);
+        System.out.printf(customerMessages.get("errorRemoveReservation"), id);
     }
 
     public void printEmptyReservationMessage() {
-        System.out.println(getValue("customer.error.reservations"));
+        System.out.println(customerMessages.get("errorReservations"));
     }
 
     public void printErrorReservationExistMessage() {
-        System.out.println(getValue("customer.error.reservation.exists"));
+        System.out.println(customerMessages.get("errorReservationExists"));
     }
 
     public void printBrowseSpacesItem() {
-        System.out.println(getValue("customer.browse.spaces"));
+        System.out.println(customerMessages.get("browseSpaces"));
     }
 
     public void printMakeReservationItem() {
-        System.out.println(getValue("customer.make.reservation"));
+        System.out.println(customerMessages.get("makeReservation"));
     }
 
     public void printViewReservationItem() {
-        System.out.println(getValue("customer.view.reservations.menu"));
+        System.out.println(customerMessages.get("viewReservationsMenu"));
     }
 
     public void printCancelReservationItem() {
-        System.out.println(getValue("customer.cancel.reservation"));
+        System.out.println(customerMessages.get("cancelReservation"));
     }
 
     public void printErrorAddReservationMessage() {
-        System.out.println(getValue("customer.error.already.booked"));
+        System.out.println(customerMessages.get("errorAlreadyBooked"));
     }
 
     public void printErrorNoAvailableSpacesMessage() {
-        System.out.println(getValue("customer.error.available.spaces"));
+        System.out.println(customerMessages.get("errorAvailableSpaces"));
     }
 
     public void printIdReservationMessage() {
-        System.out.println(getValue("customer.enter.reservation.id"));
+        System.out.println(customerMessages.get("enterReservationId"));
     }
 
     private String formatDateTime(LocalDateTime dateTime) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(getValue("common.date.format"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(customerMessages.get("dateFormat"));
         return dateTime.format(formatter);
     }
 }
