@@ -9,22 +9,19 @@ import org.example.model.entity.account.AdminEntity;
 import org.example.model.entity.account.CustomerEntity;
 import org.example.model.repository.account.AdminRepository;
 import org.example.model.repository.account.CustomerRepository;
-import org.example.model.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 class LoginManager {
-    private static final LoginManager INSTANCE = new LoginManager();
-    private static final SessionFactory sessionFactory = SessionManager.getFactory();
+    private final SessionFactory sessionFactory;
 
-    private LoginManager() {
-    }
-
-    static LoginManager getInstance() {
-        return INSTANCE;
+    public LoginManager(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
     UserDto authenticateOrRegister(UserDto user, String login) {

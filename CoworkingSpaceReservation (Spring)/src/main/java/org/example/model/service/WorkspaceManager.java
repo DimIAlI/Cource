@@ -9,26 +9,24 @@ import org.example.model.dto.filters.space.WorkspaceFilter;
 import org.example.model.entity.space.SpaceTypeEntity;
 import org.example.model.entity.space.WorkspaceEntity;
 import org.example.model.repository.space.WorkspaceRepository;
-import org.example.model.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static java.util.stream.Collectors.*;
 
-
+@Service
 public class WorkspaceManager {
-    private static final WorkspaceManager INSTANCE = new WorkspaceManager();
-    private static final SessionFactory sessionFactory = SessionManager.getFactory();
+    private final SessionFactory sessionFactory;
+    private final SpaceTypeManager spaceTypeManager;
 
-    private WorkspaceManager() {
-    }
-
-    public static WorkspaceManager getInstance() {
-        return INSTANCE;
+    public WorkspaceManager(SessionFactory sessionFactory, SpaceTypeManager spaceTypeManager) {
+        this.sessionFactory = sessionFactory;
+        this.spaceTypeManager = spaceTypeManager;
     }
 
     public void add(SpaceTypeDto type, double price) {
@@ -137,7 +135,7 @@ public class WorkspaceManager {
 
         return WorkspaceDto.builder()
                 .id(space.getId())
-                .type(SpaceTypeManager.getInstance().getValue(space.getType().getId()))
+                .type(spaceTypeManager.getValue(space.getType().getId()))
                 .price(space.getPrice())
                 .available(space.getAvailable())
                 .build();
