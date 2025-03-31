@@ -1,23 +1,31 @@
 package org.example.controller.factory;
 
+import jakarta.annotation.PostConstruct;
 import org.example.model.dto.account.UserDto;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.Optional;
 
+@Component
 public class UserFactorySelector {
-    private final Map<String, UserFactory> userFactories;
+    private Map<String, UserFactory> userFactories;
+    private final AdminFactory adminFactory;
+    private final CustomerFactory customerFactory;
 
-    {
-        userFactories = Map.of("1", new AdminFactory(),
-                "2", new CustomerFactory());
+    public UserFactorySelector(AdminFactory adminFactory, CustomerFactory customerFactory) {
+        this.adminFactory = adminFactory;
+        this.customerFactory = customerFactory;
     }
-
     public Optional<UserDto> getEmptyUser(String choice) {
-        UserFactory factory = userFactories.get(choice);
-        if (factory == null) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(factory.createUser());
+        return Optional.ofNullable(userFactories.get(choice))
+                .map(UserFactory::createUser);
+    }
+    @PostConstruct
+    private void initFactory() {
+        userFactories = Map.of(
+                "1", adminFactory,
+                "2", customerFactory
+        );
     }
 }
