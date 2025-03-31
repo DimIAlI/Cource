@@ -10,5 +10,4 @@ public class AdminRepository extends BaseUserRepository<Long, AdminEntity, Admin
     public AdminRepository(EntityManager manager) {
         super(manager, AdminEntity.class);
     }
-
 }
