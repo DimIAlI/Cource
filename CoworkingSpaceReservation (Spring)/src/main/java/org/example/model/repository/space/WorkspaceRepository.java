@@ -2,12 +2,13 @@ package org.example.model.repository.space;
 
 import org.example.model.dto.filters.space.WorkspaceFilter;
 import org.example.model.entity.space.WorkspaceEntity;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Repository
 public class WorkspaceRepository extends BaseSpaceRepository<Long, WorkspaceEntity, WorkspaceFilter> {
 
     public WorkspaceRepository(EntityManager manager) {

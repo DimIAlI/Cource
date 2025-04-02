@@ -22,7 +22,7 @@ public abstract class BaseRepository<T extends Serializable, E extends BaseEntit
 
     @Override
     public E save(E entity) {
-        manager.merge(entity);
+        manager.persist(entity);
         return entity;
     }
 

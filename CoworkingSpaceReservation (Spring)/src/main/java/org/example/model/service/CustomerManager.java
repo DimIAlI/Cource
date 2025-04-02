@@ -2,20 +2,19 @@ package org.example.model.service;
 
 import org.example.model.dto.account.CustomerDto;
 import org.example.model.dto.account.UserDto;
+import org.springframework.stereotype.Service;
 
+@Service
 public class CustomerManager {
 
-    private static final CustomerManager INSTANCE = new CustomerManager();
+    private final LoginManager loginManager;
 
-    private CustomerManager() {
-    }
-
-    public static CustomerManager getInstance() {
-        return INSTANCE;
+    public CustomerManager(LoginManager loginManager) {
+        this.loginManager = loginManager;
     }
 
     public UserDto getCustomer(UserDto user, String login) {
-        return LoginManager.getInstance().authenticateOrRegister(user, login);
+        return loginManager.authenticateOrRegister(user, login);
     }
 
     public CustomerDto getEmptyCustomer() {

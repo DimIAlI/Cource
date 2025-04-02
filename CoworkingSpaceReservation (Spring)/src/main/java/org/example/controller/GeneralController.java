@@ -6,12 +6,13 @@ import org.example.model.dto.space.ReservationDto;
 import org.example.model.dto.space.SpaceTypeDto;
 import org.example.model.dto.space.WorkspaceDto;
 import org.example.view.GeneralView;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
-
+@Controller
 public class GeneralController {
     private final Scanner scanner;
     private final GeneralView generalView;
@@ -33,16 +34,6 @@ public class GeneralController {
         this.workspaceController = workspaceController;
         this.reservationController = reservationController;
         this.generalView = generalView;
-    }
-
-    public static GeneralController createGeneralController() {
-        Scanner scanner = new Scanner(System.in);
-        GeneralView generalView = new GeneralView();
-        AdminController adminController = AdminController.createAdminController();
-        CustomerController customerController = CustomerController.createCustomerController();
-        WorkspaceController workspaceController = WorkspaceController.createWorkspaceController();
-        ReservationController reservationController = ReservationController.createReservationController();
-        return new GeneralController(scanner, adminController, customerController, workspaceController, reservationController, generalView);
     }
 
     public void showWelcomeMessage() {

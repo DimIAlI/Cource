@@ -14,15 +14,15 @@ import java.util.List;
 
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@org.springframework.stereotype.Repository
 public abstract class BaseRepository<T extends Serializable, E extends BaseEntity, F extends Filter<T>>
         implements Repository<T, E, F> {
-
     private final EntityManager manager;
     private final Class<E> clazz;
 
     @Override
     public E save(E entity) {
-        manager.merge(entity);
+        manager.persist(entity);
         return entity;
     }
 

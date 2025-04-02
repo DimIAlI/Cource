@@ -4,12 +4,23 @@ import org.example.controller.GeneralController;
 import org.example.controller.ValueValidator;
 import org.example.controller.navigation.command.MenuCommand;
 import org.example.exceptions.PlaceAlreadyExistException;
+import org.example.model.dto.account.UserDto;
 import org.example.model.dto.space.SpaceTypeDto;
 import org.example.model.service.SpaceTypeManager;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AddWorkspaceCommand implements MenuCommand {
+    private final ValueValidator valueValidator;
+    private final SpaceTypeManager spaceTypeManager;
+
+    public AddWorkspaceCommand(ValueValidator valueValidator, SpaceTypeManager spaceTypeManager) {
+        this.valueValidator = valueValidator;
+        this.spaceTypeManager = spaceTypeManager;
+    }
+
     @Override
-    public boolean execute(GeneralController generalController){
+    public boolean execute(GeneralController generalController, UserDto userDto){
         generalController.showAddSpaceMenuItem();
         generalController.showAllSpacesMessage();
 
@@ -20,7 +31,7 @@ public class AddWorkspaceCommand implements MenuCommand {
             generalController.showAddType();
             generalController.showEnterChoiceMessage();
             message = generalController.getUserMessage();
-            isValid = ValueValidator.checkType(message);
+            isValid = valueValidator.checkType(message);
 
             if (!isValid) {
                 generalController.showErrorMessage();
@@ -29,7 +40,7 @@ public class AddWorkspaceCommand implements MenuCommand {
 
         //used to avoid the effectively final restriction
         String finalMessage = message;
-        SpaceTypeDto type = SpaceTypeManager.getInstance().getValues().values().stream()
+        SpaceTypeDto type = spaceTypeManager.getValues().values().stream()
                 .filter(t -> t.getDisplayName().equalsIgnoreCase(finalMessage))
                 .findFirst().get();
 
@@ -37,7 +48,7 @@ public class AddWorkspaceCommand implements MenuCommand {
             generalController.showAddPrice();
             generalController.showEnterChoiceMessage();
             message = generalController.getUserMessage();
-            isValid = ValueValidator.checkPrice(message);
+            isValid = valueValidator.checkPrice(message);
 
             if (!isValid) {
                 generalController.showErrorMessage();

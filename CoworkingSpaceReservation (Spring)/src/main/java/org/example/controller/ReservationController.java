@@ -5,19 +5,17 @@ import org.example.model.dto.space.ReservationDto;
 import org.example.model.dto.account.UserDto;
 import org.example.model.dto.space.WorkspaceDto;
 import org.example.model.service.ReservationManager;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Controller
 class ReservationController {
     private final ReservationManager reservationManager;
 
-    ReservationController() {
-        this.reservationManager = ReservationManager.getInstance();
-    }
-
-    static ReservationController createReservationController() {
-        return new ReservationController();
+    ReservationController(ReservationManager reservationManager) {
+        this.reservationManager = reservationManager;
     }
 
     List<ReservationDto> getAllReservations() {

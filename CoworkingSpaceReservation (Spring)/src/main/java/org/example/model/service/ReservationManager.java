@@ -13,25 +13,23 @@ import org.example.model.entity.space.SpaceTypeEntity;
 import org.example.model.entity.space.WorkspaceEntity;
 import org.example.model.repository.space.ReservationRepository;
 import org.example.model.repository.space.WorkspaceRepository;
-import org.example.model.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
+@Service
 public class ReservationManager {
-    private static final ReservationManager INSTANCE = new ReservationManager();
-    private final SpaceTypeManager spaceTypeManager = SpaceTypeManager.getInstance();
-    private static final SessionFactory sessionFactory = SessionManager.getFactory();
 
-    private ReservationManager() {
-    }
+    private final SpaceTypeManager spaceTypeManager;
+    private final SessionFactory sessionFactory;
 
-    public static ReservationManager getInstance() {
-        return INSTANCE;
+    public ReservationManager(SpaceTypeManager spaceTypeManager, SessionFactory sessionFactory) {
+        this.spaceTypeManager = spaceTypeManager;
+        this.sessionFactory = sessionFactory;
     }
 
     public void add(CustomerDto customer, WorkspaceDto space, LocalDateTime startTime, LocalDateTime endTime) {

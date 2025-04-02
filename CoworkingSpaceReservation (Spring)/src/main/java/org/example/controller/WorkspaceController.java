@@ -3,19 +3,16 @@ package org.example.controller;
 import org.example.model.dto.space.SpaceTypeDto;
 import org.example.model.dto.space.WorkspaceDto;
 import org.example.model.service.WorkspaceManager;
+import org.springframework.stereotype.Controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
+@Controller
 public class WorkspaceController {
     private final WorkspaceManager workspaceManager;
 
-    public WorkspaceController() {
-        this.workspaceManager = WorkspaceManager.getInstance();
-    }
-
-    static WorkspaceController createWorkspaceController() {
-        return new WorkspaceController();
+    public WorkspaceController(WorkspaceManager workspaceManager) {
+        this.workspaceManager = workspaceManager;
     }
 
     public void addWorkspace(SpaceTypeDto type, double price) {

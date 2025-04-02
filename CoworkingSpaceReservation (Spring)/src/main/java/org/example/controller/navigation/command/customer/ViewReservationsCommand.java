@@ -1,17 +1,17 @@
 package org.example.controller.navigation.command.customer;
 
 import org.example.controller.GeneralController;
-import org.example.model.dto.account.CustomerDto;
+import org.example.controller.navigation.command.MenuCommand;
+import org.example.model.dto.account.UserDto;
+import org.springframework.stereotype.Component;
 
-public class ViewReservationsCommand extends CustomerCommand {
-    public ViewReservationsCommand(CustomerDto customer) {
-        super(customer);
-    }
+@Component
+public class ViewReservationsCommand implements MenuCommand {
 
     @Override
-    public boolean execute(GeneralController generalController) {
+    public boolean execute(GeneralController generalController, UserDto userDto) {
         generalController.showViewReservationItem();
-        generalController.showViewCustomerReservations(getCustomer());
+        generalController.showViewCustomerReservations(userDto);
         return false;
     }
 }

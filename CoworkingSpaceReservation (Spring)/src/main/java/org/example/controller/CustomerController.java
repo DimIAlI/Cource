@@ -5,20 +5,18 @@ import org.example.model.dto.account.UserDto;
 import org.example.model.dto.space.WorkspaceDto;
 import org.example.model.service.CustomerManager;
 import org.example.view.CustomerView;
+import org.springframework.stereotype.Controller;
 
 import java.util.List;
-
+@Controller
 class CustomerController {
 
     private final CustomerView customerView;
+    private final CustomerManager customerManager;
 
-    CustomerController(CustomerView customerView) {
+    CustomerController(CustomerView customerView, CustomerManager customerManager) {
         this.customerView = customerView;
-    }
-
-    static CustomerController createCustomerController() {
-        CustomerView customerView = new CustomerView();
-        return new CustomerController(customerView);
+        this.customerManager = customerManager;
     }
 
     void showWelcomeMessage() {
@@ -61,7 +59,7 @@ class CustomerController {
     }
 
     UserDto getCustomer(UserDto user, String choice) {
-        return CustomerManager.getInstance().getCustomer(user, choice);
+        return customerManager.getCustomer(user, choice);
     }
 
     void showBrowseSpacesItem() {

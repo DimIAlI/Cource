@@ -3,32 +3,37 @@ package org.example.model.service;
 import org.example.model.dto.space.SpaceTypeDto;
 import org.example.model.entity.space.SpaceTypeEntity;
 import org.example.model.repository.space.SpaceTypeRepository;
-import org.example.model.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class SpaceTypeManager {
-    private static final SpaceTypeManager INSTANCE = new SpaceTypeManager();
-    private static final SessionFactory sessionFactory = SessionManager.getFactory();
-    private static Map<String, SpaceTypeDto> cachedByName;
-    private static Map<Long, SpaceTypeDto> cachedById;
+    private final SessionFactory sessionFactory;
+    private Map<String, SpaceTypeDto> cachedByName;
+    private Map<Long, SpaceTypeDto> cachedById;
 
-    static {
+    public SpaceTypeManager(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
         loadSpaceTypes();
     }
 
-    private SpaceTypeManager() {
+    public Map<String, SpaceTypeDto> getValues() {
+        return cachedByName;
     }
-    public static SpaceTypeManager getInstance() {
-        return INSTANCE;
+
+    public SpaceTypeDto getValue(long id) {
+        return cachedById.get(id);
     }
-    private static void loadSpaceTypes() {
+
+
+    private void loadSpaceTypes() {
 
         List<SpaceTypeEntity> spaceTypes = getAllSpaces();
 
@@ -51,7 +56,7 @@ public class SpaceTypeManager {
         cachedById = Collections.unmodifiableMap(byId);
     }
 
-    private static List<SpaceTypeEntity> getAllSpaces() {
+    private List<SpaceTypeEntity> getAllSpaces() {
         Session session = sessionFactory.getCurrentSession();
         Transaction transaction = session.beginTransaction();
 
@@ -61,13 +66,5 @@ public class SpaceTypeManager {
 
         transaction.commit();
         return spaceTypes;
-    }
-
-    public Map<String, SpaceTypeDto> getValues() {
-        return cachedByName;
-    }
-
-    public SpaceTypeDto getValue(long id) {
-        return cachedById.get(id);
     }
 }
