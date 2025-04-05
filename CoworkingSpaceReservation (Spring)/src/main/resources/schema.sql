@@ -23,7 +23,6 @@ CREATE TABLE IF NOT EXISTS workspaces
     id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     type_id   BIGINT         NOT NULL,
     price     NUMERIC(15, 2) NOT NULL,
---     available BOOLEAN        NOT NULL,
     CONSTRAINT unique_type_price UNIQUE (type_id, price),
     FOREIGN KEY (type_id) REFERENCES space_types (id) ON DELETE CASCADE
 );
