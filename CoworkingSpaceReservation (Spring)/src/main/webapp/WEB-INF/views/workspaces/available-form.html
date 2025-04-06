@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Available Spaces</title>
+    <link rel="stylesheet" href="/css/workspaces/available-form.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="card">
+        <h1>Check Available Spaces</h1>
+
+        <form th:object="${availableDto}" action="/user/spaces/available-list" method="GET">
+
+            <label for="startTime">Start Time:</label>
+            <input type="datetime-local" id="startTime" th:field="*{startTime}" required/>
+            <br>
+
+            <div th:if="${#fields.hasErrors('startTime')}" class="error-message">
+                <p th:each="err : ${#fields.errors('startTime')}" th:text="${err}"></p>
+            </div>
+
+            <label for="endTime">End Time:</label>
+            <input type="datetime-local" id="endTime" th:field="*{endTime}" required/>
+            <br>
+
+            <div th:if="${#fields.hasErrors('endTime')}" class="error-message">
+                <p th:each="err : ${#fields.errors('endTime')}" th:text="${err}"></p>
+            </div>
+
+            <button type="submit">Check Availability</button>
+
+            <div class="back-button-wrapper">
+                <a href="/dashboard" class="command-button">Back to Home</a>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove Reservation</title>
+    <link rel="stylesheet" href="/css/reservations/remove-form.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+    <div class="card">
+        <h1>Remove Reservation</h1>
+
+        <form th:action="@{/user/reservations}" th:object="${deleteReservationDto}" method="POST">
+            <input type="hidden" name="_method" value="DELETE"/>
+
+            <div class="form-group">
+                <label for="reservationId">Reservation ID:</label>
+                <input type="number" th:field="*{reservationId}" id="reservationId" placeholder="Enter reservation ID"
+                       required/>
+
+                <div th:if="${#fields.hasErrors('reservationId')}" class="error-message">
+                    <p th:each="err : ${#fields.errors('reservationId')}" th:text="${err}"></p>
+                </div>
+                <div th:if="${errorMessage}" class="error-message">
+                    <p th:text="${errorMessage}"></p>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-button">Delete Reservation</button>
+        </form>
+
+        <div class="button-container">
+            <a href="/dashboard" class="back-link">Back to Home</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

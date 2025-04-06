@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workspace List</title>
+    <link rel="stylesheet" href="/css/workspaces/add-form.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <div class="card">
+        <h2>List of All Workspaces</h2>
+
+        <div th:if="${spacesErrorMessage}" class="error-message">
+            <p th:text="${spacesErrorMessage}"></p>
+        </div>
+
+        <ul th:if="${workspaces != null}">
+            <li th:each="workspace : ${workspaces}">
+                <strong>ID:</strong> <span th:text="${workspace.id}"></span><br>
+                <strong>Type:</strong> <span th:text="${workspace.type}"></span><br>
+                <strong>Price:</strong> <span th:text="${workspace.price}"></span>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="card">
+        <h2>Add New Workspace</h2>
+
+        <form action="/admin/spaces" method="POST" th:object="${addWorkspace}">
+            <label for="type">Workspace Type:</label>
+            <select id="type" name="type" th:field="*{type}" required>
+                <option value="" disabled selected>Select workspace type</option>
+                <option th:each="displayName : ${displayNames}"
+                        th:value="${displayName}"
+                        th:text="${displayName}"></option>
+            </select>
+            <div th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="error"></div>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" step="0.01" min="0.01" th:field="*{price}" required>
+            <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="error"></div>
+
+            <div th:if="${workspaceType != null}">
+                <p th:text="'Workspace type: ' + ${workspaceType}"></p>
+            </div>
+            <div th:if="${workspacePrice != null}">
+                <p th:text="'Price: ' + ${workspacePrice}"></p>
+            </div>
+            <div th:if="${errorMessage}" class="error-message">
+                <p th:text="${errorMessage}"></p>
+            </div>
+            <button type="submit" class="command-button">Add Workspace</button>
+
+            <div class="back-button-wrapper">
+                <a href="/dashboard" class="command-button">Back to Home</a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>

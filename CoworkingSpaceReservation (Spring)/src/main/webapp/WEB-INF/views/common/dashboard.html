@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="/css/common/dashboard-page.css">
+</head>
+
+<body>
+
+<div class="dashboard-container">
+    <h2>Dashboard</h2>
+    <div class="user-info">
+        <strong>Current User: </strong><span th:text="${userLogin}">admin</span>
+    </div>
+
+    <div th:if="${role == 'AdminDto'}">
+        <button class="command-button" onclick="location.href='/admin/spaces?action=add'">Add a new coworking space
+        </button>
+        <button class="command-button" onclick="location.href='/admin/spaces?action=remove'">Remove a coworking space
+        </button>
+        <button class="command-button" onclick="location.href='/admin/reservations?action=view'">View all reservations
+        </button>
+    </div>
+
+    <div th:if="${role == 'CustomerDto'}">
+        <button class="command-button" onclick="location.href='/user/spaces?action=view'">Browse available spaces
+        </button>
+        <button class="command-button" onclick="location.href='/user/reservations?action=add'">Make a reservation
+        </button>
+        <button class="command-button" onclick="location.href='/user/reservations?action=view'">View my reservations
+        </button>
+        <button class="command-button" onclick="location.href='/user/reservations?action=remove'">Cancel a reservation
+        </button>
+    </div>
+
+    <div th:if="${errorMessage != null}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <button class="command-button" onclick="location.href='/logout'">Logout</button>
+</div>
+
+</body>
+</html>
