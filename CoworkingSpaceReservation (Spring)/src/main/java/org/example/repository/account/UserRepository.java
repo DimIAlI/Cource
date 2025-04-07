@@ -1,10 +1,11 @@
 package org.example.repository.account;
 
-import org.example.entity.BaseEntity;
-import org.example.repository.Repository;
-import org.example.service.filters.Filter;
+import org.example.entity.account.UserEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.io.Serializable;
+import java.util.Optional;
 
-public interface UserRepository<T extends Serializable, E extends BaseEntity, F extends Filter<T>> extends Repository<T, E, F> {
+public interface UserRepository <T extends UserEntity> extends JpaRepository<UserEntity, Long> {
+
+    Optional<T> findByLogin(String login);
 }

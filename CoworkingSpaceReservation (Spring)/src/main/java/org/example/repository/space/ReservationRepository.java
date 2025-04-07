@@ -1,15 +1,14 @@
 package org.example.repository.space;
 
-import jakarta.persistence.EntityManager;
 import org.example.entity.space.ReservationEntity;
-import org.example.service.filters.space.ReservationFilter;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-@Repository
-public class ReservationRepository extends BaseSpaceRepository<Long, ReservationEntity, ReservationFilter> {
+import java.util.List;
+import java.util.Optional;
 
-    public ReservationRepository(EntityManager manager) {
-        super(manager, ReservationEntity.class);
-    }
+public interface ReservationRepository extends JpaRepository<ReservationEntity, Long> {
 
+    Optional<ReservationEntity> findByIdAndCustomerId(Long id, Long customer_id);
+
+    List<ReservationEntity> findByCustomerId(Long customerId);
 }
