@@ -10,81 +10,61 @@ import org.example.entity.account.AdminEntity;
 import org.example.entity.account.CustomerEntity;
 import org.example.repository.account.AdminRepository;
 import org.example.repository.account.CustomerRepository;
-import org.example.service.filters.account.AdminFilter;
-import org.example.service.filters.account.CustomerFilter;
 import org.example.service.mapper.EntityConverter;
 import org.example.service.mapper.entytyToDto.AdminMapper;
 import org.example.service.mapper.entytyToDto.CustomerMapper;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class LoginService {
 
-    private final SessionFactory sessionFactory;
+    private final AdminRepository adminRepository;
+    private final CustomerRepository customerRepository;
     private final EntityConverter entityBuilder;
     private final AdminMapper adminMapper;
     private final CustomerMapper customerMapper;
 
-
+    @Transactional
     public UserDto authenticateOrRegister(ReadUserDto user) {
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
         if (user.getRole() == Role.ADMIN) {
-            return authenticateOrRegisterAdmin(user, session, transaction);
-        } else
-            return authenticateOrRegisterCustomer(user, session, transaction);
+            return authenticateOrRegisterAdmin(user);
+        } else {
+            return authenticateOrRegisterCustomer(user);
+        }
     }
 
-    private AdminDto authenticateOrRegisterAdmin(ReadUserDto user, Session session, Transaction transaction) {
-        AdminRepository repository = new AdminRepository(session);
+    private AdminDto authenticateOrRegisterAdmin(ReadUserDto user) {
 
-        AdminFilter loginFilter = AdminFilter.builder()
-                .login(user.getLogin())
-                .build();
+        String login = user.getLogin();
+        Optional<AdminEntity> maybeUser = adminRepository.findByLogin(login);
 
-        List<AdminEntity> maybeUser = repository.findAll(loginFilter);
+        return maybeUser
+                .map(adminMapper::mapTo)
+                .orElseGet(() -> {
 
-        if (maybeUser.isEmpty()) {
-            AdminEntity newAdmin = entityBuilder.convertToAdminEntity(user.getLogin());
-            AdminEntity savedAdmin = repository.save(newAdmin);
+                    AdminEntity newAdmin = entityBuilder.convertToAdminEntity(login);
+                    AdminEntity savedAdmin = adminRepository.save(newAdmin);
 
-            transaction.commit();
-
-            return adminMapper.mapTo(savedAdmin);
-        }
-        transaction.commit();
-
-        AdminEntity adminEntity = maybeUser.get(0);
-        return adminMapper.mapTo(adminEntity);
+                    return adminMapper.mapTo(savedAdmin);
+                });
     }
 
-    private CustomerDto authenticateOrRegisterCustomer(ReadUserDto user, Session session, Transaction transaction) {
-        CustomerRepository repository = new CustomerRepository(session);
+    private CustomerDto authenticateOrRegisterCustomer(ReadUserDto user) {
 
-        CustomerFilter loginFilter = CustomerFilter.builder()
-                .login(user.getLogin())
-                .build();
+        String login = user.getLogin();
+        Optional<CustomerEntity> maybeUser = customerRepository.findByLogin(login);
 
-        List<CustomerEntity> maybeUser = repository.findAll(loginFilter);
+        return maybeUser.map(customerMapper::mapTo)
+                .orElseGet(() -> {
 
-        if (maybeUser.isEmpty()) {
-            CustomerEntity newCustomer = entityBuilder.convertToCustomerEntity(user.getLogin());
-            CustomerEntity savedCustomer = repository.save(newCustomer);
+                    CustomerEntity newCustomer = entityBuilder.convertToCustomerEntity(login);
+                    CustomerEntity savedCustomer = customerRepository.save(newCustomer);
 
-            transaction.commit();
-            return customerMapper.mapTo(savedCustomer);
-        }
-        transaction.commit();
-
-        CustomerEntity customerEntity = maybeUser.get(0);
-        return customerMapper.mapTo(customerEntity);
+                    return customerMapper.mapTo(savedCustomer);
+                });
     }
 }

@@ -13,27 +13,26 @@ import org.example.exception.reservation.UserHasNoReservationsException;
 import org.example.exception.reservation.WorkspaceAlreadyBookedAtTimeException;
 import org.example.repository.space.ReservationRepository;
 import org.example.repository.space.WorkspaceRepository;
-import org.example.service.filters.space.ReservationFilter;
 import org.example.service.mapper.EntityConverter;
 import org.example.service.mapper.entytyToDto.ReservationMapper;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
 
-    private final SessionFactory sessionFactory;
+    private final ReservationRepository reservationRepository;
+    private final WorkspaceRepository workspaceRepository;
     private final ReservationMapper reservationMapper;
     private final EntityConverter entityConverter;
 
-
+    @Transactional
     public void add(AddReservationDto reservationDto) {
 
         Long spaceId = reservationDto.getSpaceId();
@@ -41,92 +40,50 @@ public class ReservationService {
         LocalDateTime startTime = reservationDto.getStartTime();
         LocalDateTime endTime = reservationDto.getEndTime();
 
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        try {
-            checkWorkspaceAvailability(spaceId, startTime, endTime);
-        } catch (WorkspaceAlreadyBookedAtTimeException exception) {
-            transaction.rollback();
-            throw exception;
-        }
-
-        ReservationRepository reservationRepository = new ReservationRepository(session);
+        checkWorkspaceAvailability(spaceId, startTime, endTime);
 
         ReservationEntity reservationEntity = entityConverter.convertToReservationEntity(customerId, spaceId, startTime, endTime);
         reservationRepository.save(reservationEntity);
-
-        transaction.commit();
     }
 
+    @Transactional
     public void remove(DeleteReservationDto deleteReservationDto) {
 
-        Long userId = deleteReservationDto.getCustomerId();
         Long reservationId = deleteReservationDto.getReservationId();
+        Long userId = deleteReservationDto.getCustomerId();
 
-        ReservationFilter filter = ReservationFilter.builder().
-                id(reservationId)
-                .customerId(userId)
-                .build();
+        Optional<ReservationEntity> maybeReservation = reservationRepository.findByIdAndCustomerId(reservationId, userId);
 
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        ReservationRepository reservationRepository = new ReservationRepository(session);
-
-        List<ReservationEntity> existedReservations = reservationRepository.findAll(filter);
-
-        if (existedReservations.isEmpty()) {
-            transaction.rollback();
-            throw new ReservationNotFoundForUserException(reservationId);
-        }
-
-        ReservationEntity entityToRemove = existedReservations.get(0);
-
-        reservationRepository.delete(entityToRemove);
-        transaction.commit();
+        maybeReservation.ifPresentOrElse(reservationRepository::delete,
+                () -> {
+                    throw new ReservationNotFoundForUserException(reservationId);
+                });
     }
 
+    @Transactional(readOnly = true)
     public List<ReservationDto> getAll() {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        ReservationRepository reservationRepository = new ReservationRepository(session);
 
         List<ReservationEntity> reservations = reservationRepository.findAll();
 
         if (reservations.isEmpty()) {
-            transaction.rollback();
             throw new NoReservationExistException();
         }
-
-        transaction.commit();
 
         return reservations.stream()
                 .map(reservationMapper::mapTo)
                 .collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     public List<ReservationDto> getCustomerReservations(CustomerDto customer) {
 
-        ReservationFilter filter = ReservationFilter.builder()
-                .customerId(customer.getId()).
-                build();
+        Long customerId = customer.getId();
 
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        ReservationRepository reservationRepository = new ReservationRepository(session);
-
-        List<ReservationEntity> reservations = reservationRepository.findAll(filter);
+        List<ReservationEntity> reservations = reservationRepository.findByCustomerId(customerId);
 
         if (reservations.isEmpty()) {
-            transaction.rollback();
             throw new UserHasNoReservationsException();
         }
-
-        transaction.commit();
 
         return reservations.stream().
                 map(reservationMapper::mapTo)
@@ -135,15 +92,11 @@ public class ReservationService {
 
     private void checkWorkspaceAvailability(Long id, LocalDateTime startTime, LocalDateTime endTime) {
 
-        WorkspaceRepository workspaceRepository = new WorkspaceRepository(sessionFactory.getCurrentSession());
-
-        //variable to avoid effectively final constraint
-        long staticId = id;
-        List<WorkspaceEntity> availableSpaces = workspaceRepository.getAvailableBetween(startTime, endTime);
+        List<WorkspaceEntity> availableSpaces = workspaceRepository.findAvailableBetween(startTime, endTime);
 
         availableSpaces
                 .stream()
-                .filter(w -> w.getId() == staticId)
+                .filter(w -> w.getId().equals(id))
                 .findFirst()
                 .orElseThrow(() -> new WorkspaceAlreadyBookedAtTimeException(id, startTime, endTime));
     }

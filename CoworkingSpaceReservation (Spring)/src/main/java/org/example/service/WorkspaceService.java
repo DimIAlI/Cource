@@ -12,16 +12,14 @@ import org.example.exception.workspace.NoAvailableSpacesException;
 import org.example.exception.workspace.NoSpacesAddedException;
 import org.example.exception.workspace.PlaceAlreadyExistException;
 import org.example.repository.space.WorkspaceRepository;
-import org.example.service.filters.space.WorkspaceFilter;
 import org.example.service.mapper.EntityConverter;
 import org.example.service.mapper.entytyToDto.WorkspaceMapper;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -29,97 +27,66 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor
 public class WorkspaceService {
 
-    private final SessionFactory sessionFactory;
+    private final WorkspaceRepository workspaceRepository;
     private final SpaceTypeService spaceTypeManager;
     private final WorkspaceMapper workspaceMapper;
     private final EntityConverter entityConverter;
 
+    @Transactional(readOnly = true)
     public List<WorkspaceDto> getAll() {
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
 
-        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
         List<WorkspaceEntity> allWorkspaces = workspaceRepository.findAll();
 
         if (allWorkspaces.isEmpty()) {
-            transaction.rollback();
             throw new NoSpacesAddedException();
         }
 
-        transaction.commit();
         return allWorkspaces.stream()
                 .map(workspaceMapper::mapTo)
                 .collect(toList());
     }
 
+    @Transactional
     public void add(AddWorkspaceDto workSpaceDto) {
 
-        SpaceTypeDto spaceTypeDto = spaceTypeManager.getValue(workSpaceDto.getType());
-
-        WorkspaceFilter filter = WorkspaceFilter.builder()
-                .type(spaceTypeDto)
-                .price(workSpaceDto.getPrice())
-                .build();
-
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
-
-        List<WorkspaceEntity> notUniqueSpaces = workspaceRepository.findAll(filter);
-
-        if (!notUniqueSpaces.isEmpty()) {
-            transaction.rollback();
-            throw new PlaceAlreadyExistException(spaceTypeDto.getDisplayName(), workSpaceDto.getPrice());
-        }
-
-        Long typeId = spaceTypeDto.getId();
+        SpaceTypeDto spaceType = spaceTypeManager.getValue(workSpaceDto.getType());
+        Long spaceTypeId = spaceType.getId();
         Double price = workSpaceDto.getPrice();
-        WorkspaceEntity entity = entityConverter.convertSpaceToEntity(typeId, price);
 
-        workspaceRepository.save(entity);
-        transaction.commit();
+        Optional<WorkspaceEntity> potentialNotUniqueWorkspace = workspaceRepository.findByTypeIdAndPrice(spaceTypeId, price);
+
+        potentialNotUniqueWorkspace.ifPresentOrElse(space -> {
+                    throw new PlaceAlreadyExistException(spaceType.getDisplayName(), price);
+                },
+                () -> {
+                    WorkspaceEntity entity = entityConverter.convertSpaceToEntity(spaceTypeId, price);
+                    workspaceRepository.save(entity);
+                });
     }
 
+    @Transactional
     public void remove(DeleteSpaceDto deleteSpaceDto) {
 
         Long id = deleteSpaceDto.getId();
 
-        WorkspaceFilter filter = WorkspaceFilter.builder().id(id).build();
+        Optional<WorkspaceEntity> maybeWorkspace = workspaceRepository.findById(id);
 
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
-
-        List<WorkspaceEntity> all = workspaceRepository.findAll(filter);
-
-        if (all.isEmpty()) {
-            transaction.rollback();
+        maybeWorkspace.ifPresentOrElse(workspaceRepository::delete, () -> {
             throw new IdNotFoundException(id);
-        }
-
-        WorkspaceEntity entity = all.get(0);
-        workspaceRepository.delete(entity);
-        transaction.commit();
+        });
     }
 
+    @Transactional(readOnly = true)
     public List<WorkspaceDto> getAvailable(AvailableSpaceDto availableSpaceDto) {
 
         LocalDateTime startTime = availableSpaceDto.getStartTime();
         LocalDateTime endTime = availableSpaceDto.getEndTime();
 
-        Session session = sessionFactory.getCurrentSession();
-        Transaction transaction = session.beginTransaction();
-
-        WorkspaceRepository workspaceRepository = new WorkspaceRepository(session);
-        List<WorkspaceEntity> allAvailableSpaces = workspaceRepository.getAvailableBetween(startTime, endTime);
+        List<WorkspaceEntity> allAvailableSpaces = workspaceRepository.findAvailableBetween(startTime, endTime);
 
         if (allAvailableSpaces.isEmpty()) {
-            transaction.rollback();
             throw new NoAvailableSpacesException(startTime, endTime);
         }
-        transaction.commit();
 
         return allAvailableSpaces.stream()
                 .map(workspaceMapper::mapTo)
