@@ -80,13 +80,17 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IdNotFoundException.class)
-    public String handleIdNotFoundException(IdNotFoundException ex, Model model) {
+    public String handleIdNotFoundException(Model model) {
 
-        model.addAttribute("spaceId", ex.getId());
         model.addAttribute("idErrorMessage", "No workspace found with this ID");
         model.addAttribute("deleteDto", new DeleteSpaceDto());
         workspaceController.setAllSpacesAttribute(model);
 
         return "workspaces/remove-form";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String handleGlobalExceptions (){
+        return "common/error-page";
     }
 }
