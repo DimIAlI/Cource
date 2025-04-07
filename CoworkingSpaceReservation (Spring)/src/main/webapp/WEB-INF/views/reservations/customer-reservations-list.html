@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Reservations</title>
+    <link rel="stylesheet" href="/css/reservations/customer-reservations-list.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Your Reservations</h1>
+
+    <div th:if="${errorMessage}" class="error-message">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <div th:if="${errorMessage == null}">
+        <table>
+            <thead>
+            <tr>
+                <th>Reservation ID</th>
+                <th>Workspace Type</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reservation : ${customerReservations}">
+                <td th:text="${reservation.id}"></td>
+                <td th:text="${reservation.space.type}"></td>
+                <td th:text="${reservation.startTime}"></td>
+                <td th:text="${reservation.endTime}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="back-button-wrapper">
+        <a href="/dashboard" class="command-button">Back to Home</a>
+    </div>
+
+</div>
+</body>
+</html>

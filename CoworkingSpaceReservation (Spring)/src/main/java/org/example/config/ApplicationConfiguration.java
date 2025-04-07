@@ -1,24 +1,22 @@
 package org.example.config;
 
-import org.example.model.entity.BaseEntity;
-import org.example.model.entity.account.AdminEntity;
-import org.example.model.entity.account.CustomerEntity;
-import org.example.model.entity.account.UserEntity;
-import org.example.model.entity.space.ReservationEntity;
-import org.example.model.entity.space.SpaceTypeEntity;
-import org.example.model.entity.space.WorkspaceEntity;
+import jakarta.persistence.EntityManager;
+import org.example.entity.BaseEntity;
+import org.example.entity.account.AdminEntity;
+import org.example.entity.account.CustomerEntity;
+import org.example.entity.account.UserEntity;
+import org.example.entity.space.ReservationEntity;
+import org.example.entity.space.SpaceTypeEntity;
+import org.example.entity.space.WorkspaceEntity;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
-import javax.persistence.EntityManager;
-import java.util.Scanner;
-
 @Configuration
-@PropertySource("classpath:application.properties")
 @ComponentScan(basePackages = "org.example")
+@PropertySource("classpath:application.properties")
 public class ApplicationConfiguration {
 
     @Bean
@@ -34,7 +32,7 @@ public class ApplicationConfiguration {
         configuration.addAnnotatedClass(CustomerEntity.class);
         configuration.addAnnotatedClass(UserEntity.class);
 
-        configuration.configure();
+        configuration.configure("hibernate.cfg.xml");
 
         return configuration.buildSessionFactory();
     }
@@ -42,10 +40,5 @@ public class ApplicationConfiguration {
     @Bean
     public EntityManager manager(SessionFactory sessionFactory) {
         return sessionFactory.createEntityManager();
-    }
-
-    @Bean
-    public Scanner scanner() {
-        return new Scanner(System.in);
     }
 }

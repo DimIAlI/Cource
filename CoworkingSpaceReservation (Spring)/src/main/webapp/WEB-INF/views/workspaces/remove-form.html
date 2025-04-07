@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Remove Workspace</title>
+    <link rel="stylesheet" href="/css/workspaces/remove-form.css">
+</head>
+<body>
+
+<div class="dashboard-container">
+
+    <div class="card">
+        <h2>List of Workspaces</h2>
+
+        <div th:if="${errorMessage}" class="error-message">
+            <p th:text="${errorMessage}"></p>
+        </div>
+
+        <ul th:if="${errorMessage == null}">
+            <li th:each="workspace : ${workspaces}">
+                <strong>ID:</strong> <span th:text="${workspace.id}"></span><br>
+                <strong>Type:</strong> <span th:text="${workspace.type}"></span><br>
+                <strong>Price:</strong> <span th:text="${workspace.price}"></span>
+            </li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Remove a Workspace</h2>
+
+        <form th:object="${deleteDto}" action="/admin/spaces" method="POST">
+            <input type="hidden" name="_method" value="DELETE"/>
+
+            <label for="id">Enter Workspace ID to remove:</label>
+            <input type="number" id="id" th:field="*{id}" min="1" required/>
+
+            <div th:if="${idErrorMessage}" class="error">
+                <p th:text="${idErrorMessage}"></p>
+            </div>
+
+            <button type="submit" class="command-button">Delete Workspace</button>
+
+            <div class="back-button-wrapper">
+                <a href="/dashboard" class="command-button">Back to Home</a>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+</body>
+</html>
