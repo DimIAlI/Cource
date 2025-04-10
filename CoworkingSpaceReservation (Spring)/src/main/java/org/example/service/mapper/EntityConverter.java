@@ -1,5 +1,6 @@
 package org.example.service.mapper;
 
+import org.example.dto.view.ReadUserDto;
 import org.example.entity.account.AdminEntity;
 import org.example.entity.account.CustomerEntity;
 import org.example.entity.space.ReservationEntity;
@@ -18,12 +19,6 @@ public class EntityConverter {
                 .build();
     }
 
-    public AdminEntity convertToAdminEntity(String login) {
-        return AdminEntity.builder()
-                .login(login)
-                .build();
-    }
-
     public WorkspaceEntity convertSpaceToEntity(Long id, Double price) {
         SpaceTypeEntity spaceTypeEntity = convertToSpaceTypeEntity(id);
 
@@ -33,9 +28,19 @@ public class EntityConverter {
                 .build();
     }
 
-    public CustomerEntity convertToCustomerEntity(String login) {
+    public AdminEntity convertToAdminEntity(ReadUserDto user) {
+        return AdminEntity.builder()
+                .login(user.getLogin())
+                .password(user.getPassword())
+                .role(user.getRole())
+                .build();
+    }
+
+    public CustomerEntity convertToCustomerEntity(ReadUserDto user) {
         return CustomerEntity.builder()
-                .login(login)
+                .login(user.getLogin())
+                .password(user.getPassword())
+                .role(user.getRole())
                 .build();
     }
 
