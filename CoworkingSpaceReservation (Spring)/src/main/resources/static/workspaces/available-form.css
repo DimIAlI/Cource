@@ -87,25 +87,26 @@ button:hover {
     background-color: #0056b3;
 }
 
-.back-link {
-    display: inline-block;
-    text-align: center;
+.button-container {
+    display: flex;
+    justify-content: center;
     width: 100%;
-    padding: 12px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
     margin-top: 10px;
+}
+
+.back-link {
+    padding: 12px;
+    background-color: transparent;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+    border: none;
+    text-align: center;
+    border-radius: 5px;
     transition: background-color 0.3s ease;
 }
 
 .back-link:hover {
-    background-color: #0056b3;
-}
-
-.back-button-wrapper {
-    text-align: center;
-    margin-top: 20px;
+    background-color: transparent;
+    color: #0056b3;
 }

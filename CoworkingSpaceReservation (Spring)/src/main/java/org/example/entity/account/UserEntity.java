@@ -12,12 +12,17 @@ import org.example.entity.BaseEntity;
 @SuperBuilder
 @NoArgsConstructor
 @Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+@Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class UserEntity extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "hibernate_sequence")
-    @SequenceGenerator(name = "hibernate_sequence", sequenceName = "hibernate_sequence", allocationSize = 5)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(unique = true, nullable = false)
     private String login;
+    @Column(nullable = false)
+    private String password;
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }

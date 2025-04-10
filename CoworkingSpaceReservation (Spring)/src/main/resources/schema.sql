@@ -1,13 +1,21 @@
+CREATE TABLE IF NOT EXISTS users
+(
+    id       BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    login    VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role     VARCHAR(20)  NOT NULL CHECK (role IN ('ADMIN', 'CUSTOMER'))
+);
+
 CREATE TABLE IF NOT EXISTS admins
 (
-    id    BIGINT PRIMARY KEY,
-    login VARCHAR(255) NOT NULL UNIQUE
+    id BIGINT PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS customers
 (
-    id    BIGINT PRIMARY KEY,
-    login VARCHAR(255) NOT NULL UNIQUE
+    id BIGINT PRIMARY KEY,
+    FOREIGN KEY (id) REFERENCES users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS space_types
@@ -17,12 +25,11 @@ CREATE TABLE IF NOT EXISTS space_types
     display_name VARCHAR(100) NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS workspaces
 (
-    id        BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    type_id   BIGINT         NOT NULL,
-    price     NUMERIC(15, 2) NOT NULL,
+    id      BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    type_id BIGINT         NOT NULL,
+    price   NUMERIC(15, 2) NOT NULL,
     CONSTRAINT unique_type_price UNIQUE (type_id, price),
     FOREIGN KEY (type_id) REFERENCES space_types (id) ON DELETE CASCADE
 );
@@ -38,6 +45,3 @@ CREATE TABLE IF NOT EXISTS reservations
     FOREIGN KEY (customer_id) REFERENCES customers (id) ON DELETE CASCADE,
     FOREIGN KEY (workspace_id) REFERENCES workspaces (id) ON DELETE CASCADE
 );
-
-CREATE SEQUENCE IF NOT EXISTS hibernate_sequence
-    INCREMENT BY 5;

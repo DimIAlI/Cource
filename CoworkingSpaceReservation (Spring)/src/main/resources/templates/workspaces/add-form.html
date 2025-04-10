@@ -30,7 +30,7 @@
     <div class="card">
         <h2>Add New Workspace</h2>
 
-        <form action="/admin/spaces" method="POST" th:object="${addWorkspace}">
+        <form th:object="${addWorkspace}" th:action="@{/admin/spaces}" method="POST">
             <label for="type">Workspace Type:</label>
             <select id="type" name="type" th:field="*{type}" required>
                 <option value="" disabled selected>Select workspace type</option>
@@ -55,9 +55,7 @@
             </div>
             <button type="submit" class="command-button">Add Workspace</button>
 
-            <div class="back-button-wrapper">
-                <a href="/dashboard" class="command-button">Back to Home</a>
-            </div>
+            <div th:include="~{common/back-button}"></div>
 
         </form>
     </div>

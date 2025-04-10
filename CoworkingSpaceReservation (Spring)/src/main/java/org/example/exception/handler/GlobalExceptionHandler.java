@@ -3,6 +3,7 @@ package org.example.exception.handler;
 import lombok.RequiredArgsConstructor;
 import org.example.controller.WorkspaceController;
 import org.example.dto.view.*;
+import org.example.exception.account.UserAlreadyExistsException;
 import org.example.exception.reservation.NoReservationExistException;
 import org.example.exception.reservation.ReservationNotFoundForUserException;
 import org.example.exception.reservation.UserHasNoReservationsException;
@@ -11,6 +12,7 @@ import org.example.exception.workspace.IdNotFoundException;
 import org.example.exception.workspace.NoAvailableSpacesException;
 import org.example.exception.workspace.NoSpacesAddedException;
 import org.example.exception.workspace.PlaceAlreadyExistException;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -87,6 +89,19 @@ public class GlobalExceptionHandler {
         workspaceController.setAllSpacesAttribute(model);
 
         return "workspaces/remove-form";
+    }
+
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public String handleUserAlreadyExistsException(Model model) {
+        model.addAttribute("userExistMessage", "User with this name already exists");
+        model.addAttribute("userDto", new ReadUserDto());
+
+        return "common/registration-page";
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public String handleAccessDeniedException(){
+        return "common/error-access-page";
     }
 
     @ExceptionHandler(Exception.class)

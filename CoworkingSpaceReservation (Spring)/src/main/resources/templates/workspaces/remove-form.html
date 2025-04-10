@@ -28,7 +28,7 @@
     <div class="card">
         <h2>Remove a Workspace</h2>
 
-        <form th:object="${deleteDto}" action="/admin/spaces" method="POST">
+        <form th:object="${deleteDto}" th:action="@{/admin/spaces}" method="POST">
             <input type="hidden" name="_method" value="DELETE"/>
 
             <label for="id">Enter Workspace ID to remove:</label>
@@ -40,9 +40,7 @@
 
             <button type="submit" class="command-button">Delete Workspace</button>
 
-            <div class="back-button-wrapper">
-                <a href="/dashboard" class="command-button">Back to Home</a>
-            </div>
+            <div th:include="~{common/back-button}"></div>
 
         </form>
     </div>
