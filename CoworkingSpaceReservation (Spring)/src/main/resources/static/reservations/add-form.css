@@ -86,15 +86,26 @@ button:hover {
     background-color: #0056b3;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-top: 10px;
+}
+
 .back-link {
-    display: block;
+    display: inline-block;
     text-align: center;
     margin-top: 16px;
     font-size: 15px;
     color: #007bff;
     text-decoration: none;
+    padding: 8px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
 }
 
 .back-link:hover {
     text-decoration: underline;
+    color: #0056b3;
 }

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="/static/common/registration-page.css">
+</head>
+<body>
+<div class="form-container">
+    <form th:object="${userDto}" th:action="@{/registration}" method="POST" >
+    <h1>Registration</h1>
+        <div class="input-container">
+            <input type="text" th:field="*{login}" placeholder="Enter your username" required/>
+            <span class="tooltip-icon"
+                  data-tooltip="The expected login must be longer than 5 characters, not contain special characters, and be in English.">?</span>
+
+            <div th:if="${#fields.hasErrors('login')}" class="error-message" th:errors="*{login}"></div>
+        </div>
+
+        <div class="input-container">
+            <input type="password" th:field="*{password}" placeholder="Enter your password" required/>
+            <div th:if="${#fields.hasErrors('password')}" class="error-message" th:errors="*{password}"></div>
+            <span class="tooltip-icon"
+                  data-tooltip="The expected password must be longer than 10 characters, not contain special characters, and be in English.">?</span>
+        </div>
+
+        <div th:if="${userExistMessage}" class="error-message" th:text="${userExistMessage}"></div>
+
+        <div class="role-selection">
+            <label>
+                <input type="radio" th:field="*{role}" value="CUSTOMER" required/> User
+            </label>
+            <label>
+                <input type="radio" th:field="*{role}" value="ADMIN" required/> Admin
+            </label>
+            <div th:if="${#fields.hasErrors('role')}" class="error-message" th:errors="*{role}"></div>
+        </div>
+
+        <button type="submit">Register</button>
+
+        <p>Already have an account? <a href="/login">Log in</a></p>
+    </form>
+</div>
+
+</body>
+</html>

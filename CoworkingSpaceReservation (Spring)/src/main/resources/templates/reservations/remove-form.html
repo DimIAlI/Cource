@@ -11,7 +11,7 @@
     <div class="card">
         <h1>Remove Reservation</h1>
 
-        <form th:action="@{/user/reservations}" th:object="${deleteReservationDto}" method="POST">
+        <form th:object="${deleteReservationDto}" th:action="@{/user/reservations}" method="POST">
             <input type="hidden" name="_method" value="DELETE"/>
 
             <div class="form-group">
@@ -30,9 +30,8 @@
             <button type="submit" class="submit-button">Delete Reservation</button>
         </form>
 
-        <div class="button-container">
-            <a href="/dashboard" class="back-link">Back to Home</a>
-        </div>
+        <div th:include="~{common/back-button}"></div>
+
     </div>
 </div>
 

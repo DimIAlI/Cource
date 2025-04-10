@@ -84,17 +84,24 @@ button.submit-button:hover {
     display: flex;
     justify-content: center;
     width: 100%;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 a.back-link {
+    display: inline-block;
+    width: auto;
+    padding: 12px;
+    background-color: transparent;
     color: #007bff;
-    font-size: 14px;
     text-decoration: none;
-    font-weight: 500;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 5px;
+    margin-top: 10px;
     transition: color 0.3s ease;
 }
 
 a.back-link:hover {
     color: #0056b3;
+    text-decoration: underline;
 }
