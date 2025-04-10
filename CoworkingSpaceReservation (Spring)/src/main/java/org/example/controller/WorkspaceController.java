@@ -9,6 +9,7 @@ import org.example.dto.view.AvailableSpaceDto;
 import org.example.dto.view.DeleteSpaceDto;
 import org.example.service.SpaceTypeService;
 import org.example.service.WorkspaceService;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,6 +28,7 @@ public class WorkspaceController {
     private final Validator validator;
 
     @GetMapping("user/spaces")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String getCustomerChoice(@RequestParam(name = "action") String action,
                                     RedirectAttributes redirectAttributes) {
 
@@ -40,6 +42,7 @@ public class WorkspaceController {
     }
 
     @GetMapping("/admin/spaces")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String getAdminChoice(@RequestParam(name = "action") String action,
                                  RedirectAttributes redirectAttributes) {
 
@@ -54,6 +57,7 @@ public class WorkspaceController {
     }
 
     @GetMapping("/user/spaces/available")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String showAvailableSpaces(Model model) {
 
         model.addAttribute("availableDto", new AvailableSpaceDto());
@@ -62,6 +66,7 @@ public class WorkspaceController {
     }
 
     @GetMapping("/user/spaces/available-list")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String showAvailableSpaces(@Valid @ModelAttribute("availableDto") AvailableSpaceDto availableSpaceDto,
                                       BindingResult result,
                                       Model model) {
@@ -82,6 +87,7 @@ public class WorkspaceController {
     }
 
     @GetMapping("/admin/spaces/add-spaces-form")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String addWorkspace(Model model) {
 
         setSpaceTypeAttributes(model, new AddWorkspaceDto());
@@ -91,6 +97,7 @@ public class WorkspaceController {
     }
 
     @PostMapping("/admin/spaces")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String addWorkspace(@Valid @ModelAttribute("addWorkspace") AddWorkspaceDto workSpaceDto,
                                BindingResult result,
                                Model model) {
@@ -113,6 +120,7 @@ public class WorkspaceController {
     }
 
     @GetMapping("/admin/spaces/remove-spaces-form")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String removeWorkspace(Model model) {
 
         model.addAttribute("deleteDto", new DeleteSpaceDto());
@@ -122,6 +130,7 @@ public class WorkspaceController {
     }
 
     @DeleteMapping("/admin/spaces")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String removeWorkspace(@Valid @ModelAttribute("deleteDto") DeleteSpaceDto deleteSpaceDto,
                                   BindingResult result,
                                   Model model) {
