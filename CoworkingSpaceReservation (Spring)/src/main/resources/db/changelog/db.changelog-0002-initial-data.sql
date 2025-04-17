@@ -1,3 +1,6 @@
+--liquibase formatted sql
+
+--changeset DimAl:1
 INSERT INTO space_types (name, display_name)
 VALUES ('OPEN_SPACE', 'Open Space'),
        ('DEDICATED_DESK', 'Dedicated Desk'),
