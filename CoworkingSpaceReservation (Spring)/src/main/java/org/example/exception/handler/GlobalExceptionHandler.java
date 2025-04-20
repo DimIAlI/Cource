@@ -27,7 +27,7 @@ public class GlobalExceptionHandler {
     public String handeNoReservationExistException(Model model) {
 
         model.addAttribute("errorMessage", "No reservations found or added.");
-        return "/reservations/all-reservations-list";
+        return "reservations/all-reservations-list";
     }
 
     @ExceptionHandler(UserHasNoReservationsException.class)
@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorMessage", "No available spaces in the selected time range");
         model.addAttribute("availableDto", new AvailableSpaceDto());
 
-        return "/workspaces/available-form";
+        return "workspaces/available-form";
     }
 
     @ExceptionHandler(NoSpacesAddedException.class)
