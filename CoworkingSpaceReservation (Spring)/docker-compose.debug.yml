@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   app:
-    image: coworking-space-reservation:1.0
     build: .
     container_name: spring-app
     ports:
