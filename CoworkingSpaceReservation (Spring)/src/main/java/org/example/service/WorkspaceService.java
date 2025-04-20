@@ -76,7 +76,6 @@ public class WorkspaceService {
         });
     }
 
-    @Transactional(readOnly = true)
     public List<WorkspaceDto> getAvailable(AvailableSpaceDto availableSpaceDto) {
 
         LocalDateTime startTime = availableSpaceDto.getStartTime();

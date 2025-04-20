@@ -1,14 +1,15 @@
 package org.example.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.controller.validation.Validator;
-import org.example.dto.service.account.CustomerDto;
 import org.example.dto.service.space.ReservationDto;
 import org.example.dto.view.AddReservationDto;
 import org.example.dto.view.DeleteReservationDto;
+import org.example.dto.view.CustomUserDetails;
 import org.example.service.ReservationService;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,6 +26,7 @@ public class ReservationController {
     private final Validator validator;
 
     @GetMapping("/admin/reservations")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String getAdminChoice(@RequestParam(name = "action") String action,
                                  RedirectAttributes redirectAttributes) {
 
@@ -38,6 +40,7 @@ public class ReservationController {
     }
 
     @GetMapping("/user/reservations")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String getCustomerChoice(@RequestParam(name = "action") String action,
                                     RedirectAttributes redirectAttributes) {
 
@@ -53,6 +56,7 @@ public class ReservationController {
     }
 
     @GetMapping("/admin/reservations/all")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public String getAllSpaces(Model model) {
 
         List<ReservationDto> reservationList = reservationService.getAll();
@@ -62,16 +66,18 @@ public class ReservationController {
     }
 
     @GetMapping("/user/reservations/list")
-    public String getCustomerReservations(Model model, HttpSession session) {
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
+    public String getCustomerReservations(Model model,
+                                          @AuthenticationPrincipal CustomUserDetails userDetails) {
 
-        CustomerDto currentUser = (CustomerDto) session.getAttribute("currentUser");
-        List<ReservationDto> customerReservations = reservationService.getCustomerReservations(currentUser);
+        List<ReservationDto> customerReservations = reservationService.getCustomerReservations(userDetails);
         model.addAttribute("customerReservations", customerReservations);
 
         return "reservations/customer-reservations-list";
     }
 
     @GetMapping("/user/reservations/add-reservation-form")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String addReservation(Model model) {
 
         model.addAttribute("addReservationDto", new AddReservationDto());
@@ -79,10 +85,11 @@ public class ReservationController {
     }
 
     @PostMapping("user/reservations")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String addReservation(@Valid @ModelAttribute("addReservationDto") AddReservationDto addReservationDto,
                                  BindingResult result,
                                  Model model,
-                                 HttpSession session) {
+                                 @AuthenticationPrincipal CustomUserDetails userDetails) {
 
         if (!validator.isStartTimeBeforeEndTime(addReservationDto.getStartTime(), addReservationDto.getEndTime())) {
             result.rejectValue("startTime", "startTime.afterEndTime", "Start time must be before end time");
@@ -93,35 +100,33 @@ public class ReservationController {
             return "reservations/add-form";
         }
 
-        CustomerDto currentUser = (CustomerDto) session.getAttribute("currentUser");
-        addReservationDto.setCustomerId(currentUser.getId());
-
+        addReservationDto.setCustomerId(userDetails.getId());
         reservationService.add(addReservationDto);
 
         return "common/success-page";
     }
 
-
     @GetMapping("/user/reservations/remove-form")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String removeReservation(Model model) {
+
         model.addAttribute("deleteReservationDto", new DeleteReservationDto());
 
         return "reservations/remove-form";
     }
 
     @DeleteMapping("user/reservations")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER')")
     public String removeReservation(@Valid @ModelAttribute("deleteReservationDto") DeleteReservationDto deleteReservationDto,
                                     BindingResult result,
                                     Model model,
-                                    HttpSession session) {
+                                    @AuthenticationPrincipal CustomUserDetails userDetails) {
         if (result.hasErrors()) {
             model.addAttribute("deleteReservationDto", deleteReservationDto);
             return "reservations/remove-form";
         }
 
-        CustomerDto currentUser = (CustomerDto) session.getAttribute("currentUser");
-        deleteReservationDto.setCustomerId(currentUser.getId());
-
+        deleteReservationDto.setCustomerId(userDetails.getId());
         reservationService.remove(deleteReservationDto);
 
         return "common/success-page";

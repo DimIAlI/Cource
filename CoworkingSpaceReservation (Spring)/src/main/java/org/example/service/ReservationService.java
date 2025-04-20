@@ -1,9 +1,9 @@
 package org.example.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.dto.service.account.CustomerDto;
 import org.example.dto.service.space.ReservationDto;
 import org.example.dto.view.AddReservationDto;
+import org.example.dto.view.CustomUserDetails;
 import org.example.dto.view.DeleteReservationDto;
 import org.example.entity.space.ReservationEntity;
 import org.example.entity.space.WorkspaceEntity;
@@ -60,7 +60,6 @@ public class ReservationService {
                 });
     }
 
-    @Transactional(readOnly = true)
     public List<ReservationDto> getAll() {
 
         List<ReservationEntity> reservations = reservationRepository.findAll();
@@ -74,8 +73,7 @@ public class ReservationService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public List<ReservationDto> getCustomerReservations(CustomerDto customer) {
+    public List<ReservationDto> getCustomerReservations(CustomUserDetails customer) {
 
         Long customerId = customer.getId();
 

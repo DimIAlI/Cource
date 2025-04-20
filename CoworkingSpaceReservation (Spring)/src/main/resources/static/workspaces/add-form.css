@@ -87,13 +87,13 @@ input[type="number"] {
     margin-bottom: 15px;
 }
 
-.back-button-wrapper {
-    text-align: center;
-    margin-top: 0;
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
 
-.back-button-wrapper a {
-    display: inline-block;
+.back-link {
     padding: 12px;
     background-color: transparent;
     color: #007bff;
@@ -104,7 +104,7 @@ input[type="number"] {
     border-radius: 5px;
 }
 
-.back-button-wrapper a:hover {
-    color: #007bff;
+.back-link:hover {
     background-color: transparent;
+    color: #0056b3;
 }
