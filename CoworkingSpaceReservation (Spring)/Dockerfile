@@ -3,9 +3,16 @@ FROM alpine:3.21 AS build
 
 WORKDIR /build
 
-RUN apk add openjdk21
+RUN apk add openjdk21 curl bash
 
 COPY . .
+
+RUN curl -o mvnw https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw \
+ && curl -o mvnw.cmd https://raw.githubusercontent.com/takari/maven-wrapper/master/mvnw.cmd \
+ && mkdir -p .mvn/wrapper \
+ && curl -o .mvn/wrapper/maven-wrapper.properties https://raw.githubusercontent.com/takari/maven-wrapper/master/.mvn/wrapper/maven-wrapper.properties \
+ && curl -o .mvn/wrapper/maven-wrapper.jar https://repo1.maven.org/maven2/io/takari/maven-wrapper/0.5.6/maven-wrapper-0.5.6.jar \
+ && chmod +x mvnw
 
 RUN ./mvnw clean package -DskipTests
 
