@@ -62,7 +62,7 @@ public class ReservationController {
         List<ReservationDto> reservationList = reservationService.getAll();
         model.addAttribute("reservationList", reservationList);
 
-        return "/reservations/all-reservations-list";
+        return "reservations/all-reservations-list";
     }
 
     @GetMapping("/user/reservations/list")

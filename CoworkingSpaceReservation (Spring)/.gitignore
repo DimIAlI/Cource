@@ -21,7 +21,6 @@ bin/
 !gradle/wrapper/gradle-wrapper.jar
 
 # Maven
-.mvn/
 !**/pom.xml
 **/target/
 **/dependency-reduced-pom.xml
